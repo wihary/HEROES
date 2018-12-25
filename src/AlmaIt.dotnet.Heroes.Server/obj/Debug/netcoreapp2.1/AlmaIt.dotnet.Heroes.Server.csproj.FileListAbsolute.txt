@@ -8,7 +8,6 @@ U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Server\bin\Debug\netco
 U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Server\bin\Debug\netcoreapp2.1\AlmaIt.dotnet.Heroes.Shared.dll
 U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Server\bin\Debug\netcoreapp2.1\AlmaIt.dotnet.Heroes.Client.pdb
 U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Server\bin\Debug\netcoreapp2.1\AlmaIt.dotnet.Heroes.Shared.pdb
-U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Server\obj\Debug\netcoreapp2.1\AlmaIt.dotnet.Heroes.Server.csprojAssemblyReference.cache
 U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Server\obj\Debug\netcoreapp2.1\AlmaIt.dotnet.Heroes.Server.csproj.CoreCompileInputs.cache
 U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Server\obj\Debug\netcoreapp2.1\AlmaIt.dotnet.Heroes.Server.RazorAssemblyInfo.cache
 U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Server\obj\Debug\netcoreapp2.1\AlmaIt.dotnet.Heroes.Server.RazorAssemblyInfo.cs
@@ -18,3 +17,4 @@ U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Server\obj\Debug\netco
 U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Server\obj\Debug\netcoreapp2.1\AlmaIt.dotnet.Heroes.Server.csproj.CopyComplete
 U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Server\obj\Debug\netcoreapp2.1\AlmaIt.dotnet.Heroes.Server.dll
 U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Server\obj\Debug\netcoreapp2.1\AlmaIt.dotnet.Heroes.Server.pdb
+U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Server\obj\Debug\netcoreapp2.1\AlmaIt.dotnet.Heroes.Server.csprojAssemblyReference.cache
