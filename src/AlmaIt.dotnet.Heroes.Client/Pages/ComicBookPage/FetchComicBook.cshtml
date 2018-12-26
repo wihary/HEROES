@@ -1,0 +1,55 @@
+@using AlmaIt.dotnet.Heroes.Shared.Models
+@page "/AllComicBooks"
+@inject HttpClient Http
+
+<h1>Comic Books collection</h1>
+
+<p>  
+    <a href="/addcomicbook">Create New</a>  
+</p>  
+
+@if (comicBooks == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Issue Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var comicBook in comicBooks)
+            {
+                <tr>
+                    <td>@comicBook.Title</td>
+                    <td>@comicBook.IssueNumber</td>
+                    <td>  
+                        <a href='/editComicBook/@comicBook.Id'>Edit</a>  |  
+                        <button onclick="@(async () => await DeleteComicBook(comicBook.Id))">Delete</button>  
+                    </td> 
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@functions {
+    ComicBook[] comicBooks;
+
+    protected override async Task OnInitAsync()
+    {
+        comicBooks = await Http.GetJsonAsync<ComicBook[]>("api/ComicBook");
+    }
+
+    protected async Task DeleteComicBook(int id)  
+    {  
+        await Http.DeleteAsync($"/api/ComicBook/{id}");  
+        await OnInitAsync();
+
+        StateHasChanged(); 
+    } 
+}

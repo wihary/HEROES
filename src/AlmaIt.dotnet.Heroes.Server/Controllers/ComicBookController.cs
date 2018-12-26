@@ -85,7 +85,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <param name="id">Id of the comic book to remove</param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> RemoveAsync([FromQuery] int id)
+        public async Task<IActionResult> RemoveAsync([FromRoute] int id)
         {
             var comicBook = await this.comicBookContext.GetAsync(id);
 
