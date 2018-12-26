@@ -10,16 +10,6 @@
                 "${workspaceFolder}/src/AlmaIt.dotnet.Heroes.Server/AlmaIt.dotnet.Heroes.Server.csproj"
             ],
             "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "build",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/src/AlmaIt.dotnet.Heroes.Server/AlmaIt.dotnet.Heroes.Server.csproj"
-            ],
-            "problemMatcher": "$msCompile"
         }
     ]
 }
