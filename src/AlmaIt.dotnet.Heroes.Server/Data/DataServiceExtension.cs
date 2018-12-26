@@ -20,6 +20,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Data
             services.AddDbContext<HeroesContext>();
 
             services.AddTransient<IComicBookAccessLayer, ComicBookAccessLayer>();
+            services.AddTransient<IComicSeriesAccessLayer, ComicSeriesAccessLayer>();
             services.AddTransient<InitializeDb>();
 
             return services;
