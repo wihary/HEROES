@@ -23,11 +23,6 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// List of all associated comic book primary key (within the local db)
-        /// </summary>
-        public List<int> AssociatedComnicBooks { get; set; } = new List<int>();
-
-        /// <summary>
         /// List of all associated comic book object (within the local db)
         /// </summary>
         [NotMapped]
