@@ -1,0 +1,53 @@
+@using AlmaIt.dotnet.Heroes.Shared.Models
+@inject HttpClient Http
+
+<div class="row">
+    <h3>Add new Comic Book</h3>
+    <div class="form-row">
+        <div class="col-auto">
+            <input type="text" class="form-control" placeholder="Title" bind="@comicBook.Title"/>
+        </div>
+        <div class="col-auto">
+            <input type="text" class="form-control" placeholder="Issue Number" bind="@comicBook.IssueNumber"/>
+        </div>
+        <div class="col-auto">
+            <input type="date" class="form-control" placeholder="Parution" bind="@comicBook.ParutionDate" format-value="yyyy-MM-dd"/>
+        </div>
+        <div class="col-auto">
+            <select class="form-control" bind="@selectedComicSerie">
+                <option value="">-- Select related Serie --</option>
+                @foreach (var comicSerie in comicSerieList)
+                {
+                    <option value="@comicSerie.Id">@comicSerie.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-default" onclick="@(async () => await CreateComicBook())">Save</button>
+        </div>
+    </div>
+</div>
+
+@functions {
+    ComicBook comicBook = new ComicBook();
+    List<ComicSeries> comicSerieList = new List<ComicSeries>();
+    int selectedComicSerie = 0;
+
+    [Parameter]
+    Func<bool, Task> ComicBookAdded { get; set; }
+
+    protected override async Task OnInitAsync()
+    {
+        comicSerieList = await Http.GetJsonAsync<List<ComicSeries>>("api/ComicSerie");
+    }
+
+    protected async Task CreateComicBook()
+    {
+        if(selectedComicSerie != 0)
+            comicBook.SerieId = selectedComicSerie;
+
+        await Http.SendJsonAsync(HttpMethod.Post, "/api/ComicBook", comicBook);
+
+        await this.ComicBookAdded(true);
+    }
+}

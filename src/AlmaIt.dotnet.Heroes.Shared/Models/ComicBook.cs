@@ -32,21 +32,19 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
         /// Comic book Title
         /// </summary>
         [Required]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         /// <summary>
         /// Comic book number
         /// </summary>
         [Required]
-        public int IssueNumber { get; set; }
+        public int IssueNumber { get; set; } = 0;
 
         /// <summary>
         /// Comic book parution date
         /// </summary>
         [Required]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime ParutionDate { get; set; }
+        public DateTime ParutionDate { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Object latest update date
