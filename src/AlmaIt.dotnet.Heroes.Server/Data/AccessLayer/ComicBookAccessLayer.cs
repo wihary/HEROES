@@ -1,5 +1,7 @@
 namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface;
     using AlmaIt.dotnet.Heroes.Shared.Models;
 
@@ -15,6 +17,18 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         public ComicBookAccessLayer(HeroesContext context)
             : base(context)
         {
+        }
+
+        public IEnumerable<ComicBook> GetAll()
+        {
+            var comicBookList = this.GetAllAsync().ToEnumerable();
+
+            foreach (var comicBook in comicBookList)
+            {
+                
+            }
+
+            return comicBookList;
         }
     }
 }
