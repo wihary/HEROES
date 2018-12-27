@@ -1,6 +1,14 @@
 @using AlmaIt.dotnet.Heroes.Shared.Models
+@using System.Net
 @page "/settings/series"
 @inject HttpClient Http
+
+@if(!string.IsNullOrEmpty(this.Message))
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @this.Message
+    </div>
+}
 
 <h1>Registered Comic book series</h1>
 
@@ -38,6 +46,7 @@ else
 
 @functions {
     List<ComicSeries> comicSerieList;
+    private string Message = string.Empty;
 
     protected override async Task OnInitAsync()
     {
@@ -46,7 +55,9 @@ else
 
     protected async Task DeleteComicSerie(int id)
     {
-        await Http.DeleteAsync($"/api/ComicSerie/{id}");
+        var result = await Http.DeleteAsync($"/api/ComicSerie/{id}");
+        if(result.StatusCode == HttpStatusCode.BadRequest)
+            this.Message = await result.Content.ReadAsStringAsync();
         await OnInitAsync();
 
         StateHasChanged();

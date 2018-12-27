@@ -10,14 +10,17 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
     public class ComicSerieController : Controller
     {
         private readonly IComicSeriesAccessLayer comicSerieContext;
+        private readonly IComicBookAccessLayer comicBookContext;
 
         /// <summary>
         ///     ctro of <see cref="ComicSerieController"/>
         /// </summary>
         /// <param name="ComicSerieContext">DI for comic series context</param>
-        public ComicSerieController(IComicSeriesAccessLayer ComicSerieContext)
+        /// <param name="ComicBookContext">DI for comic book context</param>
+        public ComicSerieController(IComicSeriesAccessLayer ComicSerieContext, IComicBookAccessLayer ComicBookContext)
         {
             this.comicSerieContext = ComicSerieContext;
+            this.comicBookContext = ComicBookContext;
         }
 
         /// <summary>
@@ -87,6 +90,11 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveAsync([FromRoute] int id)
         {
+            if(this.comicBookContext.Where(book => book.ComicSerieId == id).Any())
+            {
+                return BadRequest($"Some comic book still reference this serie, therefor it cannot be deleted");
+            }
+
             var comicSerie = await this.comicSerieContext.GetAsync(id);
 
             if (comicSerie != null)

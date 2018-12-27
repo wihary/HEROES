@@ -26,7 +26,16 @@ else
             @foreach (var comicBook in comicBooks)
             {
                 <tr>
-                    <td>@comicBook.ComicSerie?.Name</td>
+                    <td>
+                        @if(@comicBook.ComicSerie == null)
+                        {   
+                            <span> - </span>
+                        }
+                        else
+                        {
+                            <span>@comicBook.ComicSerie.Name</span>
+                        }
+                    </td>
                     <td>@comicBook.Title</td>
                     <td>@comicBook.IssueNumber</td>
                     <td>
@@ -49,7 +58,7 @@ else
 
     protected async Task DeleteComicBook(int id)
     {
-        await Http.DeleteAsync($"/api/ComicBook/{id}");
+        var result = await Http.DeleteAsync($"/api/ComicBook/{id}");
         await OnInitAsync();
 
         StateHasChanged();
