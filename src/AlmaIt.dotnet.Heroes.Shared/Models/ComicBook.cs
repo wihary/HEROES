@@ -2,6 +2,7 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     /// <summary>
     /// Represent a comic book or issue
@@ -17,7 +18,15 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
         /// <summary>
         /// Primary key of associated comics serie
         /// </summary>
-        public int SerieId { get; set; }
+        [ForeignKey("ComicSeries")]
+        public int? SerieId { get; set; }
+
+        /// <summary>
+        /// Instance of the related comic serie
+        /// </summary>
+        /// <value></value>
+        [NotMapped]
+        public ComicSeries ComicSerie { get; set; }
 
         /// <summary>
         /// Comic book Title
@@ -35,11 +44,15 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
         /// Comic book parution date
         /// </summary>
         [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime ParutionDate { get; set; }
 
         /// <summary>
         /// Object latest update date
         /// </summary>
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime UpdateDate { get; set; } = DateTime.Now;
 
         /// <summary>

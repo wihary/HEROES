@@ -31,16 +31,22 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
         /// <summary>
         /// Object latest update date
         /// </summary>
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime UpdateDate { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Indicates when was the last issue released
         /// </summary>
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime LastReleaseDate { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Indicates when next release is planned
         /// </summary>
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime NextReleaseDate { get; set; } = DateTime.Now;
 
         /// <summary>
