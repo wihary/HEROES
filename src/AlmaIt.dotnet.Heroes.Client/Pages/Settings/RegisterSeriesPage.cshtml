@@ -1,4 +1,62 @@
 @using AlmaIt.dotnet.Heroes.Shared.Models
 @page "/settings/series"
+@inject HttpClient Http
 
 <h1>Registered Comic book series</h1>
+
+<p>
+    <AddSerieComponent ComicSerieAdded="@OnCollectionChanged"/>
+</p>
+
+@if (comicSerieList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var serie in comicSerieList)
+            {
+                <tr>
+                    <td>@serie.Name</td>
+                    <td>
+                        <a href='/editComicBook/@serie.Id'>Edit</a>  |
+                        <button class="btn btn-default" onclick="@(async () => await DeleteComicSerie(serie.Id))">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@functions {
+    List<ComicSeries> comicSerieList;
+
+    protected override async Task OnInitAsync()
+    {
+        comicSerieList = await Http.GetJsonAsync<List<ComicSeries>>("api/ComicSerie");
+    }
+
+    protected async Task DeleteComicSerie(int id)
+    {
+        await Http.DeleteAsync($"/api/ComicSerie/{id}");
+        await OnInitAsync();
+
+        StateHasChanged();
+    }
+
+    protected async Task OnCollectionChanged(bool success)
+    {
+        if(success)
+            await OnInitAsync();
+
+        StateHasChanged();
+    }
+}

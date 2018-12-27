@@ -4,7 +4,7 @@
 
 <h1>Comic Books collection</h1>
 <p>
-    <AddComicComponent ComicBookAdded="@OnComicBookAdded"/>
+    <AddComicComponent ComicBookAdded="@OnCollectionChanged"/>
 </p>
 
 @if (comicBooks == null)
@@ -53,7 +53,7 @@ else
         StateHasChanged();
     }
 
-    protected async Task OnComicBookAdded(bool success)
+    protected async Task OnCollectionChanged(bool success)
     {
         if(success)
             await OnInitAsync();
