@@ -3,6 +3,7 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using AlmaIt.dotnet.Heroes.Shared.Enumeration;
 
     /// <summary>
     /// Represent a comic book or issue
@@ -52,13 +53,8 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
         public DateTime UpdateDate { get; set; } = DateTime.Now;
 
         /// <summary>
-        /// State if comic book is in collection
+        /// Status of the comic book
         /// </summary>
-        public bool IsInCollection { get; set; } = false;
-
-        /// <summary>
-        /// State if a comic book has been ordered and pending delivery
-        /// </summary>
-        public bool IsOrdered { get; set; } = false;
+        public ComicBookStatus Status { get; set; } = ComicBookStatus.None;
     }
 }
