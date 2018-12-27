@@ -25,7 +25,6 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
         /// <summary>
         /// List of all associated comic book object (within the local db)
         /// </summary>
-        [NotMapped]
         public List<ComicBook> AssociatedComnicBooksExtended { get; set; } = new List<ComicBook>();
 
         /// <summary>

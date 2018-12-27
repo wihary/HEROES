@@ -4,6 +4,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
     using System.Linq;
     using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface;
     using AlmaIt.dotnet.Heroes.Shared.Models;
+    using Microsoft.EntityFrameworkCore;
 
     /// <summary>
     ///     Class allowing access to <see cref="ComicBook"/> data object.
@@ -19,16 +20,10 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         {
         }
 
-        public IEnumerable<ComicBook> GetAll()
-        {
-            var comicBookList = this.GetAllAsync().ToEnumerable();
-
-            foreach (var comicBook in comicBookList)
-            {
-                
-            }
-
-            return comicBookList;
-        }
+        /// <summary>
+        ///     Async Method that return all data object existing in Db
+        /// </summary>
+        /// <returns>List of <see cref="TModel"/></returns>
+        public override IAsyncEnumerable<ComicBook> GetAllAsync() => this.ModelSet.Include(book => book.ComicSerie).ToAsyncEnumerable();
     }
 }

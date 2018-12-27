@@ -46,7 +46,7 @@
     protected async Task CreateComicBook()
     {
         if(selectedComicSerie != 0)
-            comicBook.SerieId = selectedComicSerie;
+            comicBook.ComicSerieId = selectedComicSerie;
 
         await Http.SendJsonAsync(HttpMethod.Post, "/api/ComicBook", comicBook);
 

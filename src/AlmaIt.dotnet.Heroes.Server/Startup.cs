@@ -19,7 +19,10 @@ namespace AlmaIt.dotnet.Heroes.Server
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(
+                    options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
 
             services.AddResponseCompression(options =>
             {

@@ -47,7 +47,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         /// <returns>Returns Id of newly created data object</returns>
         public async Task<TIdentity> AddAsync(TModel model)
         {
-            var result = this.context.Set<TModel>().Add(model);
+            var result = this.ModelSet.Add(model);
             await this.context.SaveChangesAsync().ConfigureAwait(false);
 
             return result.Entity.Id;
@@ -60,7 +60,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         /// <returns>Returns number of state entries written to the database</returns>
         public async Task<int> AddRangeAsync(IEnumerable<TModel> models)
         {
-            this.context.Set<TModel>().AddRange(models);
+            this.ModelSet.AddRange(models);
             return await this.context.SaveChangesAsync().ConfigureAwait(false);
         }
 
@@ -69,7 +69,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         /// </summary>
         /// <param name="id">Primary key</param>
         /// <returns>Return true if object exists in db</returns>
-        public bool Exists(TIdentity id) => this.context.Set<TModel>().Any(e => e.Id.CompareTo(id) == 0);
+        public bool Exists(TIdentity id) => this.ModelSet.Any(e => e.Id.CompareTo(id) == 0);
 
         /// <summary>
         ///     Async Method that retrieve data based on primary key
@@ -78,14 +78,14 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         /// <returns>Returns <see cref="TModel"/></returns>
         public async Task<TModel> GetAsync(TIdentity id)
         {
-            return await this.context.Set<TModel>().SingleOrDefaultAsync(model => model.Id.CompareTo(id) == 0).ConfigureAwait(false);
+            return await this.ModelSet.SingleOrDefaultAsync(model => model.Id.CompareTo(id) == 0).ConfigureAwait(false);
         }
 
         /// <summary>
         ///     Async Method that return all data object existing in Db
         /// </summary>
         /// <returns>List of <see cref="TModel"/></returns>
-        public IAsyncEnumerable<TModel> GetAllAsync() => this.context.Set<TModel>().ToAsyncEnumerable();
+        public virtual IAsyncEnumerable<TModel> GetAllAsync() => this.ModelSet.ToAsyncEnumerable();
 
         /// <summary>
         ///     Async Method that remove a specific object in Db.
@@ -94,7 +94,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         /// <returns>Returns number of state entries written to the database</returns>
         public async Task<int> RemoveAsync(TModel model)
         {
-            this.context.Set<TModel>().Remove(model);
+            this.ModelSet.Remove(model);
             return await this.context.SaveChangesAsync().ConfigureAwait(false);
         }
 
@@ -105,7 +105,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         /// <returns>Returns number of state entries written to the database</returns>
         public async Task<int> RemoveRangeAsync(IEnumerable<TModel> models)
         {
-            this.context.Set<TModel>().RemoveRange(models);
+            this.ModelSet.RemoveRange(models);
             return await this.context.SaveChangesAsync().ConfigureAwait(false);
         }
 
@@ -115,7 +115,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         /// <returns>Returns number of state entries written to the database</returns>
         public async Task<int> RemoveAllAsync()
         {
-            this.context.Set<TModel>().RemoveRange(this.GetAllAsync().ToEnumerable());
+            this.ModelSet.RemoveRange(this.GetAllAsync().ToEnumerable());
             return await this.context.SaveChangesAsync().ConfigureAwait(false);
         }
 
@@ -126,7 +126,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         /// <returns>Returns number of state entries written to the database</returns>
         public async Task<int> UpdateAsync(TModel model)
         {
-            this.context.Set<TModel>().Update(model);
+            this.ModelSet.Update(model);
             return await this.context.SaveChangesAsync().ConfigureAwait(false);
         }
 

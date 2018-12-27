@@ -16,6 +16,7 @@ else
     <table class="table">
         <thead>
             <tr>
+                <th>Serie Name</th>
                 <th>Title</th>
                 <th>Issue Number</th>
                 <th></th>
@@ -25,6 +26,7 @@ else
             @foreach (var comicBook in comicBooks)
             {
                 <tr>
+                    <td>@comicBook.ComicSerie?.Name</td>
                     <td>@comicBook.Title</td>
                     <td>@comicBook.IssueNumber</td>
                     <td>

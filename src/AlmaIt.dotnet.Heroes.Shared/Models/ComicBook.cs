@@ -18,14 +18,12 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
         /// <summary>
         /// Primary key of associated comics serie
         /// </summary>
-        [ForeignKey("ComicSeries")]
-        public int? SerieId { get; set; }
+        public int? ComicSerieId { get; set; }
 
         /// <summary>
         /// Instance of the related comic serie
         /// </summary>
         /// <value></value>
-        [NotMapped]
         public ComicSeries ComicSerie { get; set; }
 
         /// <summary>
