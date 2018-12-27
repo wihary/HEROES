@@ -63,7 +63,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
 
             if (result == null)
                 return NoContent();
-                
+
             return Ok(result);
         }
 
