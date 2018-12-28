@@ -1,5 +1,7 @@
 namespace AlmaIt.dotnet.Heroes.Server.Data
 {
+    using Microsoft.EntityFrameworkCore;
+
     /// <summary>
     ///     This class meant to regroup all initialization options of the Db Context
     /// </summary>
@@ -16,6 +18,6 @@ namespace AlmaIt.dotnet.Heroes.Server.Data
         /// <summary>
         ///     Méthode that initialize Db.
         /// </summary>
-        public void Init() => this.context.Database.EnsureCreated();
+        public void Init() => this.context.Database.Migrate();
     }
 }
