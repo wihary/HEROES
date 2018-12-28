@@ -10,14 +10,17 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
     public class ComicBookController : Controller
     {
         private readonly IComicBookAccessLayer comicBookContext;
+        private readonly IComicSeriesAccessLayer comicSerieContext;
 
         /// <summary>
         ///     ctro of <see cref="ComicBookController"/>
         /// </summary>
+        /// <param name="ComicSerieContext">DI for comic series context</param>
         /// <param name="ComicBookContext">DI for comic book context</param>
-        public ComicBookController(IComicBookAccessLayer ComicBookContext)
+        public ComicBookController(IComicBookAccessLayer ComicBookContext, IComicSeriesAccessLayer ComicSerieContext)
         {
             this.comicBookContext = ComicBookContext;
+            comicSerieContext = ComicSerieContext;
         }
 
         /// <summary>
@@ -107,6 +110,13 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromBody] ComicBook comicBook)
         {
+            // Empty Navigation property which should not be send while updating entity
+            comicBook.ComicSerie = null;
+
+            // Check if comic book series exists, in order to avoid Access Layer error
+            if(!comicBook.ComicSerieId.HasValue || !this.comicSerieContext.Exists(comicBook.ComicSerieId.Value))
+                comicBook.ComicSerieId = null;
+
             var result = await this.comicBookContext.UpdateAsync(comicBook);
             return Ok(result);
         }
