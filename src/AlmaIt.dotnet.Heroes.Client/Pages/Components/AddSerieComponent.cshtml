@@ -1,14 +1,19 @@
 @using AlmaIt.dotnet.Heroes.Shared.Models
 @inject HttpClient Http
 
-<div class="col">
-    <div class="row">
-        <h3>Add Comic Book Serie</h3>
+<div class="alert alert-primary" role="alert">
+    <h3>Add Comic Book Serie</h3>
+    <div class="form-row">
+        <div class="col-4">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Title">Title</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="Title" bind="@comicSerie.Name" />
+            </div>
+        </div>
     </div>
     <div class="form-row">
-        <div class="col-auto">
-            <input type="text" class="form-control" placeholder="Title" bind="@comicSerie.Name"/>
-        </div>
         <div class="col-auto">
             <button class="btn btn-default" onclick="@(async () => await CreateComicSerie())">Save</button>
         </div>
