@@ -78,7 +78,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [HttpGet("type/{status}")]
         public IActionResult GetByStatus(ComicBookStatus status)
         {
-            var result = this.comicBookContext.Where(book => book.Status == status);
+            var result = this.comicBookContext.GetAllAsync().ToEnumerable().Where(book => book.Status == status);
 
             if (result == null)
                 return NoContent();
