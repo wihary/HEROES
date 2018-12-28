@@ -75,10 +75,10 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         ///     API endpoint use to retrieve all comic books info
         /// </summary>
         /// <returns></returns>
-        [HttpGet("collection")]
-        public IActionResult GetAllInCollection()
+        [HttpGet("type/{status}")]
+        public IActionResult GetByStatus(ComicBookStatus status)
         {
-            var result = this.comicBookContext.Where(book => book.Status == ComicBookStatus.Collection);
+            var result = this.comicBookContext.Where(book => book.Status == status);
 
             if (result == null)
                 return NoContent();

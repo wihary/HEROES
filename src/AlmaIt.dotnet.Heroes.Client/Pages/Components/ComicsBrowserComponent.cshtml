@@ -1,0 +1,110 @@
+@using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration
+@using AlmaIt.dotnet.Heroes.Shared.Enumeration
+@using AlmaIt.dotnet.Heroes.Shared.Models
+@inject HttpClient Http
+
+@if (comicBooks == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped table-sm table-hover">
+        <thead>
+            <th scope="col">Serie Name</th>
+            <th scope="col">Title</th>
+            <th scope="col">Issue Number</th>
+            <th scope="col"></th>
+        </thead>
+        <tbody>
+            @foreach (var comicBook in comicBooks)
+            {
+                <tr>
+                    <td>
+                        @if(@comicBook.ComicSerie == null)
+                        {
+                            <span> - </span>
+                        }
+                        else
+                        {
+                            <span>@comicBook.ComicSerie.Name</span>
+                        }
+                    </td>
+                    <td>@comicBook.Title</td>
+                    <td>@comicBook.IssueNumber</td>
+                    <td>
+                        <button class="btn btn-default" onclick="@(() => EditComicBook(comicBook.Id))">Edit</button> |
+                        <button class="btn btn-default" onclick="@(async () => await DeleteComicBook(comicBook.Id))">Delete</button>
+                    </td>
+                </tr>
+                @if(this.editionStatus.Key == comicBook.Id && this.editionStatus.Value)
+                {
+                    <tr>
+                        <td colspan="4" class="px-5 py-3">
+                            <EditComicComponent EditedComicBook="@comicBook" EditCompleted="@OnEditionCompleted"/>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+
+@functions {
+    [Parameter]
+    protected ComicsBrowserType browserType { get; set;}
+    List<ComicBook> comicBooks;
+    KeyValuePair<int, bool> editionStatus = new KeyValuePair<int, bool>(0, false);
+
+    protected override async Task OnInitAsync()
+    {
+        switch (browserType)
+        {
+            case ComicsBrowserType.All:
+                comicBooks = await Http.GetJsonAsync<List<ComicBook>>("api/ComicBook");
+                break;
+            case ComicsBrowserType.Collection:
+                comicBooks = await Http.GetJsonAsync<List<ComicBook>>($"api/ComicBook/type/{ComicBookStatus.Collection}");
+                break;
+            case ComicsBrowserType.Wishlist:
+                comicBooks = await Http.GetJsonAsync<List<ComicBook>>($"api/ComicBook/type/{ComicBookStatus.Wishlist}");
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    protected async Task DeleteComicBook(int id)
+    {
+        var result = await Http.DeleteAsync($"/api/ComicBook/{id}");
+        await OnInitAsync();
+
+        StateHasChanged();
+    }
+
+    protected void EditComicBook(int id)
+    {
+        this.editionStatus = new KeyValuePair<int, bool>(id, true);
+
+        StateHasChanged();
+    }
+
+    protected async Task OnCollectionChanged(bool success)
+    {
+        if(success)
+            await OnInitAsync();
+
+        StateHasChanged();
+    }
+
+    protected async Task OnEditionCompleted(bool success)
+    {
+        if(success)
+            await OnInitAsync();
+
+        this.editionStatus = new KeyValuePair<int, bool>(0, false);
+
+        StateHasChanged();
+    }
+}
