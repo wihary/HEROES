@@ -1,0 +1,98 @@
+@using AlmaIt.dotnet.Heroes.Shared.Models
+@page "/collection/comics"
+@inject HttpClient Http
+
+<h1>Comic Books collection</h1>
+<p>
+    <AddComicComponent ComicBookAdded="@OnCollectionChanged"/>
+</p>
+
+@if (comicBooks == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped table-sm table-hover">
+        <thead>
+            <th scope="col">Serie Name</th>
+            <th scope="col">Title</th>
+            <th scope="col">Issue Number</th>
+            <th scope="col"></th>
+        </thead>
+        <tbody>
+            @foreach (var comicBook in comicBooks)
+            {
+                <tr>
+                    <td>
+                        @if(@comicBook.ComicSerie == null)
+                        {
+                            <span> - </span>
+                        }
+                        else
+                        {
+                            <span>@comicBook.ComicSerie.Name</span>
+                        }
+                    </td>
+                    <td>@comicBook.Title</td>
+                    <td>@comicBook.IssueNumber</td>
+                    <td>
+                        <button class="btn btn-default" onclick="@(() => EditComicBook(comicBook.Id))">Edit</button> |
+                        <button class="btn btn-default" onclick="@(async () => await DeleteComicBook(comicBook.Id))">Delete</button>
+                    </td>
+                </tr>
+                @if(this.editionStatus.Key == comicBook.Id && this.editionStatus.Value)
+                {
+                    <tr>
+                        <td colspan="4" class="px-5 py-3">
+                            <EditComicComponent EditedComicBook="@comicBook" EditCompleted="@OnEditionCompleted"/>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+
+@functions {
+    List<ComicBook> comicBooks;
+    KeyValuePair<int, bool> editionStatus = new KeyValuePair<int, bool>(0, false);
+
+    protected override async Task OnInitAsync()
+    {
+        comicBooks = await Http.GetJsonAsync<List<ComicBook>>("api/ComicBook");
+    }
+
+    protected async Task DeleteComicBook(int id)
+    {
+        var result = await Http.DeleteAsync($"/api/ComicBook/{id}");
+        await OnInitAsync();
+
+        StateHasChanged();
+    }
+
+    protected void EditComicBook(int id)
+    {
+        this.editionStatus = new KeyValuePair<int, bool>(id, true);
+
+        StateHasChanged();
+    }
+
+    protected async Task OnCollectionChanged(bool success)
+    {
+        if(success)
+            await OnInitAsync();
+
+        StateHasChanged();
+    }
+
+    protected async Task OnEditionCompleted(bool success)
+    {
+        if(success)
+            await OnInitAsync();
+
+        this.editionStatus = new KeyValuePair<int, bool>(0, false);
+
+        StateHasChanged();
+    }
+}
