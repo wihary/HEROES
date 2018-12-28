@@ -3,12 +3,15 @@
 @using AlmaIt.dotnet.Heroes.Shared.Models
 @inject HttpClient Http
 
-@if (comicBooks == null)
+@if (this.comicBooks == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
+    <button type="button" class="btn btn-primary float-right w-25 mb-3" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="@(async () => await ToggleOverride())">
+        @this.overrideToggleMessage
+    </button>
     <table class="table table-striped table-sm table-hover">
         <thead>
             <th scope="col">Serie Name</th>
@@ -53,11 +56,19 @@ else
 @functions {
     [Parameter]
     protected ComicsBrowserType browserType { get; set;}
-    List<ComicBook> comicBooks;
-    KeyValuePair<int, bool> editionStatus = new KeyValuePair<int, bool>(0, false);
+    private List<ComicBook> comicBooks;
+    private KeyValuePair<int, bool> editionStatus = new KeyValuePair<int, bool>(0, false);
+    private bool overrideDiplayAllComics = false;
+    private string overrideToggleMessage = "Show all";
 
     protected override async Task OnInitAsync()
     {
+        if(this.overrideDiplayAllComics)
+        {
+            comicBooks = await Http.GetJsonAsync<List<ComicBook>>("api/ComicBook");
+            return;
+        }
+
         switch (browserType)
         {
             case ComicsBrowserType.All:
@@ -78,6 +89,7 @@ else
     public async Task ReloadDataList()
     {
         await this.OnInitAsync();
+        StateHasChanged();
     }
 
     protected async Task DeleteComicBook(int id)
@@ -110,6 +122,18 @@ else
 
         this.editionStatus = new KeyValuePair<int, bool>(0, false);
 
+        StateHasChanged();
+    }
+
+    protected async Task ToggleOverride()
+    {
+        this.overrideDiplayAllComics = !this.overrideDiplayAllComics;
+        if(this.overrideDiplayAllComics)
+            this.overrideToggleMessage = $"Default filter ({this.browserType})";
+        else
+            this.overrideToggleMessage = "Show all";
+
+        await OnInitAsync();
         StateHasChanged();
     }
 }
