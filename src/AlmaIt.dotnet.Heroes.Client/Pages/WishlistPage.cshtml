@@ -1,6 +1,24 @@
 @using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration
+@using AlmaIt.dotnet.Heroes.Client.Pages.Components
 @page "/wishlist"
 
 <h1>My Wishlist</h1>
+<p>
+    <AddComicComponent ComicBookAdded="@OnCollectionChanged"/>
+</p>
 
-<ComicsBrowserComponent browserType="@ComicsBrowserType.Wishlist"/>
+<p>
+    <ComicsBrowserComponent ref="comicsBrowser" browserType="@ComicsBrowserType.Wishlist"/>
+</p>
+
+@functions {
+    ComicsBrowserComponent comicsBrowser;
+
+    protected async Task OnCollectionChanged(bool success)
+    {
+        if(success)
+            await comicsBrowser.ReloadDataList();
+
+        StateHasChanged();
+    }
+}
