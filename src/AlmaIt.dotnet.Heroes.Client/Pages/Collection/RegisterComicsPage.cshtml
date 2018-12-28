@@ -3,6 +3,14 @@
 @page "/collection/comics"
 @inject HttpClient Http
 
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Home</a></li>
+    <li class="breadcrumb-item"><a href="/collection">Collection</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Collection by Comics</li>
+  </ol>
+</nav>
+
 <h1>Comic Books collection</h1>
 
 <p> <AddComicComponent ComicBookAdded="@OnCollectionChanged"/></p>

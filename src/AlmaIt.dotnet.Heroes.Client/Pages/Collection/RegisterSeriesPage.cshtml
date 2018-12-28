@@ -3,6 +3,14 @@
 @page "/collection/series"
 @inject HttpClient Http
 
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Home</a></li>
+    <li class="breadcrumb-item"><a href="/collection">Collection</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Collection by Series</li>
+  </ol>
+</nav>
+
 @if(!string.IsNullOrEmpty(this.Message))
 {
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
