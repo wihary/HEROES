@@ -1,4 +1,5 @@
 @using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration
+@using AlmaIt.dotnet.Heroes.Client.Pages.Components
 @using AlmaIt.dotnet.Heroes.Shared.Enumeration
 @using AlmaIt.dotnet.Heroes.Shared.Models
 @inject HttpClient Http
@@ -12,6 +13,7 @@ else
     <button type="button" class="btn btn-primary float-right w-25 mb-3" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="@(async () => await ToggleOverride())">
         @this.overrideToggleMessage
     </button>
+
     <table class="table table-striped table-sm table-hover">
         <thead>
             <th scope="col">Serie Name</th>
@@ -20,7 +22,7 @@ else
             <th scope="col"></th>
         </thead>
         <tbody>
-            @foreach (var comicBook in comicBooks)
+            @foreach (var comicBook in viewableComicBooks)
             {
                 <tr>
                     <td>
@@ -51,45 +53,92 @@ else
             }
         </tbody>
     </table>
+
+    <ul class="pagination">
+        <li class="page-item @(this.currentPage > 1 ? "enabled" : "disabled")">
+            <a class="page-link" onclick=@(() => ShowPage(1)) aria-label="Previous" aria-disabled=@(this.currentPage > 1 ? "false" : "true")>
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li class="page-item @(this.currentPage > 1 ? "enabled" : "disabled")">
+            <a class="page-link" onclick=@(() => ShowPage(this.currentPage - 1)) tabindex="-1" aria-disabled=@(this.currentPage > 1 ? " false" : "true")>
+                Previous
+            </a>
+        </li>
+        @{
+            int i = this.pagerMin;
+            while (i <= this.pagerMax)
+            {
+                var pageButtonNumber = i;
+                <li class="page-item @(pageButtonNumber == this.currentPage ? "active" : "")">
+                    <a class="page-link" name="page-@pageButtonNumber" onclick=@(() => ShowPage(pageButtonNumber))>
+                        @pageButtonNumber
+                    </a>
+                </li>
+                i++;
+            }
+        }
+        <li class="page-item @(this.currentPage < this.totalPages ? "enabled" : "disabled")">
+            <a class="page-link" onclick=@(() => ShowPage(this.currentPage + 1)) tabindex="-1" aria-disabled=@(this.currentPage < this.totalPages ? "false" : "true") >
+                Next
+            </a>
+        </li>
+        <li class="page-item @(this.currentPage < this.totalPages ? "enabled" : "disabled")">
+            <a class="page-link" onclick=@(() => ShowPage(this.totalPages)) aria-label="Next" aria-disabled=@(this.currentPage < this.totalPages ? "false" : "true")>
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
 }
 
 @functions {
     [Parameter]
     protected ComicsBrowserType browserType { get; set;}
     private List<ComicBook> comicBooks;
+    private IEnumerable<ComicBook> viewableComicBooks = new List<ComicBook>();
     private KeyValuePair<int, bool> editionStatus = new KeyValuePair<int, bool>(0, false);
     private bool overrideDiplayAllComics = false;
     private string overrideToggleMessage = "Show all";
+    int PageSize = 10;
+    int totalPages = 1;
+    int currentPage = 1;
+    int pagerSize = 5;
+    int pagerMin = 1;
+    int pagerMax = 1;
 
     protected override async Task OnInitAsync()
     {
         if(this.overrideDiplayAllComics)
         {
             comicBooks = await Http.GetJsonAsync<List<ComicBook>>("api/ComicBook");
-            return;
         }
-
-        switch (browserType)
+        else
         {
-            case ComicsBrowserType.All:
-                comicBooks = await Http.GetJsonAsync<List<ComicBook>>("api/ComicBook");
-                break;
-            case ComicsBrowserType.Collection:
-                comicBooks = await Http.GetJsonAsync<List<ComicBook>>($"api/ComicBook/type/{ComicBookStatus.Collection}");
-                break;
-            case ComicsBrowserType.Wishlist:
-                comicBooks = await Http.GetJsonAsync<List<ComicBook>>($"api/ComicBook/type/{ComicBookStatus.Wishlist}");
-                break;
-            default:
-                break;
+            switch (browserType)
+            {
+                case ComicsBrowserType.All:
+                    comicBooks = await Http.GetJsonAsync<List<ComicBook>>("api/ComicBook");
+                    break;
+                case ComicsBrowserType.Collection:
+                    comicBooks = await Http.GetJsonAsync<List<ComicBook>>($"api/ComicBook/type/{ComicBookStatus.Collection}");
+                    break;
+                case ComicsBrowserType.Wishlist:
+                    comicBooks = await Http.GetJsonAsync<List<ComicBook>>($"api/ComicBook/type/{ComicBookStatus.Wishlist}");
+                    break;
+                default:
+                    break;
+            }
         }
 
+        // Get number of pages
+        this.totalPages = (int)Math.Ceiling(this.comicBooks.Count() / (decimal)PageSize);
+        this.ShowPage(this.currentPage);
     }
 
     public async Task ReloadDataList()
     {
         await this.OnInitAsync();
-        StateHasChanged();
+        this.StateHasChanged();
     }
 
     protected async Task DeleteComicBook(int id)
@@ -97,32 +146,32 @@ else
         var result = await Http.DeleteAsync($"/api/ComicBook/{id}");
         await OnInitAsync();
 
-        StateHasChanged();
+        this.StateHasChanged();
     }
 
     protected void EditComicBook(int id)
     {
         this.editionStatus = new KeyValuePair<int, bool>(id, true);
 
-        StateHasChanged();
+        this.StateHasChanged();
     }
 
     protected async Task OnCollectionChanged(bool success)
     {
         if(success)
-            await OnInitAsync();
+            await this.OnInitAsync();
 
-        StateHasChanged();
+        this.StateHasChanged();
     }
 
     protected async Task OnEditionCompleted(bool success)
     {
         if(success)
-            await OnInitAsync();
+            await this.OnInitAsync();
 
         this.editionStatus = new KeyValuePair<int, bool>(0, false);
 
-        StateHasChanged();
+        this.StateHasChanged();
     }
 
     protected async Task ToggleOverride()
@@ -133,7 +182,18 @@ else
         else
             this.overrideToggleMessage = "Show all";
 
-        await OnInitAsync();
-        StateHasChanged();
+        await this.OnInitAsync();
+        this.StateHasChanged();
+    }
+
+    private void ShowPage(int pageToShow)
+    {
+        this.viewableComicBooks = this.comicBooks.Skip((pageToShow - 1) * PageSize).Take(PageSize);
+        this.currentPage = pageToShow;
+
+        this.pagerMin = (pageToShow - this.pagerSize) <= 0 ? 1 : (pageToShow - this.pagerSize);
+        this.pagerMax = (pageToShow + this.pagerSize) >= this.totalPages ? this.totalPages : (pageToShow + this.pagerSize);
+
+        this.StateHasChanged();
     }
 }
