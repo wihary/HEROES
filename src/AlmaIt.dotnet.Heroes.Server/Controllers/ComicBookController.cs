@@ -3,6 +3,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
     using System.Linq;
     using System.Threading.Tasks;
     using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface;
+    using AlmaIt.dotnet.Heroes.Shared.Enumeration;
     using AlmaIt.dotnet.Heroes.Shared.Models;
     using Microsoft.AspNetCore.Mvc;
 
@@ -71,6 +72,21 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         }
 
         /// <summary>
+        ///     API endpoint use to retrieve all comic books info
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("collection")]
+        public IActionResult GetAllInCollection()
+        {
+            var result = this.comicBookContext.Where(book => book.Status == ComicBookStatus.Collection);
+
+            if (result == null)
+                return NoContent();
+
+            return Ok(result);
+        }
+
+        /// <summary>
         ///     API endpoint use to create a new comic book
         /// </summary>
         /// <param name="comicBook">Comic book model to create</param>
@@ -114,7 +130,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             comicBook.ComicSerie = null;
 
             // Check if comic book series exists, in order to avoid Access Layer error
-            if(!comicBook.ComicSerieId.HasValue || !this.comicSerieContext.Exists(comicBook.ComicSerieId.Value))
+            if (!comicBook.ComicSerieId.HasValue || !this.comicSerieContext.Exists(comicBook.ComicSerieId.Value))
                 comicBook.ComicSerieId = null;
 
             var result = await this.comicBookContext.UpdateAsync(comicBook);

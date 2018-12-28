@@ -60,7 +60,7 @@ else
 
     protected override async Task OnInitAsync()
     {
-        comicBooks = await Http.GetJsonAsync<List<ComicBook>>("api/ComicBook");
+        comicBooks = await Http.GetJsonAsync<List<ComicBook>>("api/ComicBook/collection");
     }
 
     protected async Task DeleteComicBook(int id)
