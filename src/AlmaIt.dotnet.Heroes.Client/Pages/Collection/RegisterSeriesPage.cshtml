@@ -1,7 +1,5 @@
-@using AlmaIt.dotnet.Heroes.Shared.Models
-@using System.Net
+@using AlmaIt.dotnet.Heroes.Client.Pages.Components
 @page "/collection/series"
-@inject HttpClient Http
 
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
@@ -24,83 +22,27 @@
     <AddSerieComponent ComicSerieAdded="@OnCollectionChanged"/>
 </p>
 
-@if (comicSerieList == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var serie in comicSerieList)
-            {
-                <tr>
-                    <td>@serie.Name</td>
-                    <td>
-                        <button class="btn btn-default" onclick="@(() => EditComicSerie(serie.Id))">Edit</button>  |
-                        <button class="btn btn-default" onclick="@(async () => await DeleteComicSerie(serie.Id))">Delete</button>
-                    </td>
-                </tr>
-                @if(this.isSerieEditionEnabled.Key == serie.Id && this.isSerieEditionEnabled.Value)
-                {
-                    <tr>
-                        <td colspan="2" class="px-5 py-3">
-                            <EditSerieComponent SelectedSerie="@serie" EditCompleted="@OnEditionCompleted" />
-                        </td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
-}
+<p>
+    <SeriesBrowser ref="seriesBrowser" SendMessage="@OnMessageSent"/>
+</p>
+
 
 @functions {
-    private List<ComicSeries> comicSerieList;
-    private KeyValuePair<int, bool> isSerieEditionEnabled = new KeyValuePair<int, bool>(0, false);
     private string Message = string.Empty;
 
-    protected override async Task OnInitAsync()
-    {
-        comicSerieList = await Http.GetJsonAsync<List<ComicSeries>>("api/ComicSerie");
-    }
-
-    protected async Task DeleteComicSerie(int id)
-    {
-        var result = await Http.DeleteAsync($"/api/ComicSerie/{id}");
-        if(result.StatusCode == HttpStatusCode.BadRequest)
-            this.Message = await result.Content.ReadAsStringAsync();
-        await OnInitAsync();
-
-        StateHasChanged();
-    }
-
-    protected void EditComicSerie(int id)
-    {
-        this.isSerieEditionEnabled = new KeyValuePair<int, bool>(id, true);
-
-        StateHasChanged();
-    }
+    SeriesBrowser seriesBrowser;
 
     protected async Task OnCollectionChanged(bool success)
     {
         if(success)
-            await OnInitAsync();
+            await seriesBrowser.ReloadDataList();
 
-        StateHasChanged();
+        this.StateHasChanged();
     }
 
-    protected async Task OnEditionCompleted(bool success)
+    protected void OnMessageSent(string message)
     {
-        if(success)
-            await OnInitAsync();
-
-        this.isSerieEditionEnabled = new KeyValuePair<int, bool>(0, false);
-        StateHasChanged();
+        this.Message = message;
+        this.StateHasChanged();
     }
 }
