@@ -35,17 +35,26 @@ else
                 <tr>
                     <td>@serie.Name</td>
                     <td>
-                        <a href='/editComicBook/@serie.Id'>Edit</a>  |
+                        <button class="btn btn-default" onclick="@(() => EditComicSerie(serie.Id))">Edit</button>  |
                         <button class="btn btn-default" onclick="@(async () => await DeleteComicSerie(serie.Id))">Delete</button>
                     </td>
                 </tr>
+                @if(this.isSerieEditionEnabled.Key == serie.Id && this.isSerieEditionEnabled.Value)
+                {
+                    <tr>
+                        <td colspan="2" class="px-5 py-3">
+                            <EditSerieComponent SelectedSerie="@serie" EditCompleted="@OnEditionCompleted" />
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>
 }
 
 @functions {
-    List<ComicSeries> comicSerieList;
+    private List<ComicSeries> comicSerieList;
+    private KeyValuePair<int, bool> isSerieEditionEnabled = new KeyValuePair<int, bool>(0, false);
     private string Message = string.Empty;
 
     protected override async Task OnInitAsync()
@@ -63,11 +72,27 @@ else
         StateHasChanged();
     }
 
+    protected void EditComicSerie(int id)
+    {
+        this.isSerieEditionEnabled = new KeyValuePair<int, bool>(id, true);
+
+        StateHasChanged();
+    }
+
     protected async Task OnCollectionChanged(bool success)
     {
         if(success)
             await OnInitAsync();
 
+        StateHasChanged();
+    }
+
+    protected async Task OnEditionCompleted(bool success)
+    {
+        if(success)
+            await OnInitAsync();
+
+        this.isSerieEditionEnabled = new KeyValuePair<int, bool>(0, false);
         StateHasChanged();
     }
 }
