@@ -54,7 +54,7 @@ else
         </tbody>
     </table>
 
-    <ul class="pagination">
+    <ul class="pagination float-left">
         <li class="page-item @(this.currentPage > 1 ? "enabled" : "disabled")">
             <a class="page-link" onclick=@(() => ShowPage(1)) aria-label="Previous" aria-disabled=@(this.currentPage > 1 ? "false" : "true")>
                 <span aria-hidden="true">&laquo;</span>
@@ -89,6 +89,7 @@ else
             </a>
         </li>
     </ul>
+    <span class="float-right btn btn-link disabled">Nb Comics : @this.comicBooks.Count</span>
 }
 
 @functions {
