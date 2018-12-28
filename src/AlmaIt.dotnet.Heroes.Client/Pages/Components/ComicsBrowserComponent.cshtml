@@ -75,6 +75,11 @@ else
 
     }
 
+    public async Task ReloadDataList()
+    {
+        await this.OnInitAsync();
+    }
+
     protected async Task DeleteComicBook(int id)
     {
         var result = await Http.DeleteAsync($"/api/ComicBook/{id}");
