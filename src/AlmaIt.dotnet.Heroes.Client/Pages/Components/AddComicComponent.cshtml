@@ -2,78 +2,87 @@
 @using AlmaIt.dotnet.Heroes.Shared.Enumeration
 @inject HttpClient Http
 
-
-<div class="alert alert-primary" role="alert">
-    <h4>Add new Comic Book</h4>
-    <div class="form-row">
-        <div class="col-4">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="Title">Title</span>
-                </div>
-                <input type="text" class="form-control" aria-describedby="Title" bind="@comicBook.Title" />
-            </div>
-        </div>
-        <div class="col-1">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="Issue">Issue</span>
-                </div>
-                <input type="text" class="form-control" aria-describedby="Issue" bind="@comicBook.IssueNumber" />
-            </div>
-        </div>
-        <div class="col-auto">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="Parution">Parution</span>
-                </div>
-                <input type="date" class="form-control" aria-describedby="Parution" bind="@comicBook.ParutionDate" format-value="yyyy-MM-dd" />
-            </div>
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="col-auto">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="Serie">Related to</span>
-                </div>
-                <select class="form-control" aria-describedby="Serie" bind="@selectedComicSerie">
-                <option value="">-- Select related Serie --</option>
-                    @foreach (var comicSerie in comicSerieList)
-                    {
-                        <option value="@comicSerie.Id">@comicSerie.Name</option>
-                    }
-                </select>
-            </div>
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="col-auto">
-            <div class="form-group">
-                <label for="bookStatusOption">Where does this Comic Book belong ?</label><br/>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="bookStatusOption" id="optionCollection" checked="@(selectedBookStatus == ComicBookStatus.Collection)" onchange="@(() => selectedBookStatus = ComicBookStatus.Collection)" />
-                    <label class="form-check-label" for="optionCollection">Collection</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="bookStatusOption" id="optionWishlist" checked="@(selectedBookStatus == ComicBookStatus.Wishlist)" onchange="@(() => selectedBookStatus = ComicBookStatus.Wishlist)" />
-                    <label class="form-check-label" for="optionWishlist">Wishlist</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="bookStatusOption" id="optionNone" checked="@(selectedBookStatus == ComicBookStatus.None)" onchange="@(() => selectedBookStatus = ComicBookStatus.None)" />
-                    <label class="form-check-label" for="optionNone">Neither</label>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="col-auto">
-            <button class="btn btn-default" onclick="@(async () => await CreateComicBook())">Save</button>
-        </div>
+<div class="row">
+    <div class="col-md-3 px-3 py-3">
+        <button class="btn btn-primary btn-sm" type="button" onclick="@(() => ToggleShowAddComic())">Add comic book</button>
     </div>
 </div>
+@if(showAddComicPanel)
+{
+    <div class="alert alert-primary" role="alert">
+        <h4>Add new Comic Book</h4>
+        <div class="form-row">
+            <div class="col-4">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="Title">Title</span>
+                    </div>
+                    <input type="text" class="form-control" aria-describedby="Title" bind="@comicBook.Title" />
+                </div>
+            </div>
+            <div class="col-1">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="Issue">Issue</span>
+                    </div>
+                    <input type="text" class="form-control" aria-describedby="Issue" bind="@comicBook.IssueNumber" />
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="Parution">Parution</span>
+                    </div>
+                    <input type="date" class="form-control" aria-describedby="Parution" bind="@comicBook.ParutionDate" format-value="yyyy-MM-dd" />
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-auto">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="Serie">Related to</span>
+                    </div>
+                    <select class="form-control" aria-describedby="Serie" bind="@selectedComicSerie">
+                    <option value="">-- Select related Serie --</option>
+                        @foreach (var comicSerie in comicSerieList)
+                        {
+                            <option value="@comicSerie.Id">@comicSerie.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-auto">
+                <div class="form-group">
+                    <label for="bookStatusOption">Where does this Comic Book belong ?</label><br/>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="bookStatusOption" id="optionCollection" checked="@(selectedBookStatus == ComicBookStatus.Collection)" onchange="@(() => selectedBookStatus = ComicBookStatus.Collection)" />
+                        <label class="form-check-label" for="optionCollection">Collection</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="bookStatusOption" id="optionWishlist" checked="@(selectedBookStatus == ComicBookStatus.Wishlist)" onchange="@(() => selectedBookStatus = ComicBookStatus.Wishlist)" />
+                        <label class="form-check-label" for="optionWishlist">Wishlist</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="bookStatusOption" id="optionNone" checked="@(selectedBookStatus == ComicBookStatus.None)" onchange="@(() => selectedBookStatus = ComicBookStatus.None)" />
+                        <label class="form-check-label" for="optionNone">Neither</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-auto">
+                <button class="btn btn-default" onclick="@(async () => await CreateComicBook())">Save</button>
+            </div>
+        </div>
+    </div>
+}
+
 
 @functions {
+    private bool showAddComicPanel = false;
     ComicBook comicBook = new ComicBook();
     List<ComicSeries> comicSerieList = new List<ComicSeries>();
     int selectedComicSerie = 0;
@@ -96,5 +105,11 @@
         await Http.SendJsonAsync(HttpMethod.Post, "/api/ComicBook", comicBook);
 
         await this.ComicBookAdded(true);
+    }
+
+    protected void ToggleShowAddComic()
+    {
+        this.showAddComicPanel = !this.showAddComicPanel;
+        StateHasChanged();
     }
 }

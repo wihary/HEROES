@@ -4,9 +4,8 @@
 @inject HttpClient Http
 
 <h1>Comic Books collection</h1>
-<p>
-    <AddComicComponent ComicBookAdded="@OnCollectionChanged"/>
-</p>
+
+<p> <AddComicComponent ComicBookAdded="@OnCollectionChanged"/></p>
 
 <p>
     <ComicsBrowserComponent ref="comicsBrowser" browserType="@ComicsBrowserType.Collection"/>
