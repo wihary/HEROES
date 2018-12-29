@@ -18,11 +18,27 @@ app {
 
 .main {
     flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
     .main .top-row {
         background-color: #e6e6e6;
         border-bottom: 1px solid #d6d5d5;
+    }
+    .main .content {
+        flex: 1;
+        display: flex;
+    }
+
+        .main .content .container {
+            margin: auto;
+            width: 100%;
+            max-width: 930px;
+        }
+
+    .main footer {
+        text-align: center;
     }
 
 .sidebar {
@@ -120,4 +136,54 @@ app {
         /* Never collapse the sidebar for wide screens */
         display: block;
     }
+}
+
+.tile {
+    width: 100%;
+    display: inline-block;
+    box-sizing: border-box;
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 10px;
+}
+
+.tile .oi {
+    width: 2rem;
+}
+
+.tile .title {
+    margin-top: 0;
+}
+.tile.purple, .tile.blue, .tile.red, .tile.orange, .tile.green {
+    color: #fff;
+}
+.tile.purple {
+    background: #5133AB;
+}
+.tile.purple:hover {
+    background: #3e2784;
+}
+.tile.red {
+    background: #AC193D;
+}
+.tile.red:hover {
+    background: #7f132d;
+}
+.tile.green {
+    background: #00A600;
+}
+.tile.green:hover {
+    background: #007300;
+}
+.tile.blue {
+    background: #2672EC;
+}
+.tile.blue:hover {
+    background: #125acd;
+}
+.tile.orange {
+    background: #DC572E;
+}
+.tile.orange:hover {
+    background: #b8431f;
 }

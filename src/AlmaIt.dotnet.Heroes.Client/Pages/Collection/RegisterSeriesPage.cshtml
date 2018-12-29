@@ -1,0 +1,55 @@
+@using AlmaIt.dotnet.Heroes.Client.Pages.Components
+@page "/collection/series"
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Home</a></li>
+    <li class="breadcrumb-item"><a href="/collection">Collection</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Collection by Series</li>
+  </ol>
+</nav>
+
+@if(!string.IsNullOrEmpty(this.Message))
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @this.Message
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <h1>Registered Comic book series</h1>
+    </div>
+    <div class="col-md-2 offset-md-4">
+        <a href="/collection/comics">Switch to comics</a>
+    </div>
+</div>
+
+<p>
+    <AddSerieComponent ComicSerieAdded="@OnCollectionChanged"/>
+</p>
+
+<p>
+    <SeriesBrowser ref="seriesBrowser" SendMessage="@OnMessageSent"/>
+</p>
+
+
+@functions {
+    private string Message = string.Empty;
+
+    SeriesBrowser seriesBrowser;
+
+    protected async Task OnCollectionChanged(bool success)
+    {
+        if(success)
+            await seriesBrowser.ReloadDataList();
+
+        this.StateHasChanged();
+    }
+
+    protected void OnMessageSent(string message)
+    {
+        this.Message = message;
+        this.StateHasChanged();
+    }
+}

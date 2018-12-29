@@ -1,0 +1,40 @@
+@using AlmaIt.dotnet.Heroes.Shared.Models
+@inject HttpClient Http
+
+<div class="alert alert-secondary" role="alert">
+    <h3>Edit Comics serie details</h3>
+    <div class="form-row">
+        <div class="col-4">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Title">Title</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="Title" bind="@SelectedSerie.Name" />
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-auto">
+            <button class="btn btn-default" onclick="@(async () => await EditionCompleted(false))">Cancel</button>
+            <button class="btn btn-default" onclick="@(async () => await UpdateComicSerie())">Save</button>
+        </div>
+    </div>
+</div>
+
+@functions {
+    [Parameter]
+    protected Func<bool, Task> EditCompleted { get; set; }
+    [Parameter]
+    protected ComicSeries SelectedSerie { get; set; }
+
+    protected async Task EditionCompleted(bool success)
+    {
+        await this.EditCompleted(success);
+    }
+
+    protected async Task UpdateComicSerie()
+    {
+        await Http.SendJsonAsync(HttpMethod.Put, "/api/ComicSerie", this.SelectedSerie);
+        await this.EditionCompleted(true);
+    }
+}

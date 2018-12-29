@@ -1,9 +1,0 @@
-U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Shared\bin\Debug\netstandard2.0\AlmaIt.dotnet.Heroes.Shared.deps.json
-U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Shared\bin\Debug\netstandard2.0\AlmaIt.dotnet.Heroes.Shared.dll
-U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Shared\bin\Debug\netstandard2.0\AlmaIt.dotnet.Heroes.Shared.pdb
-U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Shared\obj\Debug\netstandard2.0\AlmaIt.dotnet.Heroes.Shared.csprojAssemblyReference.cache
-U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Shared\obj\Debug\netstandard2.0\AlmaIt.dotnet.Heroes.Shared.csproj.CoreCompileInputs.cache
-U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Shared\obj\Debug\netstandard2.0\AlmaIt.dotnet.Heroes.Shared.AssemblyInfoInputs.cache
-U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Shared\obj\Debug\netstandard2.0\AlmaIt.dotnet.Heroes.Shared.AssemblyInfo.cs
-U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Shared\obj\Debug\netstandard2.0\AlmaIt.dotnet.Heroes.Shared.dll
-U:\OneDrive\Personnel\Dev\HEROES\src\AlmaIt.dotnet.Heroes.Shared\obj\Debug\netstandard2.0\AlmaIt.dotnet.Heroes.Shared.pdb

@@ -1,7 +1,35 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page">Home</li>
+  </ol>
+</nav>
 
-Welcome to your new app.
+<h1>Welcome HERO !</h1>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+Welcome to your comic collection handy tool :D
+
+<div class="container text-center">
+    <div class="row">
+        <div class="col-md-4">
+            <a href="/collection" class="tile purple">
+                <h3 class="title"><span class="oi oi-list-rich" aria-hidden="true"></span> Collection</h3>
+                <p>See what's inside ;)</p>
+            </a>
+
+        </div>
+        <div class="col-md-4">
+            <a href="/wishlist" class="tile green">
+                <h3 class="title"><span class="oi oi-task" aria-hidden="true"></span> Wishlist</h3>
+                <p>Need anything ?</p>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="/settings" class="tile blue">
+                <h3 class="title"><span class="oi oi-cog" aria-hidden="true"></span> Settings</h3>
+                <p>Application parameters</p>
+            </a>
+        </div>
+    </div>
+</div>
