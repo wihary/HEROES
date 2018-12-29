@@ -4,12 +4,20 @@
 @using AlmaIt.dotnet.Heroes.Shared.Models
 @inject HttpClient Http
 
-@if (this.comicBooks == null)
+@if (this.fullComicBooksList == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
+    <div class="float-left">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="Filter"><button class="btn btn-sm" onclick="@ApplySearchFilter"><i class="oi oi-magnifying-glass"></i></button></span>
+            </div>
+            <input type="text" class="form-control" aria-describedby="Filter" placeholder="search" bind="@this.Filter"/>
+        </div>
+    </div>
     <button type="button" class="btn btn-primary float-right w-25 mb-3" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="@(async () => await ToggleOverride())">
         @this.overrideToggleMessage
     </button>
@@ -89,17 +97,19 @@ else
             </a>
         </li>
     </ul>
-    <span class="float-right btn btn-link disabled">Nb Comics : @this.comicBooks.Count</span>
+    <span class="float-right btn btn-link disabled">Nb Comics : @this.fullComicBooksList.Count</span>
 }
 
 @functions {
     [Parameter]
     protected ComicsBrowserType browserType { get; set;}
-    private List<ComicBook> comicBooks;
+    private List<ComicBook> fullComicBooksList;
+    private List<ComicBook> filteredComicBooksList;
     private IEnumerable<ComicBook> viewableComicBooks = new List<ComicBook>();
     private KeyValuePair<int, bool> editionStatus = new KeyValuePair<int, bool>(0, false);
     private bool overrideDiplayAllComics = false;
     private string overrideToggleMessage = "Show all";
+    private string Filter = string.Empty;
     int PageSize = 10;
     int totalPages = 1;
     int currentPage = 1;
@@ -111,28 +121,31 @@ else
     {
         if(this.overrideDiplayAllComics)
         {
-            comicBooks = await Http.GetJsonAsync<List<ComicBook>>("api/ComicBook");
+            fullComicBooksList = await Http.GetJsonAsync<List<ComicBook>>("api/ComicBook");
         }
         else
         {
             switch (browserType)
             {
                 case ComicsBrowserType.All:
-                    comicBooks = await Http.GetJsonAsync<List<ComicBook>>("api/ComicBook");
+                    fullComicBooksList = await Http.GetJsonAsync<List<ComicBook>>("api/ComicBook");
                     break;
                 case ComicsBrowserType.Collection:
-                    comicBooks = await Http.GetJsonAsync<List<ComicBook>>($"api/ComicBook/type/{ComicBookStatus.Collection}");
+                    fullComicBooksList = await Http.GetJsonAsync<List<ComicBook>>($"api/ComicBook/type/{ComicBookStatus.Collection}");
                     break;
                 case ComicsBrowserType.Wishlist:
-                    comicBooks = await Http.GetJsonAsync<List<ComicBook>>($"api/ComicBook/type/{ComicBookStatus.Wishlist}");
+                    fullComicBooksList = await Http.GetJsonAsync<List<ComicBook>>($"api/ComicBook/type/{ComicBookStatus.Wishlist}");
                     break;
                 default:
                     break;
             }
         }
 
-        // Get number of pages
-        this.totalPages = (int)Math.Ceiling(this.comicBooks.Count() / (decimal)PageSize);
+        // Apply search filter if any
+        this.ApplySearchFilter();
+
+        // Get number of pages based on filtered list
+        this.totalPages = (int)Math.Ceiling(this.filteredComicBooksList.Count() / (decimal)PageSize);
         this.ShowPage(this.currentPage);
     }
 
@@ -189,12 +202,23 @@ else
 
     private void ShowPage(int pageToShow)
     {
-        this.viewableComicBooks = this.comicBooks.Skip((pageToShow - 1) * PageSize).Take(PageSize);
+        this.viewableComicBooks = this.filteredComicBooksList.Skip((pageToShow - 1) * PageSize).Take(PageSize);
         this.currentPage = pageToShow;
 
         this.pagerMin = (pageToShow - this.pagerSize) <= 0 ? 1 : (pageToShow - this.pagerSize);
         this.pagerMax = (pageToShow + this.pagerSize) >= this.totalPages ? this.totalPages : (pageToShow + this.pagerSize);
 
         this.StateHasChanged();
+    }
+
+    protected void ApplySearchFilter()
+    {
+        if(string.IsNullOrEmpty(this.Filter))
+            this.filteredComicBooksList = this.fullComicBooksList;    
+        else
+            this.filteredComicBooksList = this.fullComicBooksList.Where(book => book.Title.Contains(this.Filter) || book.ComicSerie.Name.Contains(this.Filter)).ToList();
+
+        this.StateHasChanged();
+        this.ShowPage(this.currentPage);
     }
 }
