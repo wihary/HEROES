@@ -1,26 +1,35 @@
 @using AlmaIt.dotnet.Heroes.Shared.Models
 @inject HttpClient Http
 
-<div class="alert alert-primary" role="alert">
-    <h3>Add Comic Book Serie</h3>
-    <div class="form-row">
-        <div class="col-4">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="Title">Title</span>
+<div class="row">
+    <div class="col-md-3 px-3 py-3">
+        <button class="btn btn-primary btn-sm" type="button" onclick="@(() => ToggleShowAddSerie())">Add comics serie</button>
+    </div>
+</div>
+@if(showAddSeriePanel)
+{
+    <div class="alert alert-primary" role="alert">
+        <h3>Add Comic Book Serie</h3>
+        <div class="form-row">
+            <div class="col-4">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="Title">Title</span>
+                    </div>
+                    <input type="text" class="form-control" aria-describedby="Title" bind="@comicSerie.Name" />
                 </div>
-                <input type="text" class="form-control" aria-describedby="Title" bind="@comicSerie.Name" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-auto">
+                <button class="btn btn-default" onclick="@(async () => await CreateComicSerie())">Save</button>
             </div>
         </div>
     </div>
-    <div class="form-row">
-        <div class="col-auto">
-            <button class="btn btn-default" onclick="@(async () => await CreateComicSerie())">Save</button>
-        </div>
-    </div>
-</div>
+}
 
 @functions {
+    private bool showAddSeriePanel = false;
     [Parameter]
     Func<bool, Task> ComicSerieAdded { get; set; }
     private ComicSeries comicSerie = new ComicSeries();
@@ -30,5 +39,11 @@
         await Http.SendJsonAsync(HttpMethod.Post, "/api/ComicSerie", comicSerie);
 
         await this.ComicSerieAdded(true);
+    }
+
+    protected void ToggleShowAddSerie()
+    {
+        this.showAddSeriePanel = !this.showAddSeriePanel;
+        StateHasChanged();
     }
 }
