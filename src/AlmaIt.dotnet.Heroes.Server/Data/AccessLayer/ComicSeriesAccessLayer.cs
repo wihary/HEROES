@@ -1,8 +1,10 @@
 namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
 {
-
+    using System.Collections.Generic;
+    using System.Linq;
     using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface;
     using AlmaIt.dotnet.Heroes.Shared.Models;
+    using Microsoft.EntityFrameworkCore;
 
     /// <summary>
     ///     Class allowing access to <see cref="ComicSeries"/> data object.
@@ -17,5 +19,11 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
             : base(context)
         {
         }
+
+        /// <summary>
+        ///     Async Method that return all data object existing in Db
+        /// </summary>
+        /// <returns>List of <see cref="TModel"/></returns>
+        public override IAsyncEnumerable<ComicSeries> GetAllAsync() => this.ModelSet.Include(serie => serie.AssociatedComnicBooksExtended).ToAsyncEnumerable();
     }
 }
