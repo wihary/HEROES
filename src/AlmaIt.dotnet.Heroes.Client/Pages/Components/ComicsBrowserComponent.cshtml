@@ -1,3 +1,6 @@
+@using System.Diagnostics
+@using System.IO
+@using Newtonsoft.Json
 @using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration
 @using AlmaIt.dotnet.Heroes.Client.Pages.Components
 @using AlmaIt.dotnet.Heroes.Shared.Enumeration
@@ -98,6 +101,7 @@ else
         </li>
     </ul>
     <span class="float-right btn btn-link disabled">Nb Comics : @this.fullComicBooksList.Count</span>
+    <span class="float-right btn btn-link disabled">@this.statistics</span>
 }
 
 @functions {
@@ -110,6 +114,7 @@ else
     private bool overrideDiplayAllComics = false;
     private string overrideToggleMessage = "Show all";
     private string Filter = string.Empty;
+    private string statistics = string.Empty;
     int PageSize = 10;
     int totalPages = 1;
     int currentPage = 1;
@@ -119,26 +124,47 @@ else
 
     protected override async Task OnInitAsync()
     {
+        Stream response = null;
         if(this.overrideDiplayAllComics)
         {
-            fullComicBooksList = await Http.GetJsonAsync<List<ComicBook>>("api/ComicBook");
+            response = await Http.GetStreamAsync("api/ComicBook");
         }
         else
         {
             switch (browserType)
             {
                 case ComicsBrowserType.All:
-                    fullComicBooksList = await Http.GetJsonAsync<List<ComicBook>>("api/ComicBook");
+                    response = await Http.GetStreamAsync("api/ComicBook");
                     break;
                 case ComicsBrowserType.Collection:
-                    fullComicBooksList = await Http.GetJsonAsync<List<ComicBook>>($"api/ComicBook/type/{ComicBookStatus.Collection}");
+                    response = await Http.GetStreamAsync($"api/ComicBook/type/{ComicBookStatus.Collection}");
                     break;
                 case ComicsBrowserType.Wishlist:
-                    fullComicBooksList = await Http.GetJsonAsync<List<ComicBook>>($"api/ComicBook/type/{ComicBookStatus.Wishlist}");
+                    response = await Http.GetStreamAsync($"api/ComicBook/type/{ComicBookStatus.Wishlist}");
                     break;
                 default:
                     break;
             }
+        }
+
+        try
+        {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+            var serializer = new JsonSerializer();
+            using (var sr = new StreamReader(response))
+            using (var jsonTextReader = new JsonTextReader(sr))
+            {
+                fullComicBooksList = serializer.Deserialize<List<ComicBook>>(jsonTextReader);
+            }
+
+            stopWatch.Stop();
+            statistics += $"convert = {stopWatch.ElapsedMilliseconds.ToString()}ms";
+        }
+        catch (System.Exception ex)
+        {
+            statistics = ex.ToString();
         }
 
         // Apply search filter if any
@@ -214,7 +240,7 @@ else
     protected void ApplySearchFilter()
     {
         if(string.IsNullOrEmpty(this.Filter))
-            this.filteredComicBooksList = this.fullComicBooksList;    
+            this.filteredComicBooksList = this.fullComicBooksList;
         else
             this.filteredComicBooksList = this.fullComicBooksList.Where(book => book.Title.Contains(this.Filter) || book.ComicSerie.Name.Contains(this.Filter)).ToList();
 
