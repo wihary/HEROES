@@ -1,8 +1,10 @@
 namespace AlmaIt.dotnet.Heroes.Server.Controllers
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface;
+    using AlmaIt.dotnet.Heroes.Shared.Business;
     using AlmaIt.dotnet.Heroes.Shared.Enumeration;
     using AlmaIt.dotnet.Heroes.Shared.Models;
     using Microsoft.AspNetCore.Mvc;
@@ -75,15 +77,38 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         ///     API endpoint use to retrieve all comic books info
         /// </summary>
         /// <returns></returns>
-        [HttpGet("type/{status}")]
-        public IActionResult GetByStatus(ComicBookStatus status)
+        [HttpGet("{page}/{size}")]
+        public IActionResult GetAll(int page, int size)
         {
+            var response = new PageResponseData<ComicBook>();
+            var result = this.comicBookContext.GetAllAsync().ToEnumerable();
+
+            if (result == null)
+                return NoContent();
+
+            response.TotalResult = result.Count();
+            response.MaxPage = (int)Math.Ceiling(result.Count() / (decimal)size);
+            response.Result = result.Skip((page - 1) * size).Take(size);
+            return Ok(response);
+        }
+
+        /// <summary>
+        ///     API endpoint use to retrieve all comic books info
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("type/{status}/{page}/{size}")]
+        public IActionResult GetByStatus(ComicBookStatus status, int page, int size)
+        {
+            var response = new PageResponseData<ComicBook>();
             var result = this.comicBookContext.GetAllAsync().ToEnumerable().Where(book => book.Status == status);
 
             if (result == null)
                 return NoContent();
 
-            return Ok(result);
+            response.TotalResult = result.Count();
+            response.MaxPage = (int)Math.Ceiling(result.Count() / (decimal)size);
+            response.Result = result.Skip((page - 1) * size).Take(size);
+            return Ok(response);
         }
 
         /// <summary>
