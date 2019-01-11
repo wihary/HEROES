@@ -65,7 +65,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var result = this.comicBookContext.GetAllAsync().ToEnumerable();
+            var result = this.comicBookContext.GetAllAsync().ToEnumerable().Take(100);
 
             if (result == null)
                 return NoContent();
@@ -97,10 +97,23 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("type/{status}/{page}/{size}")]
-        public IActionResult GetByStatus(ComicBookStatus status, int page, int size)
+        public IActionResult GetByStatus([FromRoute]ComicBookStatus status,[FromRoute] int page, [FromRoute] int size)
+        {
+            return this.GetByStatus(status, page, size, string.Empty);
+        }
+
+        /// <summary>
+        ///     API endpoint use to retrieve all comic books info
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("type/{status}/{page}/{size}/{filter}")]
+        public IActionResult GetByStatus([FromRoute]ComicBookStatus status,[FromRoute] int page, [FromRoute] int size, [FromRoute]string filter = "")
         {
             var response = new PageResponseData<ComicBook>();
             var result = this.comicBookContext.GetAllAsync().ToEnumerable().Where(book => book.Status == status);
+
+            if(!string.IsNullOrEmpty(filter))
+                result = result.Where(book => book.Title.Contains(filter, StringComparison.InvariantCultureIgnoreCase) || book.ComicSerie.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase));
 
             if (result == null)
                 return NoContent();

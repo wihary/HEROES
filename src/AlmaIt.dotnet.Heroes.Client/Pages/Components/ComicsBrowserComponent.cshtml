@@ -148,17 +148,17 @@ else
         this.StateHasChanged();
     }
 
-    protected async Task GetCurrentPageData(ComicsBrowserType browserType, int pageToShow, int size)
+    protected async Task GetCurrentPageData(ComicsBrowserType browserType, int pageToShow, int size, string filter = "")
     {
         Stream response = null;
 
         switch (browserType)
         {
             case ComicsBrowserType.All:
-                response = await Http.GetStreamAsync($"api/ComicBook/{pageToShow}/{size}");
+                response = await Http.GetStreamAsync($"api/ComicBook/{pageToShow}/{size}/{filter}");
                 break;
             default:
-                response = await Http.GetStreamAsync($"api/ComicBook/type/{browserType}/{pageToShow}/{size}");
+                response = await Http.GetStreamAsync($"api/ComicBook/type/{browserType}/{pageToShow}/{size}/{filter}");
                 break;
         }
 
@@ -167,14 +167,17 @@ else
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            var serializer = new JsonSerializer();
-            using (var sr = new StreamReader(response))
-            using (var jsonTextReader = new JsonTextReader(sr))
+            if(response.Length > 0)
             {
-                var serviceData = serializer.Deserialize<PageResponseData<ComicBook>>(jsonTextReader);
-                this.viewableComicBooks = serviceData.Result;
-                this.totalPages = serviceData.MaxPage;
-                this.totalResult = serviceData.TotalResult;
+                var serializer = new JsonSerializer();
+                using (var sr = new StreamReader(response))
+                using (var jsonTextReader = new JsonTextReader(sr))
+                {
+                    var serviceData = serializer.Deserialize<PageResponseData<ComicBook>>(jsonTextReader);
+                    this.viewableComicBooks = serviceData.Result;
+                    this.totalPages = serviceData.MaxPage;
+                    this.totalResult = serviceData.TotalResult;
+                }
             }
 
             stopWatch.Stop();
@@ -261,14 +264,10 @@ else
         this.StateHasChanged();
     }
 
-    protected void ApplySearchFilter()
+    protected async Task ApplySearchFilter()
     {
-        //if(string.IsNullOrEmpty(this.Filter))
-            //this.filteredComicBooksList = this.fullComicBooksList;
-        //else
-            //this.filteredComicBooksList = this.fullComicBooksList.Where(book => book.Title.Contains(this.Filter) || book.ComicSerie.Name.Contains(this.Filter)).ToList();
-
+        this.currentPage = 1;
+        await this.ShowPage(this.currentPage);
         this.StateHasChanged();
-        this.ShowPage(this.currentPage);
     }
 }
