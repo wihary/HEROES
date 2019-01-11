@@ -1,5 +1,7 @@
 namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using AlmaIt.dotnet.Heroes.Shared.Models;
 
     /// <summary>
@@ -7,6 +9,6 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface
     /// </summary>
     public interface IComicBookAccessLayer : IBaseAccessLayer<ComicBook, int>
     {
-
+        Task<IEnumerable<ComicBook>> GetAllComcisAndSerieInfo();
     }
 }

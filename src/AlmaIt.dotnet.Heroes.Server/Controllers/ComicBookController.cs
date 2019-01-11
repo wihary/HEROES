@@ -65,7 +65,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var result = this.comicBookContext.GetAllAsync().ToEnumerable().Take(100);
+            var result = this.comicBookContext.GetAllComcisAndSerieInfo();
 
             if (result == null)
                 return NoContent();
@@ -78,10 +78,10 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("{page}/{size}")]
-        public IActionResult GetAll(int page, int size)
+        public async Task<IActionResult> GetAllAsync(int page, int size)
         {
             var response = new PageResponseData<ComicBook>();
-            var result = this.comicBookContext.GetAllAsync().ToEnumerable();
+            var result = await this.comicBookContext.GetAllComcisAndSerieInfo();
 
             if (result == null)
                 return NoContent();
@@ -97,9 +97,9 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("type/{status}/{page}/{size}")]
-        public IActionResult GetByStatus([FromRoute]ComicBookStatus status,[FromRoute] int page, [FromRoute] int size)
+        public async Task<IActionResult> GetByStatusAsync([FromRoute]ComicBookStatus status,[FromRoute] int page, [FromRoute] int size)
         {
-            return this.GetByStatus(status, page, size, string.Empty);
+            return await this.GetByStatusAsync(status, page, size, string.Empty);
         }
 
         /// <summary>
@@ -107,10 +107,10 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("type/{status}/{page}/{size}/{filter}")]
-        public IActionResult GetByStatus([FromRoute]ComicBookStatus status,[FromRoute] int page, [FromRoute] int size, [FromRoute]string filter = "")
+        public async Task<IActionResult> GetByStatusAsync([FromRoute]ComicBookStatus status,[FromRoute] int page, [FromRoute] int size, [FromRoute]string filter = "")
         {
             var response = new PageResponseData<ComicBook>();
-            var result = this.comicBookContext.GetAllAsync().ToEnumerable().Where(book => book.Status == status);
+            var result = (await this.comicBookContext.GetAllComcisAndSerieInfo()).Where(book => book.Status == status);
 
             if(!string.IsNullOrEmpty(filter))
                 result = result.Where(book => book.Title.Contains(filter, StringComparison.InvariantCultureIgnoreCase) || book.ComicSerie.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase));
