@@ -34,44 +34,33 @@ else
             <th scope="col"></th>
         </thead>
         <tbody>
-            @if(this.isLoading)
+            @foreach (var comicBook in viewableComicBooks)
             {
                 <tr>
-                    <td colspan="4" class="px-5 py-3">
-                        <span>Loading...</span>
+                    <td>
+                        @if(@comicBook.ComicSerie == null)
+                        {
+                            <span> - </span>
+                        }
+                        else
+                        {
+                            <span>@comicBook.ComicSerie.Name</span>
+                        }
+                    </td>
+                    <td>@comicBook.Title</td>
+                    <td>@comicBook.IssueNumber</td>
+                    <td>
+                        <button class="btn btn-default" onclick="@(() => EditComicBook(comicBook.Id))">Edit</button> |
+                        <button class="btn btn-default" onclick="@(async () => await DeleteComicBook(comicBook.Id))">Delete</button>
                     </td>
                 </tr>
-            }
-            else
-            {
-                @foreach (var comicBook in viewableComicBooks)
+                @if(this.editionStatus.Key == comicBook.Id && this.editionStatus.Value)
                 {
                     <tr>
-                        <td>
-                            @if(@comicBook.ComicSerie == null)
-                            {
-                                <span> - </span>
-                            }
-                            else
-                            {
-                                <span>@comicBook.ComicSerie.Name</span>
-                            }
-                        </td>
-                        <td>@comicBook.Title</td>
-                        <td>@comicBook.IssueNumber</td>
-                        <td>
-                            <button class="btn btn-default" onclick="@(() => EditComicBook(comicBook.Id))">Edit</button> |
-                            <button class="btn btn-default" onclick="@(async () => await DeleteComicBook(comicBook.Id))">Delete</button>
+                        <td colspan="4" class="px-5 py-3">
+                            <EditComicComponent EditedComicBook="@comicBook" EditCompleted="@OnEditionCompleted"/>
                         </td>
                     </tr>
-                    @if(this.editionStatus.Key == comicBook.Id && this.editionStatus.Value)
-                    {
-                        <tr>
-                            <td colspan="4" class="px-5 py-3">
-                                <EditComicComponent EditedComicBook="@comicBook" EditCompleted="@OnEditionCompleted"/>
-                            </td>
-                        </tr>
-                    }
                 }
             }
         </tbody>
@@ -132,7 +121,6 @@ else
     int pagerSize = 5;
     int pagerMin = 1;
     int pagerMax = 1;
-    bool isLoading = false;
 
     protected override async Task OnInitAsync()
     {
@@ -251,16 +239,12 @@ else
 
     private async Task ShowPage(int pageToShow)
     {
-        this.isLoading = true;
-        this.StateHasChanged();
-
         this.currentPage = pageToShow;
-        await this.GetCurrentPageData(this.browserType, this.currentPage, this.PageSize);
+        await this.GetCurrentPageData(this.browserType, this.currentPage, this.PageSize, this.Filter);
 
         this.pagerMin = (pageToShow - this.pagerSize) <= 0 ? 1 : (pageToShow - this.pagerSize);
         this.pagerMax = (pageToShow + this.pagerSize) >= this.totalPages ? this.totalPages : (pageToShow + this.pagerSize);
 
-        this.isLoading = false;
         this.StateHasChanged();
     }
 
