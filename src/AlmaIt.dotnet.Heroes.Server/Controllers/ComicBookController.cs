@@ -7,8 +7,10 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
     using AlmaIt.dotnet.Heroes.Shared.Business;
     using AlmaIt.dotnet.Heroes.Shared.Enumeration;
     using AlmaIt.dotnet.Heroes.Shared.Models;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    [Produces("application/json")]
     [Route("api/[controller]")]
     public class ComicBookController : Controller
     {
@@ -62,6 +64,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         ///     API endpoint use to retrieve all comic books info
         /// </summary>
         /// <returns></returns>
+        //[Authorize(Policy = "ReadOnlyUsers")]
         [HttpGet]
         public IActionResult GetAll()
         {

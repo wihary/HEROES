@@ -14,6 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Dotnet.JsonIdentityProvider">
+      <HintPath>..\..\lib\Dotnet.JsonIdentityProvider.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AlmaIt.dotnet.Heroes.Shared\AlmaIt.dotnet.Heroes.Shared.csproj" />
   </ItemGroup>
 

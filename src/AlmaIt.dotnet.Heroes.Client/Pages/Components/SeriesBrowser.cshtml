@@ -84,7 +84,7 @@ else
         </li>
     </ul>
     <span class="float-right btn btn-link disabled">Nb Series : @this.fullComicSerieList.Count</span>
-}  
+}
 
 @functions {
     private List<ComicSeries> fullComicSerieList;
@@ -107,7 +107,7 @@ else
 
         // Apply search filter if any
         this.ApplySearchFilter();
-        
+
         // Get number of pages
         this.totalPages = (int)Math.Ceiling(this.filteredComicSerie.Count() / (decimal)PageSize);
         this.ShowPage(this.currentPage);
@@ -167,7 +167,7 @@ else
     protected void ApplySearchFilter()
     {
         if(string.IsNullOrEmpty(this.Filter))
-            this.filteredComicSerie = this.fullComicSerieList;    
+            this.filteredComicSerie = this.fullComicSerieList;
         else
             this.filteredComicSerie = this.fullComicSerieList.Where(serie => serie.Name.Contains(this.Filter)).ToList();
 
@@ -175,4 +175,4 @@ else
         this.ShowPage(this.currentPage);
     }
 }
-   
+

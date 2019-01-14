@@ -1,0 +1,27 @@
+[
+    {
+        "Claims": [
+            {
+                "Id": 0,
+                "UserId": null,
+                "ClaimType": "SuperUser",
+                "ClaimValue": "True"
+            }
+        ],
+        "Id": "6bfd02dd-02de-4ae9-8977-772d7e4b9054",
+        "UserName": "root",
+        "NormalizedUserName": "ROOT",
+        "Email": null,
+        "NormalizedEmail": null,
+        "EmailConfirmed": false,
+        "PasswordHash": "AQAAAAEAACcQAAAAEPEklpcD6/h4WXtS4mzEY76idBGQQ42lVnnKyXig8dFxMuq1/mtcp6LcqTGt4tuS+Q==",
+        "SecurityStamp": null,
+        "ConcurrencyStamp": "cd737313-cfde-4cbf-bf81-067a2edbd9cd",
+        "PhoneNumber": null,
+        "PhoneNumberConfirmed": false,
+        "TwoFactorEnabled": false,
+        "LockoutEnd": null,
+        "LockoutEnabled": false,
+        "AccessFailedCount": 0
+    }
+]
