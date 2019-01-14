@@ -12,3 +12,5 @@ src/AlmaIt\.dotnet\.Heroes\.Shared/obj/
 src/AlmaIt\.dotnet\.Heroes\.Shared/bin/
 
 src/AlmaIt\.dotnet\.Heroes\.Server/Data/Heroes\.db
+
+src/AlmaIt\.dotnet\.Heroes\.Server/Data/claims\.json
