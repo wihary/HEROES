@@ -53,5 +53,9 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
         /// </summary>
         public bool IsSerieCompleted { get; set; }
 
+        /// <summary>
+        /// List of all associated Tag object
+        /// </summary>
+        public List<ComicSeriesTags> Tags { get; set; } = new List<ComicSeriesTags>();
     }
 }

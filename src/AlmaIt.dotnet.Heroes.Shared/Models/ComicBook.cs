@@ -1,6 +1,7 @@
 namespace AlmaIt.dotnet.Heroes.Shared.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using AlmaIt.dotnet.Heroes.Shared.Enumeration;
@@ -56,5 +57,10 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
         /// Status of the comic book
         /// </summary>
         public ComicBookStatus Status { get; set; } = ComicBookStatus.None;
+
+        /// <summary>
+        /// List of all associated Tag object
+        /// </summary>
+        public List<ComicBookTags> Tags { get; set; } = new List<ComicBookTags>();
     }
 }
