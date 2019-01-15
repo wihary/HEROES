@@ -1,0 +1,30 @@
+@inherits AlmaIt.dotnet.Heroes.Client.Components.Settings.UserListBase
+@if(!string.IsNullOrEmpty(this.Message))
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @this.Message
+    </div>
+}
+
+@if (this.Users == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped table-sm table-hover">
+        <thead>
+            <th scope="col">User Name</th>
+            <th scope="col">Claim list</th>
+        </thead>
+        <tbody>
+            @foreach (var user in this.Users)
+            {
+                <tr>
+                    <td>@user.Name</td>
+                    <td>@String.Join(";", user.Claims)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
