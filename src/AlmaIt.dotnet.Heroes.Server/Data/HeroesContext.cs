@@ -16,6 +16,11 @@ namespace AlmaIt.dotnet.Heroes.Server.Data
         public DbSet<ComicSeries> ComicSeries{ get; set; }
 
         /// <summary>
+        /// Represent the whole dataset of available Tags
+        /// </summary>
+        public DbSet<ObjectTag> Tags{ get; set; }
+
+        /// <summary>
         ///     Override
         ///     This method is called for each instance of the context that is created
         /// </summary>
