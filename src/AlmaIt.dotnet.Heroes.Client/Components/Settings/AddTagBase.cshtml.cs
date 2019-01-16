@@ -1,6 +1,8 @@
 namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
 {
     using System;
+    using System.Collections.Generic;
+    using System.Drawing;
     using System.Net.Http;
     using System.Threading.Tasks;
     using AlmaIt.dotnet.Heroes.Shared.Models;
@@ -19,6 +21,8 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
 
         protected bool IsVisible = false;
 
+        protected Color[] AvailableColor = { Color.AliceBlue, Color.Blue, Color.Green, Color.Red, Color.Yellow };
+
 
         /// <summary>
         ///     Method that send a post request to server with Tag object in order to create it
@@ -29,7 +33,6 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
             await Http.SendJsonAsync(HttpMethod.Post, "/api/tag", this.Tag);
 
             await this.TagCreated(true);
-            this.ResetPanelState();
         }
 
         protected void ResetPanelState()

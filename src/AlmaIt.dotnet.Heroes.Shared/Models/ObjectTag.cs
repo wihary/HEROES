@@ -9,6 +9,11 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
     /// <typeparam name="int">Unique identifier (primary key)</typeparam>
     public class ObjectTag : IDataObject<int>
     {
+        public ObjectTag()
+        {
+            this.Color = Color.AliceBlue;
+        }
+
         public int Id { get; set; }
 
         public string Name { get; set; }
