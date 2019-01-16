@@ -5,6 +5,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
     using System.Drawing;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using AlmaIt.dotnet.Heroes.Shared.Enumeration;
     using AlmaIt.dotnet.Heroes.Shared.Models;
     using Microsoft.AspNetCore.Blazor;
     using Microsoft.AspNetCore.Blazor.Components;
@@ -21,8 +22,19 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
 
         protected bool IsVisible = false;
 
-        protected Color[] AvailableColor = { Color.AliceBlue, Color.Blue, Color.Green, Color.Red, Color.Yellow };
+        protected List<Color> AvailableColor = new List<Color>();
 
+        /// <summary>
+        ///     This method is the entry point to the blazor component rendering
+        /// </summary>
+        /// <returns></returns>
+        protected override void OnInit()
+        {    
+            foreach (string knownColor in Enum.GetNames(typeof(KnownColor)))
+            {
+                this.AvailableColor.Add(Color.FromName(knownColor));
+            }
+        }
 
         /// <summary>
         ///     Method that send a post request to server with Tag object in order to create it
