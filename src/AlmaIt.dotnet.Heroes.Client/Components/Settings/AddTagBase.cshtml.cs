@@ -45,6 +45,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
         {
             await Http.SendJsonAsync(HttpMethod.Post, "/api/tag", this.tag);
             await this.TagCreated(true);
+            this.StateHasChanged();
         }
 
         protected void ResetPanelState()
