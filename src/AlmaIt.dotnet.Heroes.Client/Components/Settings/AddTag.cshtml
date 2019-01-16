@@ -20,7 +20,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="Name">Name</span>
                     </div>
-                    <input type="text" class="form-control" aria-describedby="Name" bind="@this.Tag.Name" />
+                    <input type="text" class="form-control" aria-describedby="Name" bind="@this.tag.Name" />
                 </div>
             </div>
             <div class="col-auto">
@@ -28,12 +28,15 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="Color">Color: </span>
                     </div>
-                    <select class="form-control" aria-describedby="Color" style="background-color: @this.Tag.Argb.ToHtml()"  bind="@this.Tag.Argb">
+                    <select class="form-control" aria-describedby="Color" style="background-color: @this.tag.Argb.ToHtml()"  bind="@this.tag.Argb">
                         @foreach (var color in this.AvailableColor)
                         {
                             <option value="@color.ToArgb()" style="background-color: @color.ToHtml()"></option>
                         }
                     </select>
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" disabled>#@this.tag.Color.Name</span>
+                    </div>
                 </div>
             </div>
         </div>

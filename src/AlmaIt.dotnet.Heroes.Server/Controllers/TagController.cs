@@ -75,6 +75,9 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] ObjectTag tag)
         {
+            if(tag == null)
+                return this.BadRequest();
+                
             var result = await this.objectTagAccess.AddAsync(tag);
             return Ok(result);
         }

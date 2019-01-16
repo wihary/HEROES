@@ -9,6 +9,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
     using AlmaIt.dotnet.Heroes.Shared.Models;
     using Microsoft.AspNetCore.Blazor;
     using Microsoft.AspNetCore.Blazor.Components;
+    using Newtonsoft.Json;
 
     public class AddTagBase : BlazorComponent
     {
@@ -18,7 +19,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
         [Parameter]
         Func<bool, Task> TagCreated { get; set; }
 
-        public ObjectTag Tag { get; set; } = new ObjectTag();
+        public ObjectTag tag { get; set; } = new ObjectTag();
 
         protected bool IsVisible = false;
 
@@ -42,14 +43,13 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
         /// <returns></returns>
         protected async Task CreateTag()
         {
-            await Http.SendJsonAsync(HttpMethod.Post, "/api/tag", this.Tag);
-
+            await Http.SendJsonAsync(HttpMethod.Post, "/api/tag", this.tag);
             await this.TagCreated(true);
         }
 
         protected void ResetPanelState()
         {
-            this.Tag = new ObjectTag();
+            this.tag = new ObjectTag();
             this.StateHasChanged();
         }
 

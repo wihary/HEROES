@@ -11,20 +11,16 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
     {
         public ObjectTag()
         {
-            this.Color = Color.AliceBlue;
+            this.Argb = Color.AliceBlue.ToArgb();
         }
 
         public int Id { get; set; }
 
         public string Name { get; set; }
 
-        public int Argb
-        {
-            get => this.Color.ToArgb();
-            set => this.Color = Color.FromArgb(value);
-        }
+        public int Argb { get; set; }
 
         [NotMapped]
-        public Color Color { get; set; }
+        public Color Color { get => Color.FromArgb(this.Argb); }
     }
 }
