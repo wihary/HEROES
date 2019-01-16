@@ -57,5 +57,10 @@ namespace AlmaIt.dotnet.Heroes.Client.Pages.Settings
             if (this.Tags == null)
                 this.Tags = new List<ObjectTag>();
         }
+
+        protected async Task OnCollectionChanged(bool success)
+        {
+            this.StateHasChanged();
+        }
     }
 }

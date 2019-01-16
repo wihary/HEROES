@@ -1,3 +1,4 @@
+@using AlmaIt.dotnet.Heroes.Client.Components
 @page "/settings/tags"
 @inherits AlmaIt.dotnet.Heroes.Client.Pages.Settings.TagManagerBase
 
@@ -17,6 +18,9 @@
         @this.Message
     </div>
 }
+<p> 
+    <AddTag TagCreated="@OnCollectionChanged"/>
+</p>
 
 @if (this.Tags == null)
 {
