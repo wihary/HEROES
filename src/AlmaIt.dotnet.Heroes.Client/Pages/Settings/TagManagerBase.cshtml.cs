@@ -18,32 +18,34 @@ namespace AlmaIt.dotnet.Heroes.Client.Pages.Settings
 
         public List<ObjectTag> Tags { get; set; }
 
-        public bool IsErrorMessage { get; set; } = false;
+        public bool IsErrorMessage { get; set; }
 
         public string Message { get; set; }
 
-        protected AlertType level = AlertType.info;
+        protected AlertType Level = AlertType.info;
 
 
-        /// <summary>
-        ///     This method is the entry point to the blazor component rendering
-        /// </summary>
+        /// <summary>This method is the entry point to the blazor component rendering</summary>
         /// <returns></returns>
         protected override async Task OnInitAsync()
         {
-            var response = await Http.GetAsync($"api/tag", HttpCompletionOption.ResponseHeadersRead);
-            response.EnsureSuccessStatusCode();
+            var response = await this.Http.GetAsync("api/tag", HttpCompletionOption.ResponseHeadersRead);
 
-            if (response.StatusCode == HttpStatusCode.OK)
+            try
             {
+                response.EnsureSuccessStatusCode();
                 try
                 {
                     using (var stream = await response.Content.ReadAsStreamAsync())
-                    using (var streamReader = new StreamReader(stream))
-                    using (var jsonReader = new JsonTextReader(streamReader))
                     {
-                        var serializer = new JsonSerializer();
-                        this.Tags = serializer.Deserialize<List<ObjectTag>>(jsonReader);
+                        using (var streamReader = new StreamReader(stream))
+                        {
+                            using (var jsonReader = new JsonTextReader(streamReader))
+                            {
+                                var serializer = new JsonSerializer();
+                                this.Tags = serializer.Deserialize<List<ObjectTag>>(jsonReader);
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -52,33 +54,57 @@ namespace AlmaIt.dotnet.Heroes.Client.Pages.Settings
                     this.Message = ex.Message;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                this.Message = $"[{response.StatusCode}] : {response.ReasonPhrase}";
+                this.Message = $"[{response.StatusCode}] : {response.ReasonPhrase} ({ex.Message})";
             }
 
             if (this.Tags == null)
+            {
                 this.Tags = new List<ObjectTag>();
+            }
         }
 
         protected async Task OnCollectionChanged(bool success)
         {
             if (success)
             {
-                this.level = AlertType.success;
+                this.Level = AlertType.success;
                 this.Message = "Tag sucessfully created";
             }
             else
             {
-                this.level = AlertType.danger;
+                this.Level = AlertType.danger;
                 this.Message = "Error occured while creating new tag";
             }
 
 
             // reload tag lists
-            await OnInitAsync();
+            await this.OnInitAsync();
 
             this.StateHasChanged();
+        }
+
+        protected async Task DeleteTag(int id)
+        {
+            var result = await this.Http.DeleteAsync($"/api/tag/{id}");
+            try
+            {
+                result.EnsureSuccessStatusCode();
+            }
+            catch (Exception)
+            {
+                this.Level = AlertType.danger;
+                this.Message = "Error occured while deleting tag";
+                return;
+            }
+
+            this.Level = AlertType.success;
+            this.Message = "Tag sucessfully deleted";
+
+            await this.OnInitAsync();
+            this.StateHasChanged();
+
         }
     }
 }

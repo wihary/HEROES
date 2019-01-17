@@ -16,7 +16,7 @@
 
 @if(!string.IsNullOrEmpty(this.Message))
 {
-    <div class="alert alert-@this.level.ToString() alert-dismissible fade show" role="alert">
+    <div class="alert alert-@this.Level.ToString() alert-dismissible fade show" role="alert">
         @this.Message
     </div>
 }
@@ -32,9 +32,11 @@ else
 {
     <table class="table table-striped table-sm table-hover">
         <thead>
-            <th scope="col"></th>
-            <th scope="col">Tag</th>
-            <th scope="col"></th>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Tag</th>
+                <th scope="col"></th>
+            </tr>
         </thead>
         <tbody>
             @foreach (var tag in this.Tags)
@@ -42,7 +44,7 @@ else
                 <tr>
                     <td style="width: 1%; white-space: nowarp; background-color: @tag.Color.ToHtml()"></td>
                     <td>@tag.Name</td>
-                    <td></td>
+                    <td><button class="btn btn-default" onclick="@(async () => await this.DeleteTag(tag.Id))">Delete</button></td>
                 </tr>
             }
         </tbody>
