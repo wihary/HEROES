@@ -1,5 +1,6 @@
 @using AlmaIt.dotnet.Heroes.Client.Components
 @using AlmaIt.dotnet.Heroes.Client.Converters
+@using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration
 @page "/settings/tags"
 @inherits AlmaIt.dotnet.Heroes.Client.Pages.Settings.TagManagerBase
 
@@ -15,11 +16,11 @@
 
 @if(!string.IsNullOrEmpty(this.Message))
 {
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div class="alert alert-@this.level.ToString() alert-dismissible fade show" role="alert">
         @this.Message
     </div>
 }
-<p> 
+<p>
     <AddTag TagCreated="@OnCollectionChanged"/>
 </p>
 

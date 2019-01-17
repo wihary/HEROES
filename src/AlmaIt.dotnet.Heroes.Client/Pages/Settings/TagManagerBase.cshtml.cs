@@ -6,6 +6,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Pages.Settings
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration;
     using AlmaIt.dotnet.Heroes.Shared.Models;
     using Microsoft.AspNetCore.Blazor.Components;
     using Newtonsoft.Json;
@@ -20,6 +21,8 @@ namespace AlmaIt.dotnet.Heroes.Client.Pages.Settings
         public bool IsErrorMessage { get; set; } = false;
 
         public string Message { get; set; }
+
+        protected AlertType level = AlertType.info;
 
 
         /// <summary>
@@ -60,6 +63,21 @@ namespace AlmaIt.dotnet.Heroes.Client.Pages.Settings
 
         protected async Task OnCollectionChanged(bool success)
         {
+            if (success)
+            {
+                this.level = AlertType.success;
+                this.Message = "Tag sucessfully created";
+            }
+            else
+            {
+                this.level = AlertType.danger;
+                this.Message = "Error occured while creating new tag";
+            }
+
+
+            // reload tag lists
+            await OnInitAsync();
+
             this.StateHasChanged();
         }
     }

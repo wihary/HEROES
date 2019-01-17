@@ -25,12 +25,13 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
 
         protected List<Color> AvailableColor = new List<Color>();
 
+
         /// <summary>
         ///     This method is the entry point to the blazor component rendering
         /// </summary>
         /// <returns></returns>
         protected override void OnInit()
-        {    
+        {
             foreach (string knownColor in Enum.GetNames(typeof(KnownColor)))
             {
                 this.AvailableColor.Add(Color.FromName(knownColor));
