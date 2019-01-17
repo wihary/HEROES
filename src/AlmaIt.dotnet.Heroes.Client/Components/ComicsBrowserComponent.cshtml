@@ -6,6 +6,7 @@
 @using AlmaIt.dotnet.Heroes.Shared.Enumeration
 @using AlmaIt.dotnet.Heroes.Shared.Models
 @using AlmaIt.dotnet.Heroes.Shared.Business
+@using AlmaIt.dotnet.Heroes.Client.Converters
 @inject HttpClient Http
 
 @if (string.IsNullOrEmpty(this.statistics))
@@ -28,6 +29,7 @@ else
 
     <table class="table table-striped table-sm table-hover">
         <thead>
+            <th scope="col">Tags</th>
             <th scope="col">Serie Name</th>
             <th scope="col">Title</th>
             <th scope="col">Issue Number</th>
@@ -37,6 +39,12 @@ else
             @foreach (var comicBook in viewableComicBooks)
             {
                 <tr>
+                    <td>
+                        @foreach (var bookTag in comicBook.Tags)
+                        {
+                            <div style="width: 1%; white-space: nowarp; background-color: @bookTag.Tag.Color.ToHtml()"></div>
+                        }
+                    </td>
                     <td>
                         @if(@comicBook.ComicSerie == null)
                         {
