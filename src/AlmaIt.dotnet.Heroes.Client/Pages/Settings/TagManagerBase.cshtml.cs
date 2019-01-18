@@ -1,14 +1,17 @@
 namespace AlmaIt.dotnet.Heroes.Client.Pages.Settings
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Net;
     using System.Net.Http;
+    using System.Net;
     using System.Threading.Tasks;
+    using System;
+
     using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration;
     using AlmaIt.dotnet.Heroes.Shared.Models;
+
     using Microsoft.AspNetCore.Blazor.Components;
+
     using Newtonsoft.Json;
 
     public class TagManagerBase : BlazorComponent
@@ -16,14 +19,13 @@ namespace AlmaIt.dotnet.Heroes.Client.Pages.Settings
         [Inject]
         protected HttpClient Http { get; set; }
 
-        public List<ObjectTag> Tags { get; set; }
+        public List<ObjectTag> Tags { get; set; } = new List<ObjectTag>();
 
         public bool IsErrorMessage { get; set; }
 
         public string Message { get; set; }
 
         protected AlertType Level = AlertType.info;
-
 
         /// <summary>This method is the entry point to the blazor component rendering</summary>
         /// <returns></returns>
@@ -34,34 +36,30 @@ namespace AlmaIt.dotnet.Heroes.Client.Pages.Settings
             try
             {
                 response.EnsureSuccessStatusCode();
-                try
-                {
-                    using (var stream = await response.Content.ReadAsStreamAsync())
-                    {
-                        using (var streamReader = new StreamReader(stream))
-                        {
-                            using (var jsonReader = new JsonTextReader(streamReader))
-                            {
-                                var serializer = new JsonSerializer();
-                                this.Tags = serializer.Deserialize<List<ObjectTag>>(jsonReader);
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    this.IsErrorMessage = true;
-                    this.Message = ex.Message;
-                }
             }
             catch (Exception ex)
             {
                 this.Message = $"[{response.StatusCode}] : {response.ReasonPhrase} ({ex.Message})";
             }
 
-            if (this.Tags == null)
+            try
             {
-                this.Tags = new List<ObjectTag>();
+                using(var stream = await response.Content.ReadAsStreamAsync())
+                {
+                    using(var streamReader = new StreamReader(stream))
+                    {
+                        using(var jsonReader = new JsonTextReader(streamReader))
+                        {
+                            var serializer = new JsonSerializer();
+                            this.Tags = serializer.Deserialize<List<ObjectTag>>(jsonReader);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this.IsErrorMessage = true;
+                this.Message = ex.Message;
             }
         }
 
@@ -78,13 +76,17 @@ namespace AlmaIt.dotnet.Heroes.Client.Pages.Settings
                 this.Message = "Error occured while creating new tag";
             }
 
-
             // reload tag lists
             await this.OnInitAsync();
 
             this.StateHasChanged();
         }
 
+        /// <summary>
+        /// Method for delete a tag by id.
+        /// </summary>
+        /// <param name="id">Tag's is</param>
+        /// <returns>Retourne une tache.</returns>
         protected async Task DeleteTag(int id)
         {
             var result = await this.Http.DeleteAsync($"/api/tag/{id}");
