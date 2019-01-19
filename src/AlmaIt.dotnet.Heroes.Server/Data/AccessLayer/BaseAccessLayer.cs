@@ -76,7 +76,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         /// </summary>
         /// <param name="id">Primary key</param>
         /// <returns>Returns <see cref="TModel"/></returns>
-        public async Task<TModel> GetAsync(TIdentity id)
+        public virtual async Task<TModel> GetAsync(TIdentity id)
         {
             return await this.ModelSet.SingleOrDefaultAsync(model => model.Id.CompareTo(id) == 0).ConfigureAwait(false);
         }

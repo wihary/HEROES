@@ -175,19 +175,39 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <summary>
         ///     API endpoint use to update an existing comic book
         /// </summary>
-        /// <param name="comicBook">Comic book model to create</param>
+        /// <param name="model">Comic book model to create</param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] ComicBook comicBook)
+        public async Task<IActionResult> UpdateAsync([FromBody] ComicBook model)
         {
+             var tagList = new List<ObjectTag>(model.Tags);
+             
             // Empty Navigation property which should not be send while updating entity
-            comicBook.ComicSerie = null;
+            model.ComicSerie = null;
 
             // Check if comic book series exists, in order to avoid Access Layer error
-            if (!comicBook.ComicSerieId.HasValue || !this.comicSerieContext.Exists(comicBook.ComicSerieId.Value))
-                comicBook.ComicSerieId = null;
+            if (!model.ComicSerieId.HasValue || !this.comicSerieContext.Exists(model.ComicSerieId.Value))
+                model.ComicSerieId = null;
 
-            var result = await this.comicBookContext.UpdateAsync(comicBook);
+            // Update comic changes
+            var result = await this.comicBookContext.UpdateAsync(model);
+
+            // Handle related tags, so that we can update relation if tag have been added or removed
+            // First we get model object from db, we clear all related tags
+            // related tags or then rebuild from what the client sent
+            var comicBookUpdated = await this.comicBookContext.GetAsync(model.Id);
+            comicBookUpdated.RelatedTags.Clear();
+
+            foreach (var linkedTag in tagList)
+            {
+                comicBookUpdated.RelatedTags.Add(
+                    new ComicBookTags{
+                        Tag = await this.objectTagContext.GetAsync(linkedTag.Id)
+                    }
+                );
+            }
+            result = await this.comicBookContext.UpdateAsync(comicBookUpdated);
+
             return Ok(result);
         }
     }

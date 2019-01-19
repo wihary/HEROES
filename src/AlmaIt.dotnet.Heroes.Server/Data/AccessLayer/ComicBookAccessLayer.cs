@@ -30,6 +30,8 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
             .Include(book => book.RelatedTags).ThenInclude(tag => tag.Tag)
             .ToAsyncEnumerable();
 
+        public virtual async Task<ComicBook> GetAsync(int id) => await this.GetAllAsync().SingleOrDefault(model => model.Id.CompareTo(id) == 0);
+
         /// <summary>
         ///     Async method that returns all comics info and their associated serie
         ///     Filter ComicSerie object so that not all related comicBook's serie get included

@@ -84,7 +84,8 @@ namespace AlmaIt.dotnet.Heroes.Client.Components
 
         protected void RemoveTag(string tagName)
         {
-            this.EditedComicBook.Tags.ToList().RemoveAll(x => x.Name == tagName);
+            var removedTag = this.EditedComicBook.RelatedTags.ToList().FirstOrDefault(x => x.Tag.Name == tagName);
+            this.EditedComicBook.RelatedTags.Remove(removedTag);
         }
     }
 }
