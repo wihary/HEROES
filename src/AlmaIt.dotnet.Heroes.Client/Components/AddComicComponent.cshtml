@@ -100,8 +100,10 @@
                 <div class="form-group">
                     @foreach (var comicBookTags in this.comicBook.Tags)
                     {
-                        <span class="badge badge-primary" data-toggle="tooltip" data-placement="bottom" 
-                            title="Click to remove" onclick="@(() => this.RemoveTag(comicBookTags.Name))" style="cursor: pointer">@comicBookTags.Name</span>
+                        <span class="badge badge-primary"data-toggle="tooltip" data-placement="bottom" title="Click to remove" 
+                            onclick="@(() => this.RemoveTag(comicBookTags.Name))" style="cursor: pointer; background-color: @comicBookTags.Color.ToHtml()">
+                            @comicBookTags.Name
+                        </span>
                     }
                 </div>
             </div>
