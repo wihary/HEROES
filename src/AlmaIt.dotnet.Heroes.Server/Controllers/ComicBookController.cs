@@ -136,14 +136,14 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] ComicBook comicBook)
         {
-            var tagList = new List<ComicBookTags>(comicBook.Tags);
-            comicBook.Tags.Clear();
+            var tagList = new List<ObjectTag>(comicBook.Tags);
+            comicBook.RelatedTags = new List<ComicBookTags>();
 
             foreach (var linkedTag in tagList)
             {
-                comicBook.Tags.Add(
+                comicBook.RelatedTags.Add(
                     new ComicBookTags{
-                        Tag = await this.objectTagContext.GetAsync(linkedTag.TagId)
+                        Tag = await this.objectTagContext.GetAsync(linkedTag.Id)
                     }
                 );
             }

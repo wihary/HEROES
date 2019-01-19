@@ -40,9 +40,9 @@ else
             {
                 <tr>
                     <td>
-                        @if(comicBook.Tags != null)
+                        @if(comicBook.RelatedTags != null)
                         {
-                            @foreach (var bookTag in comicBook.Tags)
+                            @foreach (var bookTag in comicBook.RelatedTags)
                             {
                                 <div style="width: 1%; white-space: nowarp; background-color: @bookTag.Tag.Color.ToHtml()"></div>
                             }

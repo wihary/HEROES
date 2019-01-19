@@ -56,6 +56,6 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
         /// <summary>
         /// List of all associated Tag object
         /// </summary>
-        public List<ComicSeriesTags> Tags { get; set; } = new List<ComicSeriesTags>();
+        public ICollection<ComicSeriesTags> RelatedTags { get; set; }
     }
 }

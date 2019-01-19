@@ -101,7 +101,7 @@
                     @foreach (var comicBookTags in this.comicBook.Tags)
                     {
                         <span class="badge badge-primary" data-toggle="tooltip" data-placement="bottom" 
-                            title="Click to remove" onclick="@(() => this.RemoveTag(comicBookTags.Tag.Name))" style="cursor: pointer">@comicBookTags.Tag.Name</span>
+                            title="Click to remove" onclick="@(() => this.RemoveTag(comicBookTags.Name))" style="cursor: pointer">@comicBookTags.Name</span>
                     }
                 </div>
             </div>

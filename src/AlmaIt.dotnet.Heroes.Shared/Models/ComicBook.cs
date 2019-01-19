@@ -4,7 +4,9 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Linq;
     using AlmaIt.dotnet.Heroes.Shared.Enumeration;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Represent a comic book or issue
@@ -61,6 +63,18 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
         /// <summary>
         /// List of all associated Tag object
         /// </summary>
-        public ICollection<ComicBookTags> Tags { get; set; }
+        //TODO: [JsonIgnore] == we are not yet ready for this, should come with business layer separation
+        public ICollection<ComicBookTags> RelatedTags { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="t.Tag"></param>
+        /// <returns></returns>
+        [NotMapped]
+        public List<ObjectTag> Tags
+        {
+            get => this.RelatedTags == null ? new List<ObjectTag>() : this.RelatedTags.Select(t => t.Tag).ToList();
+        }
     }
 }

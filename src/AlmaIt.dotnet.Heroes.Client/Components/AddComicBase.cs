@@ -34,10 +34,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Components
 
         protected string SelectedTag = string.Empty;
         protected bool ShowAddComicPanel = false;
-        protected ComicBook comicBook = new ComicBook
-        {
-            Tags = new List<ComicBookTags>()
-        };
+        protected ComicBook comicBook = new ComicBook();
 
         protected int selectedComicSerie = 0;
         protected ComicBookStatus selectedBookStatus = ComicBookStatus.None;
@@ -70,18 +67,30 @@ namespace AlmaIt.dotnet.Heroes.Client.Components
 
         protected void AddTagSelected()
         {
-            var selectedTag =  this.objectTagList.FirstOrDefault(tag => tag.Name == this.SelectedTag);
+            var selectedTag = this.objectTagList.FirstOrDefault(tag => tag.Name == this.SelectedTag);
 
-            this.comicBook.Tags.Add(new ComicBookTags{
-                TagId = selectedTag.Id,
-                Tag =  selectedTag
-            });
+            try
+            {
+                if(this.comicBook.RelatedTags == null)
+                    this.comicBook.RelatedTags = new List<ComicBookTags>();
+
+                this.comicBook.RelatedTags.Add(
+                    new ComicBookTags
+                    {
+                        Tag = selectedTag
+                    });
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
             StateHasChanged();
         }
 
         protected void RemoveTag(string tagName)
         {
-            this.comicBook.Tags.ToList().RemoveAll(x => x.Tag.Name == tagName);
+            this.comicBook.Tags.ToList().RemoveAll(x => x.Name == tagName);
         }
     }
 }

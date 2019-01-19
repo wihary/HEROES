@@ -45,24 +45,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ComicBookTags>().HasKey(x => new { x.ComicBookId, x.TagId });
-            modelBuilder.Entity<ComicBook>()
-                .HasMany(comicBook => comicBook.Tags)
-                .WithOne(tag => tag.ComicBook)
-                .HasForeignKey(key => key.ComicBookId);
-            modelBuilder.Entity<ObjectTag>()
-                .HasMany(objectTag => objectTag.ComicBookTags)
-                .WithOne(tag => tag.Tag)
-                .HasForeignKey(key => key.TagId);
-
             modelBuilder.Entity<ComicSeriesTags>().HasKey(x => new { x.ComicSerieId, x.TagId });
-            modelBuilder.Entity<ComicSeries>()
-                .HasMany(comicSerie => comicSerie.Tags)
-                .WithOne(tag => tag.ComicSerie)
-                .HasForeignKey(key => key.ComicSerieId);
-            modelBuilder.Entity<ObjectTag>()
-                .HasMany(objectTag => objectTag.ComicSerieTags)
-                .WithOne(tag => tag.Tag)
-                .HasForeignKey(key => key.TagId);
         }
     }
 }
