@@ -77,7 +77,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Pages.Settings
             }
 
             // reload tag lists
-            await this.OnInitAsync();
+            await this.OnInitAsync().ConfigureAwait(false);
 
             this.StateHasChanged();
         }

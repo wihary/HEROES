@@ -10,20 +10,20 @@ namespace AlmaIt.dotnet.Heroes.Client.Components
     using Microsoft.AspNetCore.Blazor;
     using Microsoft.AspNetCore.Blazor.Components;
 
-    public class EditComicBase : BlazorComponent
+    public class AddComicBase : BlazorComponent
     {
         [Inject]
-        public HttpClient Http { get; set; }
+        protected HttpClient Http { get; set; }
 
         [Parameter]
-        public Func<bool, Task> EditCompleted { get; set; }
+        Func<bool, Task> ComicBookAdded { get; set; }
 
-        [Parameter]
-        public ComicBook EditedComicBook { get; set; }
-
+        /// <summary>
+        /// Referential list of all available series in DB
+        /// </summary>
+        /// <typeparam name="ComicSeries"></typeparam>
+        /// <returns></returns>
         protected List<ComicSeries> comicSerieList = new List<ComicSeries>();
-        protected int selectedComicSerie = 0;
-        protected ComicBookStatus selectedBookStatus = ComicBookStatus.None;
 
         /// <summary>
         /// Referential list of all available tags in Db
@@ -33,42 +33,49 @@ namespace AlmaIt.dotnet.Heroes.Client.Components
         protected List<ObjectTag> objectTagList = new List<ObjectTag>();
 
         protected string SelectedTag = string.Empty;
+        protected bool ShowAddComicPanel;
+        protected ComicBook comicBook = new ComicBook();
+
+        protected int selectedComicSerie;
+        protected ComicBookStatus selectedBookStatus = ComicBookStatus.None;
+
 
 
         protected override async Task OnInitAsync()
         {
-            this.objectTagList = await Http.GetJsonAsync<List<ObjectTag>>("api/tag");
             this.comicSerieList = await Http.GetJsonAsync<List<ComicSeries>>("api/ComicSerie");
-
-            if (this.EditedComicBook.ComicSerieId.HasValue)
-                this.selectedComicSerie = this.EditedComicBook.ComicSerieId.Value;
-
-            this.selectedBookStatus = this.EditedComicBook.Status;
+            this.objectTagList = await Http.GetJsonAsync<List<ObjectTag>>("api/tag");
         }
 
-        protected async Task EditionCompleted(bool success)
+        protected async Task CreateComicBook()
         {
-            await this.EditCompleted(success);
+            if (selectedComicSerie != 0)
+            { comicBook.ComicSerieId = selectedComicSerie; }
+
+            comicBook.Status = selectedBookStatus;
+
+            await Http.SendJsonAsync(HttpMethod.Post, "/api/ComicBook", comicBook);
+
+            await this.ComicBookAdded(true).ConfigureAwait(false);
+            StateHasChanged();
         }
 
-        protected async Task UpdateComicBook()
+        protected void ToggleShowAddComic()
         {
-            this.EditedComicBook.ComicSerieId = this.selectedComicSerie;
-            this.EditedComicBook.Status = this.selectedBookStatus;
-
-            await Http.SendJsonAsync(HttpMethod.Put, "/api/ComicBook", this.EditedComicBook);
-            await this.EditionCompleted(true);
+            this.ShowAddComicPanel = !this.ShowAddComicPanel;
+            StateHasChanged();
         }
+
         protected void AddTagSelected()
         {
             var selectedTag = this.objectTagList.FirstOrDefault(tag => tag.Name == this.SelectedTag);
 
             try
             {
-                if (this.EditedComicBook.RelatedTags == null)
-                    this.EditedComicBook.RelatedTags = new List<ComicBookTags>();
+                if (this.comicBook.RelatedTags == null)
+                { this.comicBook.RelatedTags = new List<ComicBookTags>(); }
 
-                this.EditedComicBook.RelatedTags.Add(
+                this.comicBook.RelatedTags.Add(
                     new ComicBookTags
                     {
                         Tag = selectedTag
@@ -84,8 +91,8 @@ namespace AlmaIt.dotnet.Heroes.Client.Components
 
         protected void RemoveTag(string tagName)
         {
-            var removedTag = this.EditedComicBook.RelatedTags.ToList().FirstOrDefault(x => x.Tag.Name == tagName);
-            this.EditedComicBook.RelatedTags.Remove(removedTag);
+            var removedTag = this.comicBook.RelatedTags.ToList().FirstOrDefault(x => x.Tag.Name == tagName);
+            this.comicBook.RelatedTags.Remove(removedTag);
         }
     }
 }

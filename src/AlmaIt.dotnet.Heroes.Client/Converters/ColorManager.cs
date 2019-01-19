@@ -10,21 +10,23 @@ namespace AlmaIt.dotnet.Heroes.Client.Converters
             string colorString = String.Empty;
 
             if (color.IsEmpty)
-                return colorString;
+            { return colorString; }
 
-            if (color.IsNamedColor) {
-                if (color == Color.LightGray) {
+            if (color.IsNamedColor)
+            {
+                if (color == Color.LightGray)
+                {
                     // special case due to mismatch between Html and enum spelling
                     colorString = "LightGrey";
                 }
-                else {
+                else
+                {
                     colorString = color.Name;
                 }
             }
-            else {
-                colorString = "#" + color.R.ToString("X2", null) +
-                                    color.G.ToString("X2", null) +
-                                    color.B.ToString("X2", null);
+            else
+            {
+                colorString = $"#{color.R.ToString("X2", null)}{color.G.ToString("X2", null)}{color.B.ToString("X2", null)}";
             }
 
             return colorString;

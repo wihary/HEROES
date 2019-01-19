@@ -21,7 +21,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
 
         public ObjectTag tag { get; set; } = new ObjectTag();
 
-        protected bool IsVisible = false;
+        protected bool IsVisible;
 
         protected readonly List<Color> AvailableColor = new List<Color>();
 
@@ -45,7 +45,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
         protected async Task CreateTag()
         {
             await this.Http.SendJsonAsync(HttpMethod.Post, "/api/tag", this.tag);
-            await this.TagCreated(true);
+            await this.TagCreated(true).ConfigureAwait(false);
             this.StateHasChanged();
         }
 

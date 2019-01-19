@@ -101,7 +101,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("type/{status}/{page}/{size}")]
-        public async Task<IActionResult> GetByStatusAsync([FromRoute]ComicBookStatus status,[FromRoute] int page, [FromRoute] int size)
+        public async Task<IActionResult> GetByStatusAsync([FromRoute]ComicBookStatus status, [FromRoute] int page, [FromRoute] int size)
         {
             return await this.GetByStatusAsync(status, page, size, string.Empty);
         }
@@ -111,12 +111,12 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("type/{status}/{page}/{size}/{filter}")]
-        public async Task<IActionResult> GetByStatusAsync([FromRoute]ComicBookStatus status,[FromRoute] int page, [FromRoute] int size, [FromRoute]string filter = "")
+        public async Task<IActionResult> GetByStatusAsync([FromRoute]ComicBookStatus status, [FromRoute] int page, [FromRoute] int size, [FromRoute]string filter = "")
         {
             var response = new PageResponseData<ComicBook>();
             var result = (await this.comicBookContext.GetAllComcisAndSerieInfo()).Where(book => book.Status == status);
 
-            if(!string.IsNullOrEmpty(filter))
+            if (!string.IsNullOrEmpty(filter))
                 result = result.Where(book => book.Title.Contains(filter, StringComparison.InvariantCultureIgnoreCase) || book.ComicSerie.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase));
 
             if (result == null)
@@ -142,7 +142,8 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             foreach (var linkedTag in tagList)
             {
                 comicBook.RelatedTags.Add(
-                    new ComicBookTags{
+                    new ComicBookTags
+                    {
                         Tag = await this.objectTagContext.GetAsync(linkedTag.Id)
                     }
                 );
@@ -180,17 +181,17 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromBody] ComicBook model)
         {
-             var tagList = new List<ObjectTag>(model.Tags);
-             
+            var tagList = new List<ObjectTag>(model.Tags);
+
             // Empty Navigation property which should not be send while updating entity
             model.ComicSerie = null;
 
             // Check if comic book series exists, in order to avoid Access Layer error
             if (!model.ComicSerieId.HasValue || !this.comicSerieContext.Exists(model.ComicSerieId.Value))
-                model.ComicSerieId = null;
+            { model.ComicSerieId = null; }
 
             // Update comic changes
-            var result = await this.comicBookContext.UpdateAsync(model);
+            await this.comicBookContext.UpdateAsync(model);
 
             // Handle related tags, so that we can update relation if tag have been added or removed
             // First we get model object from db, we clear all related tags
@@ -201,12 +202,13 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             foreach (var linkedTag in tagList)
             {
                 comicBookUpdated.RelatedTags.Add(
-                    new ComicBookTags{
+                    new ComicBookTags
+                    {
                         Tag = await this.objectTagContext.GetAsync(linkedTag.Id)
                     }
                 );
             }
-            result = await this.comicBookContext.UpdateAsync(comicBookUpdated);
+            var result = await this.comicBookContext.UpdateAsync(comicBookUpdated);
 
             return Ok(result);
         }

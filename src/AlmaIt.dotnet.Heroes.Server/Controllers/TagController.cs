@@ -31,7 +31,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             var result = await this.objectTagAccess.GetAsync(id);
 
             if (result == null)
-                return NoContent();
+            { return NoContent(); }
 
             return Ok(result);
         }
@@ -47,7 +47,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             var result = this.objectTagAccess.Where(x => x.Name.Contains(name)).FirstOrDefault();
 
             if (result == null)
-                return NoContent();
+            { return NoContent(); }
 
             return Ok(result);
         }
@@ -62,7 +62,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             var result = this.objectTagAccess.GetAllAsync().ToEnumerable();
 
             if (result == null)
-                return NoContent();
+            { return NoContent(); }
 
             return Ok(result);
         }
@@ -75,9 +75,9 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] ObjectTag tag)
         {
-            if(tag == null)
-                return this.BadRequest();
-                
+            if (tag == null)
+            { return this.BadRequest(); }
+
             var result = await this.objectTagAccess.AddAsync(tag);
             return Ok(result);
         }
