@@ -1,13 +1,15 @@
-@using AlmaIt.dotnet.Heroes.Shared.Models
 @using AlmaIt.dotnet.Heroes.Shared.Enumeration
-@inject HttpClient Http
+@using AlmaIt.dotnet.Heroes.Client.Converters
+
+@inherits AlmaIt.dotnet.Heroes.Client.Components.AddComicBase
 
 <div class="row">
     <div class="col-md-3 px-3 py-3">
-        <button class="btn btn-primary btn-sm" type="button" onclick="@(() => ToggleShowAddComic())">Add comic book</button>
+        <button class="btn btn-primary btn-sm" type="button" onclick="@(() => this.ToggleShowAddComic())">Add comic book</button>
     </div>
 </div>
-@if(showAddComicPanel)
+
+@if(this.ShowAddComicPanel)
 {
     <div class="alert alert-primary" role="alert">
         <h4>Add new Comic Book</h4>
@@ -56,17 +58,19 @@
         <div class="form-row">
             <div class="col-auto">
                 <div class="form-group">
-                    <label for="bookStatusOption">Where does this Comic Book belong ?</label><br/>
+                    <label for="bookStatusOption">
+                        Where does this Comic Book belong:
+                    </label><br/>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="bookStatusOption" id="optionCollection" checked="@(selectedBookStatus == ComicBookStatus.Collection)" onchange="@(() => selectedBookStatus = ComicBookStatus.Collection)" />
+                        <input class="form-check-input" type="radio" name="bookStatusOption" id="optionCollection" checked="@(this.selectedBookStatus == ComicBookStatus.Collection)" onchange="@(() => this.selectedBookStatus = ComicBookStatus.Collection)" />
                         <label class="form-check-label" for="optionCollection">Collection</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="bookStatusOption" id="optionWishlist" checked="@(selectedBookStatus == ComicBookStatus.Wishlist)" onchange="@(() => selectedBookStatus = ComicBookStatus.Wishlist)" />
+                        <input class="form-check-input" type="radio" name="bookStatusOption" id="optionWishlist" checked="@(this.selectedBookStatus == ComicBookStatus.Wishlist)" onchange="@(() => this.selectedBookStatus = ComicBookStatus.Wishlist)" />
                         <label class="form-check-label" for="optionWishlist">Wishlist</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="bookStatusOption" id="optionNone" checked="@(selectedBookStatus == ComicBookStatus.None)" onchange="@(() => selectedBookStatus = ComicBookStatus.None)" />
+                        <input class="form-check-input" type="radio" name="bookStatusOption" id="optionNone" checked="@(this.selectedBookStatus == ComicBookStatus.None)" onchange="@(() => this.selectedBookStatus = ComicBookStatus.None)" />
                         <label class="form-check-label" for="optionNone">Neither</label>
                     </div>
                 </div>
@@ -74,42 +78,38 @@
         </div>
         <div class="form-row">
             <div class="col-auto">
-                <button class="btn btn-default" onclick="@(async () => await CreateComicBook())">Save</button>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="Serie">Tags</span>
+                    </div>
+                    <select class="form-control" aria-describedby="Serie" bind="@this.SelectedTag">
+                    <option value="">-- Select related Serie --</option>
+                        @foreach (var tag in this.objectTagList)
+                        {
+                            <option value="@tag.Name" style="background-color: @tag.Color.ToHtml()">@tag.Name</option>
+                        }
+                    </select>
+                    <div class="input-group-apend">
+                        <button class="btn btn-default" onclick="@(() => this.AddTagSelected())">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-auto">
+                <div class="form-group">
+                    @foreach (var comicBookTags in this.comicBook.Tags)
+                    {
+                        <span class="badge badge-primary" data-toggle="tooltip" data-placement="bottom" 
+                            title="Click to remove" onclick="@(() => this.RemoveTag(comicBookTags.Tag.Name))" style="cursor: pointer">@comicBookTags.Tag.Name</span>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-auto">
+                <button class="btn btn-default" onclick="@(async () => await this.CreateComicBook())">Save</button>
             </div>
         </div>
     </div>
-}
-
-
-@functions {
-    private bool showAddComicPanel = false;
-    ComicBook comicBook = new ComicBook();
-    List<ComicSeries> comicSerieList = new List<ComicSeries>();
-    int selectedComicSerie = 0;
-    ComicBookStatus selectedBookStatus = ComicBookStatus.None;
-
-    [Parameter]
-    Func<bool, Task> ComicBookAdded { get; set; }
-
-    protected override async Task OnInitAsync()
-    {
-        comicSerieList = await Http.GetJsonAsync<List<ComicSeries>>("api/ComicSerie");
-    }
-
-    protected async Task CreateComicBook()
-    {
-        if(selectedComicSerie != 0)
-            comicBook.ComicSerieId = selectedComicSerie;
-        comicBook.Status = selectedBookStatus;
-
-        await Http.SendJsonAsync(HttpMethod.Post, "/api/ComicBook", comicBook);
-
-        await this.ComicBookAdded(true);
-    }
-
-    protected void ToggleShowAddComic()
-    {
-        this.showAddComicPanel = !this.showAddComicPanel;
-        StateHasChanged();
-    }
 }

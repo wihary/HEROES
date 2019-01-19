@@ -1,6 +1,7 @@
 namespace AlmaIt.dotnet.Heroes.Server.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface;
@@ -14,16 +15,19 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
     {
         private readonly IComicBookAccessLayer comicBookContext;
         private readonly IComicSeriesAccessLayer comicSerieContext;
+        private readonly IObjectTagAccessLayer objectTagContext;
 
         /// <summary>
         ///     ctro of <see cref="ComicBookController"/>
         /// </summary>
-        /// <param name="ComicSerieContext">DI for comic series context</param>
-        /// <param name="ComicBookContext">DI for comic book context</param>
-        public ComicBookController(IComicBookAccessLayer ComicBookContext, IComicSeriesAccessLayer ComicSerieContext)
+        /// <param name="comicSerieContext">DI for comic series context</param>
+        /// <param name="comicBookContext">DI for comic book context</param>
+        /// <param name="objectTagContext">DI for tags context</param>
+        public ComicBookController(IComicBookAccessLayer comicBookContext, IComicSeriesAccessLayer comicSerieContext, IObjectTagAccessLayer objectTagContext)
         {
-            this.comicBookContext = ComicBookContext;
-            comicSerieContext = ComicSerieContext;
+            this.comicBookContext = comicBookContext;
+            this.comicSerieContext = comicSerieContext;
+            this.objectTagContext = objectTagContext;
         }
 
         /// <summary>
@@ -132,6 +136,18 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] ComicBook comicBook)
         {
+            var tagList = new List<ComicBookTags>(comicBook.Tags);
+            comicBook.Tags.Clear();
+
+            foreach (var linkedTag in tagList)
+            {
+                comicBook.Tags.Add(
+                    new ComicBookTags{
+                        Tag = await this.objectTagContext.GetAsync(linkedTag.TagId)
+                    }
+                );
+            }
+
             var result = await this.comicBookContext.AddAsync(comicBook);
             return Ok(result);
         }

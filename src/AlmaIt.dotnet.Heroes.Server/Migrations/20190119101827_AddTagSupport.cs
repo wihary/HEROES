@@ -2,7 +2,7 @@
 
 namespace AlmaIt.dotnet.Heroes.Server.Migrations
 {
-    public partial class AddTagSupportForComicsSeries : Migration
+    public partial class AddTagSupport : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -10,14 +10,13 @@ namespace AlmaIt.dotnet.Heroes.Server.Migrations
                 name: "ComicBookTags",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<int>(nullable: false),
                     ComicBookId = table.Column<int>(nullable: false),
                     TagId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ComicBookTags", x => x.Id);
+                    table.PrimaryKey("PK_ComicBookTags", x => new { x.ComicBookId, x.TagId });
                     table.ForeignKey(
                         name: "FK_ComicBookTags_ComicBooks_ComicBookId",
                         column: x => x.ComicBookId,
@@ -33,25 +32,24 @@ namespace AlmaIt.dotnet.Heroes.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ComicSeriesTags",
+                name: "ComicSerieTags",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<int>(nullable: false),
                     ComicSerieId = table.Column<int>(nullable: false),
                     TagId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ComicSeriesTags", x => x.Id);
+                    table.PrimaryKey("PK_ComicSerieTags", x => new { x.ComicSerieId, x.TagId });
                     table.ForeignKey(
-                        name: "FK_ComicSeriesTags_ComicSeries_ComicSerieId",
+                        name: "FK_ComicSerieTags_ComicSeries_ComicSerieId",
                         column: x => x.ComicSerieId,
                         principalTable: "ComicSeries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ComicSeriesTags_Tags_TagId",
+                        name: "FK_ComicSerieTags_Tags_TagId",
                         column: x => x.TagId,
                         principalTable: "Tags",
                         principalColumn: "Id",
@@ -59,23 +57,13 @@ namespace AlmaIt.dotnet.Heroes.Server.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ComicBookTags_ComicBookId",
-                table: "ComicBookTags",
-                column: "ComicBookId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ComicBookTags_TagId",
                 table: "ComicBookTags",
                 column: "TagId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ComicSeriesTags_ComicSerieId",
-                table: "ComicSeriesTags",
-                column: "ComicSerieId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ComicSeriesTags_TagId",
-                table: "ComicSeriesTags",
+                name: "IX_ComicSerieTags_TagId",
+                table: "ComicSerieTags",
                 column: "TagId");
         }
 
@@ -85,7 +73,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Migrations
                 name: "ComicBookTags");
 
             migrationBuilder.DropTable(
-                name: "ComicSeriesTags");
+                name: "ComicSerieTags");
         }
     }
 }

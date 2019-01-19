@@ -1,5 +1,6 @@
 namespace AlmaIt.dotnet.Heroes.Shared.Models
 {
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Drawing;
 
@@ -22,5 +23,15 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
 
         [NotMapped]
         public Color Color { get => Color.FromArgb(this.Argb); }
+
+        /// <summary>
+        /// List of all associated Comic Books
+        /// </summary>
+        public ICollection<ComicBookTags> ComicBookTags { get; set; }
+
+        /// <summary>
+        /// List of all associated Comic Series
+        /// </summary>
+        public ICollection<ComicSeriesTags> ComicSerieTags { get; set; }
     }
 }

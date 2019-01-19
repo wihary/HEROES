@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlmaIt.dotnet.Heroes.Server.Migrations
 {
     [DbContext(typeof(HeroesContext))]
-    [Migration("20190115124322_AddTagSupportForComicsSeries")]
-    partial class AddTagSupportForComicsSeries
+    [Migration("20190119101827_AddTagSupport")]
+    partial class AddTagSupport
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,16 +45,13 @@ namespace AlmaIt.dotnet.Heroes.Server.Migrations
 
             modelBuilder.Entity("AlmaIt.dotnet.Heroes.Shared.Models.ComicBookTags", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
                     b.Property<int>("ComicBookId");
 
                     b.Property<int>("TagId");
 
-                    b.HasKey("Id");
+                    b.Property<int>("Id");
 
-                    b.HasIndex("ComicBookId");
+                    b.HasKey("ComicBookId", "TagId");
 
                     b.HasIndex("TagId");
 
@@ -84,20 +81,17 @@ namespace AlmaIt.dotnet.Heroes.Server.Migrations
 
             modelBuilder.Entity("AlmaIt.dotnet.Heroes.Shared.Models.ComicSeriesTags", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
                     b.Property<int>("ComicSerieId");
 
                     b.Property<int>("TagId");
 
-                    b.HasKey("Id");
+                    b.Property<int>("Id");
 
-                    b.HasIndex("ComicSerieId");
+                    b.HasKey("ComicSerieId", "TagId");
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("ComicSeriesTags");
+                    b.ToTable("ComicSerieTags");
                 });
 
             modelBuilder.Entity("AlmaIt.dotnet.Heroes.Shared.Models.ObjectTag", b =>
@@ -129,7 +123,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AlmaIt.dotnet.Heroes.Shared.Models.ObjectTag", "Tag")
-                        .WithMany()
+                        .WithMany("ComicBookTags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -142,7 +136,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AlmaIt.dotnet.Heroes.Shared.Models.ObjectTag", "Tag")
-                        .WithMany()
+                        .WithMany("ComicSerieTags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
