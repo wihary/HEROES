@@ -6,7 +6,6 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using AlmaIt.dotnet.Heroes.Shared.Enumeration;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// Represent a comic book or issue
