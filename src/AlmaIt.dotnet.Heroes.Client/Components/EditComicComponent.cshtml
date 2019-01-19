@@ -1,6 +1,7 @@
 @using AlmaIt.dotnet.Heroes.Shared.Models
 @using AlmaIt.dotnet.Heroes.Shared.Enumeration
-@inject HttpClient Http
+@using AlmaIt.dotnet.Heroes.Client.Converters
+@inherits AlmaIt.dotnet.Heroes.Client.Components.EditComicBase
 
 
 <div class="alert alert-secondary" role="alert">
@@ -68,6 +69,38 @@
     </div>
     <div class="form-row">
         <div class="col-auto">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="Serie">Tags</span>
+                </div>
+                <select class="form-control" aria-describedby="Serie" bind="@this.SelectedTag">
+                <option value="">-- Select related Serie --</option>
+                    @foreach (var tag in this.objectTagList)
+                    {
+                        <option value="@tag.Name" style="background-color: @tag.Color.ToHtml()">@tag.Name</option>
+                    }
+                </select>
+                <div class="input-group-apend">
+                    <button class="btn btn-default" onclick="@(() => this.AddTagSelected())">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-auto">
+            <div class="form-group">
+                @foreach (var comicBookTags in this.EditedComicBook.Tags)
+                {
+                    <span class="badge badge-primary"data-toggle="tooltip" data-placement="bottom" title="Click to remove" 
+                        onclick="@(() => this.RemoveTag(comicBookTags.Name))" style="cursor: pointer; background-color: @comicBookTags.Color.ToHtml()">
+                        @comicBookTags.Name
+                    </span>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-auto">
             <button class="btn btn-default" onclick="@(async () => await EditionCompleted(false))">Cancel</button>
         </div>
         <div class="col-auto">
@@ -77,35 +110,5 @@
 </div>
 
 @functions {
-    [Parameter]
-    Func<bool, Task> EditCompleted { get; set; }
-    [Parameter]
-    ComicBook EditedComicBook { get; set; }
 
-    List<ComicSeries> comicSerieList = new List<ComicSeries>();
-    int selectedComicSerie = 0;
-    ComicBookStatus selectedBookStatus = ComicBookStatus.None;
-
-
-    protected override async Task OnInitAsync()
-    {
-        comicSerieList = await Http.GetJsonAsync<List<ComicSeries>>("api/ComicSerie");
-        if(this.EditedComicBook.ComicSerieId.HasValue)
-            this.selectedComicSerie = this.EditedComicBook.ComicSerieId.Value;
-        this.selectedBookStatus = this.EditedComicBook.Status;
-    }
-
-    protected async Task EditionCompleted(bool success)
-    {
-        await this.EditCompleted(success);
-    }
-
-    protected async Task UpdateComicBook()
-    {
-        this.EditedComicBook.ComicSerieId = this.selectedComicSerie;
-        this.EditedComicBook.Status = this.selectedBookStatus;
-
-        await Http.SendJsonAsync(HttpMethod.Put, "/api/ComicBook", this.EditedComicBook);
-        await this.EditionCompleted(true);
-    }
 }
