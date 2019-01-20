@@ -1,12 +1,15 @@
 namespace AlmaIt.dotnet.Heroes.Server.Controllers
 {
-    using System;
     using System.Linq;
     using System.Threading.Tasks;
+    using System;
+
     using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface;
     using AlmaIt.dotnet.Heroes.Shared.Business;
     using AlmaIt.dotnet.Heroes.Shared.Enumeration;
+    using AlmaIt.dotnet.Heroes.Shared.Helpers;
     using AlmaIt.dotnet.Heroes.Shared.Models;
+
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/[controller]")]
@@ -63,14 +66,14 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string sortBy)
         {
-            var result = this.comicBookContext.GetAllComcisAndSerieInfo();
+            var result = await this.comicBookContext.GetAllComcisAndSerieInfo();
 
             if (result == null)
                 return NoContent();
 
-            return Ok(result);
+            return Ok(result.AsQueryable().Sort(sortBy));
         }
 
         /// <summary>
@@ -78,16 +81,16 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("{page}/{size}")]
-        public async Task<IActionResult> GetAllAsync(int page, int size)
+        public async Task<IActionResult> GetAllAsync(int page, int size, [FromQuery] string sortBy)
         {
             var response = new PageResponseData<ComicBook>();
             var result = await this.comicBookContext.GetAllComcisAndSerieInfo();
 
             if (result == null)
                 return NoContent();
-
+            result = result.AsQueryable().Sort(sortBy);
             response.TotalResult = result.Count();
-            response.MaxPage = (int)Math.Ceiling(result.Count() / (decimal)size);
+            response.MaxPage = (int) Math.Ceiling(result.Count() / (decimal) size);
             response.Result = result.Skip((page - 1) * size).Take(size);
             return Ok(response);
         }
@@ -97,9 +100,9 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("type/{status}/{page}/{size}")]
-        public async Task<IActionResult> GetByStatusAsync([FromRoute]ComicBookStatus status,[FromRoute] int page, [FromRoute] int size)
+        public async Task<IActionResult> GetByStatusAsync([FromRoute] ComicBookStatus status, [FromRoute] int page, [FromRoute] int size, [FromQuery] string sortBy)
         {
-            return await this.GetByStatusAsync(status, page, size, string.Empty);
+            return await this.GetByStatusAsync(status, page, size, sortBy, string.Empty);
         }
 
         /// <summary>
@@ -107,19 +110,19 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("type/{status}/{page}/{size}/{filter}")]
-        public async Task<IActionResult> GetByStatusAsync([FromRoute]ComicBookStatus status,[FromRoute] int page, [FromRoute] int size, [FromRoute]string filter = "")
+        public async Task<IActionResult> GetByStatusAsync([FromRoute] ComicBookStatus status, [FromRoute] int page, [FromRoute] int size, [FromQuery] string sortBy, [FromRoute] string filter = "")
         {
             var response = new PageResponseData<ComicBook>();
             var result = (await this.comicBookContext.GetAllComcisAndSerieInfo()).Where(book => book.Status == status);
 
-            if(!string.IsNullOrEmpty(filter))
+            if (!string.IsNullOrEmpty(filter))
                 result = result.Where(book => book.Title.Contains(filter, StringComparison.InvariantCultureIgnoreCase) || book.ComicSerie.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase));
 
             if (result == null)
                 return NoContent();
-
+            result = result.AsQueryable().Sort(sortBy);
             response.TotalResult = result.Count();
-            response.MaxPage = (int)Math.Ceiling(result.Count() / (decimal)size);
+            response.MaxPage = (int) Math.Ceiling(result.Count() / (decimal) size);
             response.Result = result.Skip((page - 1) * size).Take(size);
             return Ok(response);
         }
@@ -154,7 +157,6 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
 
             return NoContent();
         }
-
 
         /// <summary>
         ///     API endpoint use to update an existing comic book

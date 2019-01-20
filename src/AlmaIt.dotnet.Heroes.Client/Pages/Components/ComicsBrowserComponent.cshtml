@@ -28,9 +28,9 @@ else
 
     <table class="table table-striped table-sm table-hover">
         <thead>
-            <th scope="col">Serie Name</th>
-            <th scope="col">Title</th>
-            <th scope="col">Issue Number</th>
+            <th scope="col"><button class="btn btn-link" onclick="@(async () => await this.SortSeriesBySerieName())">Serie Name</button></th>
+            <th scope="col"><button class="btn btn-link" onclick="@(async () => await this.SortSeriesByTitle())">Title</button></th>
+            <th scope="col"><button class="btn btn-link" onclick="@(async () => await this.SortSeriesByIssueNumber())">Issue Number</button></th>
             <th scope="col"></th>
         </thead>
         <tbody>
@@ -121,6 +121,7 @@ else
     int pagerSize = 5;
     int pagerMin = 1;
     int pagerMax = 1;
+    bool asc = true;
 
     protected override async Task OnInitAsync()
     {
@@ -136,17 +137,36 @@ else
         this.StateHasChanged();
     }
 
-    protected async Task GetCurrentPageData(ComicsBrowserType browserType, int pageToShow, int size, string filter = "")
+    protected async Task SortSeriesByTitle()
+    {
+        await this.ShowPage(this.currentPage, $"title {(asc ? "asc" : "desc")}");
+        this.asc = !asc;
+    }
+
+    protected async Task SortSeriesBySerieName()
+    {
+        await this.ShowPage(this.currentPage, $"ComicSerie.Name {(asc ? "asc" : "desc")}");
+        this.asc = !asc;
+    }
+
+    protected async Task SortSeriesByIssueNumber()
+    {
+        await this.ShowPage(this.currentPage, $"IssueNumber {(asc ? "asc" : "desc")}");
+        this.asc = !asc;
+    }
+
+
+    protected async Task GetCurrentPageData(ComicsBrowserType browserType, int pageToShow, int size, string sortBy, string filter = "")
     {
         Stream response = null;
 
         switch (browserType)
         {
             case ComicsBrowserType.All:
-                response = await Http.GetStreamAsync($"api/ComicBook/{pageToShow}/{size}/{filter}");
+                response = await Http.GetStreamAsync($"api/ComicBook/{pageToShow}/{size}/{filter}{(string.IsNullOrEmpty(sortBy) ? "" : $"?sortBy={sortBy}")}");
                 break;
             default:
-                response = await Http.GetStreamAsync($"api/ComicBook/type/{browserType}/{pageToShow}/{size}/{filter}");
+                response = await Http.GetStreamAsync($"api/ComicBook/type/{browserType}/{pageToShow}/{size}/{filter}{(string.IsNullOrEmpty(sortBy) ? "" : $"?sortBy={sortBy}")}");
                 break;
         }
 
@@ -237,10 +257,10 @@ else
         this.StateHasChanged();
     }
 
-    private async Task ShowPage(int pageToShow)
+    private async Task ShowPage(int pageToShow, string sortBy = "")
     {
         this.currentPage = pageToShow;
-        await this.GetCurrentPageData(this.browserType, this.currentPage, this.PageSize, this.Filter);
+        await this.GetCurrentPageData(this.browserType, this.currentPage, this.PageSize, sortBy, this.Filter);
 
         this.pagerMin = (pageToShow - this.pagerSize) <= 0 ? 1 : (pageToShow - this.pagerSize);
         this.pagerMax = (pageToShow + this.pagerSize) >= this.totalPages ? this.totalPages : (pageToShow + this.pagerSize);
