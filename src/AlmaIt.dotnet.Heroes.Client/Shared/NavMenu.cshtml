@@ -1,11 +1,13 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
+﻿@inherits AlmaIt.dotnet.Heroes.Client.Shared.NavMenuBase
+
+<div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">Heroes</a>
+    <span style="color:white;font-size:small;">[state=@this.AppState.IsLoggedin]</span>
     <button class="navbar-toggler" onclick=@ToggleNavMenu>
         <span class="navbar-toggler-icon"></span>
     </button>
 </div>
-
-<div class=@(collapseNavMenu ? "collapse" : null) onclick=@ToggleNavMenu>
+<div class=@(this.collapseNavMenu ? "collapse" : null) onclick=@ToggleNavMenu>
     <ul class="nav flex-column">
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" Match=NavLinkMatch.All>
@@ -29,12 +31,3 @@
         </li>
     </ul>
 </div>
-
-@functions {
-    bool collapseNavMenu = true;
-
-    void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-}
