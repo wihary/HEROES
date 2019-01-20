@@ -84,12 +84,12 @@ namespace AlmaIt.dotnet.Heroes.Server
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "default", template: "{controller}/{action}/{id?}");
             });
-
-            app.UseAuthentication();
+              
             app.UseBlazor<Client.Startup>();
         }
     }
