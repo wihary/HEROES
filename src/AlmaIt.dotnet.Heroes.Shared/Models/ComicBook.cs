@@ -1,6 +1,7 @@
 namespace AlmaIt.dotnet.Heroes.Shared.Models
 {
     using System;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using AlmaIt.dotnet.Heroes.Shared.Enumeration;
@@ -31,12 +32,14 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
         /// Comic book Title
         /// </summary>
         [Required]
+        [DisplayName("Title")]
         public string Title { get; set; } = string.Empty;
 
         /// <summary>
         /// Comic book number
         /// </summary>
         [Required]
+        [DisplayName("Issue number")]
         public int IssueNumber { get; set; } = 0;
 
         /// <summary>

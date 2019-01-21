@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,12 +21,17 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
         /// Name of comic serie
         /// </summary>
         [Required]
+        [DisplayName("Serie name")]
         public string Name { get; set; }
 
         /// <summary>
         /// List of all associated comic book object (within the local db)
         /// </summary>
         public List<ComicBook> AssociatedComnicBooksExtended { get; set; } = new List<ComicBook>();
+
+        [NotMapped]
+        [DisplayName("Nb issues")]
+        public int IssuesCount => this.AssociatedComnicBooksExtended.Count;
 
         /// <summary>
         /// Object latest update date
