@@ -47,10 +47,12 @@ namespace AlmaIt.dotnet.Heroes.Client.ViewModel
                 var tokenInfo = await this.sessionStorage.GetItem<TokenInfo>("authToken");
                 if (tokenInfo == null || string.IsNullOrEmpty(tokenInfo.Token) || tokenInfo.Expired.CompareTo(DateTime.Now) <= 0)
                 {
+                    this.CleanAuthorizationHeader();
                     this.IsLoggedin = false;
                 }
                 else
                 {
+                    await this.SetAuthorizationHeader();
                     this.IsLoggedin = true;
                 }
             }
@@ -76,7 +78,7 @@ namespace AlmaIt.dotnet.Heroes.Client.ViewModel
                 token.UserName = user.UserName;
                 await this.sessionStorage.SetItem<TokenInfo>("authToken", token);
 
-                // Ensure that everything is set correctly
+                // Ensure that everything is set correctly, including headers with bearer authentification
                 if (await this.IsLoggedInAsync())
                 {
                     this.OnUserLoggedIn(EventArgs.Empty);
@@ -120,9 +122,15 @@ namespace AlmaIt.dotnet.Heroes.Client.ViewModel
         {
             if (!this.httpClient.DefaultRequestHeaders.Contains("Authorization"))
             {
-                var token = await this.sessionStorage.GetItem<string>("authToken");
-                this.httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var tokenInfo = await this.sessionStorage.GetItem<TokenInfo>("authToken");
+                this.httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenInfo.Token);
             }
+        }
+
+        private void CleanAuthorizationHeader()
+        {
+            if (this.httpClient.DefaultRequestHeaders.Contains("Authorization"))
+            { this.httpClient.DefaultRequestHeaders.Remove("Authorization"); }
         }
 
         protected virtual void OnUserLoggedIn(EventArgs e)

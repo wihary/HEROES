@@ -5,6 +5,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
     using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading.Tasks;
     using Dotnet.JsonIdentityProvider.IdentityProvider.Model;
     using Microsoft.AspNetCore.Blazor.Components;
@@ -32,7 +33,6 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
         protected override async Task OnInitAsync()
         {
             var response = await Http.GetAsync($"api/user", HttpCompletionOption.ResponseHeadersRead);
-            response.EnsureSuccessStatusCode();
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -54,7 +54,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
             }
             else
             {
-                this.Message = $"[{response.StatusCode}] : {response.ReasonPhrase}";
+                this.Message = $"[{(int)response.StatusCode}] : {response.ReasonPhrase}";
             }
 
             if (this.Users == null)
