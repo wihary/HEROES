@@ -1,10 +1,8 @@
+@using AlmaIt.dotnet.Heroes.Client.Components
+@using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration
 @inherits AlmaIt.dotnet.Heroes.Client.Components.Settings.UserListBase
-@if(!string.IsNullOrEmpty(this.Message))
-{
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        @this.Message
-    </div>
-}
+
+<TopAlertMessage Message="@this.Message" AlertType="@AlertType.danger"/>
 
 @if (this.Users == null)
 {
