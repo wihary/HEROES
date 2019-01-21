@@ -2,12 +2,16 @@ namespace AlmaIt.dotnet.Heroes.Client.Pages
 {
     using System;
     using System.Threading.Tasks;
+    using AlmaIt.dotnet.Heroes.Client.ViewModel;
     using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration;
     using Blazor.Extensions.Storage;
     using Microsoft.AspNetCore.Blazor.Components;
 
     public class IndexBase : BlazorComponent
     {
+        [Inject]
+        public AppState AppState { get; set; }
+
         [Inject]
         private SessionStorage SessionStorage { get; set; }
 
@@ -17,7 +21,14 @@ namespace AlmaIt.dotnet.Heroes.Client.Pages
 
         protected override async Task OnInitAsync()
         {
-            var message= await this.SessionStorage.GetItem<string>("message");
+            this.AppState.UserHasLoggedOut += new EventHandler(async (s, e) => await this.UserLoggedOutAsync(s, e));
+
+            await this.DisplayAvailableMessageAsync();
+        }
+
+        private async Task DisplayAvailableMessageAsync()
+        {
+            var message = await this.SessionStorage.GetItem<string>("message");
 
             if (!string.IsNullOrEmpty(message))
             {
@@ -27,6 +38,12 @@ namespace AlmaIt.dotnet.Heroes.Client.Pages
                 this.Message = message;
                 this.Type = messageType;
             }
+        }
+
+        private async Task UserLoggedOutAsync(object sender, EventArgs e)
+        {
+            await this.DisplayAvailableMessageAsync();
+            this.StateHasChanged();
         }
     }
 }

@@ -1,6 +1,7 @@
 namespace AlmaIt.dotnet.Heroes.Client.Shared
 {
     using System;
+    using System.Threading.Tasks;
     using AlmaIt.dotnet.Heroes.Client.ViewModel;
     using Microsoft.AspNetCore.Blazor.Components;
 
@@ -11,15 +12,20 @@ namespace AlmaIt.dotnet.Heroes.Client.Shared
 
         protected bool collapseNavMenu = true;
 
-        protected override void OnInit()
+        protected override async Task OnInitAsync()
         {
+            await this.AppState.IsLoggedInAsync();
             this.AppState.UserHasLoggedIn += this.UserLoggedIn;
+            this.AppState.UserHasLoggedOut += this.UserLoggedOut;
         }
 
         private void UserLoggedIn(object sender, EventArgs e)
         {
-            Console.WriteLine($"event called, logged = {this.AppState.IsLoggedin}");
+            this.StateHasChanged();
+        }
 
+        private void UserLoggedOut(object sender, EventArgs e)
+        {
             this.StateHasChanged();
         }
 

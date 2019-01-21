@@ -12,6 +12,7 @@ namespace AlmaIt.dotnet.Heroes.Client.ViewModel
     using Newtonsoft.Json;
     using System.Text;
     using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration;
+    using Microsoft.AspNetCore.Blazor.Services;
 
     /// <summary>
     ///     This class is use as an authentification manager for the client
@@ -21,15 +22,18 @@ namespace AlmaIt.dotnet.Heroes.Client.ViewModel
     {
         private readonly HttpClient httpClient;
         private readonly SessionStorage sessionStorage;
+        private readonly IUriHelper uriHelper;
 
         public bool IsLoggedin { get; set; }
 
         public event EventHandler UserHasLoggedIn;
+        public event EventHandler UserHasLoggedOut;
 
-        public AppState(HttpClient httpClient, SessionStorage localStorage)
+        public AppState(HttpClient httpClient, SessionStorage localStorage, IUriHelper uriHelper)
         {
             this.httpClient = httpClient;
             this.sessionStorage = localStorage;
+            this.uriHelper = uriHelper;
         }
 
         /// <summary>
@@ -90,9 +94,26 @@ namespace AlmaIt.dotnet.Heroes.Client.ViewModel
             }
         }
 
-        public void Logout()
+        public async Task Logout()
         {
+            await this.sessionStorage.RemoveItem("authToken");
 
+            if (!await this.IsLoggedInAsync())
+            {
+                await this.sessionStorage.SetItem<string>("message", "Your are now disconnected !");
+                await this.sessionStorage.SetItem<string>("messageType", AlertType.success.ToString());
+
+                this.OnUserLoggedOut(EventArgs.Empty);
+            }
+            else
+            {
+                await this.sessionStorage.SetItem<string>("message", "Logout failed for unknow reason :'(");
+                await this.sessionStorage.SetItem<string>("messageType", AlertType.warning.ToString());
+
+                this.OnUserLoggedOut(EventArgs.Empty);
+            }
+
+            this.uriHelper.NavigateTo("/");
         }
 
         private async Task SetAuthorizationHeader()
@@ -106,9 +127,14 @@ namespace AlmaIt.dotnet.Heroes.Client.ViewModel
 
         protected virtual void OnUserLoggedIn(EventArgs e)
         {
-            Console.WriteLine("event sent");
             if (this.UserHasLoggedIn != null)
                 this.UserHasLoggedIn(this, e);
+        }
+
+        protected virtual void OnUserLoggedOut(EventArgs e)
+        {
+            if (this.UserHasLoggedOut != null)
+                this.UserHasLoggedOut(this, e);
         }
     }
 }
