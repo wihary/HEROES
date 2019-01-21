@@ -1,98 +1,99 @@
-@using System.Diagnostics
-@using System.IO
-@using Newtonsoft.Json
-@using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration
-@using AlmaIt.dotnet.Heroes.Client.Pages.Components
-@using AlmaIt.dotnet.Heroes.Shared.Enumeration
-@using AlmaIt.dotnet.Heroes.Shared.Models
-@using AlmaIt.dotnet.Heroes.Client.Helpers
-@using AlmaIt.dotnet.Heroes.Shared.Business
 @inject HttpClient Http
 @inject HtmlHelper Html
 
-@if (string.IsNullOrEmpty(this.statistics))
+@using AlmaIt.dotnet.Heroes.Client.Helpers
+@using AlmaIt.dotnet.Heroes.Shared.Models
+@inherits ComicsBrowserComponentBase
+
+@if (string.IsNullOrEmpty(this.Statistics))
 {
-    <p><em>Loading...</em></p>
+    <p>
+        <em>Loading...</em>
+    </p>
 }
 else
 {
     <div class="float-left">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text" id="Filter"><button class="btn btn-sm" onclick="@ApplySearchFilter"><i class="oi oi-magnifying-glass"></i></button></span>
+                <span class="input-group-text" id="Filter">
+                    <button class="btn btn-sm" onclick="@ApplySearchFilter">
+                        <i class="oi oi-magnifying-glass"></i>
+                    </button>
+                </span>
             </div>
             <input type="text" class="form-control" aria-describedby="Filter" placeholder="search" bind="@(this.Filter)"/>
         </div>
     </div>
     <button type="button" class="btn btn-primary float-right w-25 mb-3" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="@(async () => await this.ToggleOverride())">
-        @(this.overrideToggleMessage)
+        @(this.OverrideToggleMessage)
     </button>
 
     <table class="table table-striped table-sm table-hover">
         <thead>
-            <tr>
-                <th scope="col">
-                    <button class="btn btn-link" onclick="@(async () => await this.SortSeriesBySerieName())">@(this.Html.DisplayName<ComicBook>(cs => cs.ComicSerie.Name))</button>
-                </th>
-                <th scope="col">
-                    <button class="btn btn-link" onclick="@(async () => await this.SortSeriesByTitle())">@(this.Html.DisplayName<ComicBook>(cs => cs.Title))</button>
-                </th>
-                <th scope="col">
-                    <button class="btn btn-link" onclick="@(async () => await this.SortSeriesByIssueNumber())">@(this.Html.DisplayName<ComicBook>(cs => cs.IssueNumber))</button>
-                </th>
-                <th scope="col"></th>
-            </tr>
+        <tr>
+            <th scope="col">
+                <button class="btn btn-link" onclick="@(async () => await this.SortSeriesBySerieName())">@(this.Html.DisplayName<ComicBook>(cs => cs.ComicSerie.Name))</button>
+            </th>
+            <th scope="col">
+                <button class="btn btn-link" onclick="@(async () => await this.SortSeriesByTitle())">@(this.Html.DisplayName<ComicBook>(cs => cs.Title))</button>
+            </th>
+            <th scope="col">
+                <button class="btn btn-link" onclick="@(async () => await this.SortSeriesByIssueNumber())">@(this.Html.DisplayName<ComicBook>(cs => cs.IssueNumber))</button>
+            </th>
+            <th scope="col"></th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var comicBook in this.viewableComicBooks)
+        @foreach (var comicBook in this.ViewableComicBooks)
+        {
+            <tr>
+                <td>
+                    @if (comicBook.ComicSerie == null)
+                    {
+                        <span> - </span>
+                    }
+                    else
+                    {
+                        <span>@comicBook.ComicSerie.Name</span>
+                    }
+                </td>
+                <td>@comicBook.Title</td>
+                <td>@comicBook.IssueNumber</td>
+                <td>
+                    <button class="btn btn-default" onclick="@(() => this.EditComicBook(comicBook.Id))">Edit</button> |
+                    <button class="btn btn-default" onclick="@(async () => await this.DeleteComicBook(comicBook.Id))">Delete</button>
+                </td>
+            </tr>
+            if (this.EditionStatus.Key == comicBook.Id && this.EditionStatus.Value)
             {
                 <tr>
-                    <td>
-                        @if(@comicBook.ComicSerie == null)
-                        {
-                            <span> - </span>
-                        }
-                        else
-                        {
-                            <span>@comicBook.ComicSerie.Name</span>
-                        }
-                    </td>
-                    <td>@comicBook.Title</td>
-                    <td>@comicBook.IssueNumber</td>
-                    <td>
-                        <button class="btn btn-default" onclick="@(() => this.EditComicBook(comicBook.Id))">Edit</button> |
-                        <button class="btn btn-default" onclick="@(async () => await this.DeleteComicBook(comicBook.Id))">Delete</button>
+                    <td colspan="4" class="px-5 py-3">
+                        <EditComicComponent EditedComicBook="@comicBook" EditCompleted="@OnEditionCompleted"/>
                     </td>
                 </tr>
-                if(this.editionStatus.Key == comicBook.Id && this.editionStatus.Value)
-                {
-                    <tr>
-                        <td colspan="4" class="px-5 py-3">
-                            <EditComicComponent EditedComicBook="@comicBook" EditCompleted="@OnEditionCompleted"/>
-                        </td>
-                    </tr>
-                }
             }
+        }
         </tbody>
     </table>
 
     <ul class="pagination float-left">
-        <li class="page-item @(this.currentPage > 1 ? "enabled" : "disabled")">
-            <a class="page-link" onclick=@(async () => await this.ShowPage(1)) aria-label="Previous" aria-disabled=@(this.currentPage > 1 ? "false" : "true")>
+        <li class="page-item @(this.CurrentPage > 1 ? "enabled" : "disabled")">
+            <a class="page-link" onclick=@(async () => await this.ShowPage(1)) aria-label="Previous" aria-disabled=@(this.CurrentPage > 1 ? "false" : "true")>
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
-        <li class="page-item @(this.currentPage > 1 ? "enabled" : "disabled")">
-            <a class="page-link" onclick=@(async () => await this.ShowPage(this.currentPage - 1)) tabindex="-1" aria-disabled=@(this.currentPage > 1 ? " false" : "true")>
+        <li class="page-item @(this.CurrentPage > 1 ? "enabled" : "disabled")">
+            <a class="page-link" onclick=@(async () => await this.ShowPage(this.CurrentPage - 1)) tabindex="-1" aria-disabled=@(this.CurrentPage > 1 ? " false" : "true")>
                 Previous
             </a>
         </li>
         @{
-            int i = this.pagerMin;
-            while (i <= this.pagerMax)
+            var i = this.PagerMin;
+            while (i <= this.PagerMax)
             {
                 var pageButtonNumber = i;
-                <li class="page-item @(pageButtonNumber == this.currentPage ? "active" : "")">
+                <li class="page-item @(pageButtonNumber == this.CurrentPage ? "active" : "")">
                     <a class="page-link" name="page-@pageButtonNumber" onclick=@(async () => await this.ShowPage(pageButtonNumber))>
                         @pageButtonNumber
                     </a>
@@ -100,188 +101,17 @@ else
                 i++;
             }
         }
-        <li class="page-item @(this.currentPage < this.totalPages ? "enabled" : "disabled")">
-            <a class="page-link" onclick=@(async () => await this.ShowPage(this.currentPage + 1)) tabindex="-1" aria-disabled=@(this.currentPage < this.totalPages ? "false" : "true") >
+        <li class="page-item @(this.CurrentPage < this.TotalPages ? "enabled" : "disabled")">
+            <a class="page-link" onclick=@(async () => await this.ShowPage(this.CurrentPage + 1)) tabindex="-1" aria-disabled=@(this.CurrentPage < this.TotalPages ? "false" : "true")>
                 Next
             </a>
         </li>
-        <li class="page-item @(this.currentPage < this.totalPages ? "enabled" : "disabled")">
-            <a class="page-link" onclick=@(async () => await this.ShowPage(this.totalPages)) aria-label="Next" aria-disabled=@(this.currentPage < this.totalPages ? "false" : "true")>
+        <li class="page-item @(this.CurrentPage < this.TotalPages ? "enabled" : "disabled")">
+            <a class="page-link" onclick=@(async () => await this.ShowPage(this.TotalPages)) aria-label="Next" aria-disabled=@(this.CurrentPage < this.TotalPages ? "false" : "true")>
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>
     </ul>
-    <span class="float-right btn btn-link disabled">Nb Comics : @(this.totalResult)</span>
-    <span class="float-right btn btn-link disabled">@(this.statistics)</span>
-}
-
-@functions {
-    [Parameter]
-    protected ComicsBrowserType browserType { get; set;}
-    private IEnumerable<ComicBook> viewableComicBooks = new List<ComicBook>();
-    private KeyValuePair<int, bool> editionStatus = new KeyValuePair<int, bool>(0, false);
-    private bool overrideDiplayAllComics = false;
-    private string overrideToggleMessage = "Show all";
-    private string Filter = string.Empty;
-    private string statistics = string.Empty;
-    int totalResult = 0;
-    int PageSize = 10;
-    int totalPages = 1;
-    int currentPage = 1;
-    int pagerSize = 5;
-    int pagerMin = 1;
-    int pagerMax = 1;
-    bool asc = true;
-
-    protected override async Task OnInitAsync()
-    {
-        try
-        {
-            await this.ShowPage(this.currentPage);
-        }
-        catch (Exception ex)
-        {
-            this.statistics = ex.ToString();
-        }
-
-        this.StateHasChanged();
-    }
-
-    protected async Task SortSeriesByTitle()
-    {
-        await this.ShowPage(this.currentPage, $"title {(this.asc ? "asc" : "desc")}");
-        this.asc = !this.asc;
-    }
-
-    protected async Task SortSeriesBySerieName()
-    {
-        await this.ShowPage(this.currentPage, $"ComicSerie.Name {(this.asc ? "asc" : "desc")}");
-        this.asc = !this.asc;
-    }
-
-    protected async Task SortSeriesByIssueNumber()
-    {
-        await this.ShowPage(this.currentPage, $"IssueNumber {(this.asc ? "asc" : "desc")}");
-        this.asc = !this.asc;
-    }
-
-
-    protected async Task GetCurrentPageData(ComicsBrowserType browserType, int pageToShow, int size, string sortBy, string filter = "")
-    {
-        Stream response = null;
-
-        switch (browserType)
-        {
-            case ComicsBrowserType.All:
-                response = await this.Http.GetStreamAsync($"api/ComicBook/{pageToShow}/{size}/{filter}{(string.IsNullOrEmpty(sortBy) ? "" : $"?sortBy={sortBy}")}");
-                break;
-            default:
-                response = await this.Http.GetStreamAsync($"api/ComicBook/type/{browserType}/{pageToShow}/{size}/{filter}{(string.IsNullOrEmpty(sortBy) ? "" : $"?sortBy={sortBy}")}");
-                break;
-        }
-
-        try
-        {
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-            if(response.Length > 0)
-            {
-                var serializer = new JsonSerializer();
-                using (var sr = new StreamReader(response))
-                using (var jsonTextReader = new JsonTextReader(sr))
-                {
-                    var serviceData = serializer.Deserialize<PageResponseData<ComicBook>>(jsonTextReader);
-                    this.viewableComicBooks = serviceData.Result;
-                    this.totalPages = serviceData.MaxPage;
-                    this.totalResult = serviceData.TotalResult;
-                }
-            }
-
-            stopWatch.Stop();
-            this.statistics = $"{stopWatch.ElapsedMilliseconds.ToString()}ms";
-        }
-        catch (Exception ex)
-        {
-            this.statistics = ex.ToString();
-        }
-
-        this.StateHasChanged();
-    }
-
-    public async Task ReloadDataList()
-    {
-        await this.OnInitAsync();
-        this.StateHasChanged();
-    }
-
-    protected async Task DeleteComicBook(int id)
-    {
-        var result = await this.Http.DeleteAsync($"/api/ComicBook/{id}");
-        await this.OnInitAsync();
-
-        this.StateHasChanged();
-    }
-
-    protected void EditComicBook(int id)
-    {
-        this.editionStatus = new KeyValuePair<int, bool>(id, true);
-
-        this.StateHasChanged();
-    }
-
-    protected async Task OnCollectionChanged(bool success)
-    {
-        if(success)
-            await this.OnInitAsync();
-
-        this.StateHasChanged();
-    }
-
-    protected async Task OnEditionCompleted(bool success)
-    {
-        if(success)
-            await this.OnInitAsync();
-
-        this.editionStatus = new KeyValuePair<int, bool>(0, false);
-
-        this.StateHasChanged();
-    }
-
-    protected async Task ToggleOverride()
-    {
-        this.overrideDiplayAllComics = !this.overrideDiplayAllComics;
-        if(this.overrideDiplayAllComics)
-        {
-            this.overrideToggleMessage = $"Default filter ({this.browserType})";
-            this.browserType = ComicsBrowserType.All;
-        }
-        else
-        {
-            this.overrideToggleMessage = "Show all";
-            this.browserType = ComicsBrowserType.Collection;
-        }
-
-
-        await this.OnInitAsync();
-        this.StateHasChanged();
-    }
-
-    private async Task ShowPage(int pageToShow, string sortBy = "")
-    {
-        this.currentPage = pageToShow;
-        await this.GetCurrentPageData(this.browserType, this.currentPage, this.PageSize, sortBy, this.Filter);
-
-        this.pagerMin = (pageToShow - this.pagerSize) <= 0 ? 1 : (pageToShow - this.pagerSize);
-        this.pagerMax = (pageToShow + this.pagerSize) >= this.totalPages ? this.totalPages : (pageToShow + this.pagerSize);
-
-        this.StateHasChanged();
-    }
-
-    protected async Task ApplySearchFilter()
-    {
-        this.currentPage = 1;
-        await this.ShowPage(this.currentPage);
-        this.StateHasChanged();
-    }
+    <span class="float-right btn btn-link disabled">Nb Comics : @(this.TotalResult)</span>
+    <span class="float-right btn btn-link disabled">@(this.Statistics)</span>
 }

@@ -12,3 +12,7 @@ src/AlmaIt\.dotnet\.Heroes\.Shared/obj/
 src/AlmaIt\.dotnet\.Heroes\.Shared/bin/
 
 src/AlmaIt\.dotnet\.Heroes\.Server/Data/Heroes\.db
+
+*.user
+
+\.vs/

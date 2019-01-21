@@ -1,10 +1,10 @@
-@using System.Net
-@using AlmaIt.dotnet.Heroes.Client.Helpers
-@using AlmaIt.dotnet.Heroes.Shared.Models
 @inject HttpClient Http
 @inject HtmlHelper Html
+@using AlmaIt.dotnet.Heroes.Client.Helpers
+@using AlmaIt.dotnet.Heroes.Shared.Models
+@inherits SeriesBrowserBase
 
-@if (this.fullComicSerieList == null)
+@if (this.FullComicSerieList == null)
 {
     <p>
         <em>Loading...</em>
@@ -37,7 +37,7 @@ else
         </tr>
         </thead>
         <tbody>
-        @foreach (var serie in this.viewableComicSerie)
+        @foreach (var serie in this.ViewableComicSerie)
         {
             <tr>
                 <td>@serie.Name</td>
@@ -47,35 +47,36 @@ else
                     <button class="btn btn-default" onclick="@(async () => await this.DeleteComicSerie(serie.Id))">Delete</button>
                 </td>
             </tr>
-            if (this.isSerieEditionEnabled.Key == serie.Id && this.isSerieEditionEnabled.Value)
-             {
-                 <tr>
-                     <td colspan="2" class="px-5 py-3">
-                         <EditSerieComponent SelectedSerie="@serie" EditCompleted="@OnEditionCompleted"/>
-                     </td>
-                 </tr>
-             }
+            if (this.IsSerieEditionEnabled.Key == serie.Id && this.IsSerieEditionEnabled.Value)
+            {
+                <tr>
+                    <td colspan="2" class="px-5 py-3">
+                        <EditSerieComponent SelectedSerie="@serie" EditCompleted="@OnEditionCompleted"/>
+                    </td>
+                </tr>
+            }
         }
         </tbody>
     </table>
 
     <ul class="pagination float-left">
-        <li class="page-item @(this.currentPage > 1 ? "enabled" : "disabled")">
-            <a class="page-link" onclick=@(() => this.ShowPage(1)) aria-label="Previous" aria-disabled=@(this.currentPage > 1 ? "false" : "true")>
+        <li class="page-item @(this.CurrentPage > 1 ? "enabled" : "disabled")">
+            <a class="page-link" onclick=
+@(() => this.ShowPage(1)) aria-label="Previous" aria-disabled=@(this.CurrentPage > 1 ? "false" : "true")>
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
-        <li class="page-item @(this.currentPage > 1 ? "enabled" : "disabled")">
-            <a class="page-link" onclick=@(() => this.ShowPage(this.currentPage - 1)) tabindex="-1" aria-disabled=@(this.currentPage > 1 ? " false" : "true")>
+        <li class="page-item @(this.CurrentPage > 1 ? "enabled" : "disabled")">
+            <a class="page-link" onclick=@(() => this.ShowPage(this.CurrentPage - 1)) tabindex="-1" aria-disabled=@(this.CurrentPage > 1 ? " false" : "true")>
                 Previous
             </a>
         </li>
         @{
-            var i = this.pagerMin;
-            while (i <= this.pagerMax)
+            var i = this.PagerMin;
+            while (i <= this.PagerMax)
             {
                 var pageButtonNumber = i;
-                <li class="page-item @(pageButtonNumber == this.currentPage ? "active" : "")">
+                <li class="page-item @(pageButtonNumber == this.CurrentPage ? "active" : "")">
                     <a class="page-link" name="page-@pageButtonNumber" onclick=@(() => this.ShowPage(pageButtonNumber))>
                         @pageButtonNumber
                     </a>
@@ -83,158 +84,17 @@ else
                 i++;
             }
         }
-        <li class="page-item @(this.currentPage < this.totalPages ? "enabled" : "disabled")">
-            <a class="page-link" onclick=@(() => this.ShowPage(this.currentPage + 1)) tabindex="-1" aria-disabled=@(this.currentPage < this.totalPages ? "false" : "true")>
+        <li class="page-item @(this.CurrentPage < this.TotalPages ? "enabled" : "disabled")">
+            <a class="page-link" onclick=
+@(() => this.ShowPage(this.CurrentPage + 1)) tabindex="-1" aria-disabled=@(this.CurrentPage < this.TotalPages ? "false" : "true")>
                 Next
             </a>
         </li>
-        <li class="page-item @(this.currentPage < this.totalPages ? "enabled" : "disabled")">
-            <a class="page-link" onclick=@(() => this.ShowPage(this.totalPages)) aria-label="Next" aria-disabled=@(this.currentPage < this.totalPages ? "false" : "true")>
+        <li class="page-item @(this.CurrentPage < this.TotalPages ? "enabled" : "disabled")">
+            <a class="page-link" onclick=@(() => this.ShowPage(this.TotalPages)) aria-label="Next" aria-disabled=@(this.CurrentPage < this.TotalPages ? "false" : "true")>
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>
     </ul>
-    <span class="float-right btn btn-link disabled">Nb Series : @(this.fullComicSerieList.Count)</span>
-}
-
-@functions {
-
-    private List<ComicSeries> fullComicSerieList;
-
-    private KeyValuePair<int, bool> isSerieEditionEnabled = new KeyValuePair<int, bool>(0, false);
-
-    private IEnumerable<ComicSeries> viewableComicSerie = new List<ComicSeries>();
-
-    private IEnumerable<ComicSeries> filteredComicSerie = new List<ComicSeries>();
-
-    private string Filter = string.Empty;
-
-    [Parameter]
-    protected Action<string> SendMessage { get; set; }
-
-    readonly int PageSize = 10;
-
-    int totalPages = 1;
-
-    int currentPage = 1;
-
-    int pagerSize = 5;
-
-    int pagerMin = 1;
-
-    int pagerMax = 1;
-
-    bool asc = true;
-
-    protected override async Task OnInitAsync()
-    {
-        this.fullComicSerieList = await this.Http.GetJsonAsync<List<ComicSeries>>("api/ComicSerie");
-
-    // Apply search filter if any
-        this.ApplySearchFilter();
-
-    // Get number of pages
-        this.totalPages = (int)Math.Ceiling(this.filteredComicSerie.Count() / (decimal)this.PageSize);
-        this.ShowPage(this.currentPage);
-    }
-
-    protected async Task DeleteComicSerie(int id)
-    {
-        var result = await this.Http.DeleteAsync($"/api/ComicSerie/{id}");
-        if (result.StatusCode == HttpStatusCode.BadRequest) this.SendMessage(await result.Content.ReadAsStringAsync());
-        await this.OnInitAsync();
-
-        this.StateHasChanged();
-    }
-
-    protected async Task SortSeriesByName()
-    {
-        if (this.asc)
-        {
-            this.fullComicSerieList = await this.Http.GetJsonAsync<List<ComicSeries>>("api/ComicSerie?sortBy=name desc");
-            this.asc = false;
-        }
-        else
-        {
-            this.fullComicSerieList = await this.Http.GetJsonAsync<List<ComicSeries>>("api/ComicSerie?sortBy=name asc");
-            this.asc = true;
-        }
-
-    // Apply search filter if any
-        this.ApplySearchFilter();
-
-    // Get number of pages
-        this.totalPages = (int)Math.Ceiling(this.filteredComicSerie.Count() / (decimal)this.PageSize);
-        this.ShowPage(this.currentPage);
-    }
-
-    protected async Task SortSeriesByIssueCount()
-    {
-        if (this.asc)
-        {
-            this.fullComicSerieList = await this.Http.GetJsonAsync<List<ComicSeries>>("api/ComicSerie?sortBy=IssuesCount desc");
-            this.asc = false;
-        }
-        else
-        {
-            this.fullComicSerieList = await this.Http.GetJsonAsync<List<ComicSeries>>("api/ComicSerie?sortBy=IssuesCount asc");
-            this.asc = true;
-        }
-
-    // Apply search filter if any
-        this.ApplySearchFilter();
-
-    // Get number of pages
-        this.totalPages = (int)Math.Ceiling(this.filteredComicSerie.Count() / (decimal)this.PageSize);
-        this.ShowPage(this.currentPage);
-    }
-
-    public async Task ReloadDataList()
-    {
-        await this.OnInitAsync();
-        this.StateHasChanged();
-    }
-
-    protected void EditComicSerie(int id)
-    {
-        this.isSerieEditionEnabled = new KeyValuePair<int, bool>(id, true);
-
-        this.StateHasChanged();
-    }
-
-    protected async Task OnCollectionChanged(bool success)
-    {
-        if (success) await this.OnInitAsync();
-
-        this.StateHasChanged();
-    }
-
-    protected async Task OnEditionCompleted(bool success)
-    {
-        if (success) await this.OnInitAsync();
-
-        this.isSerieEditionEnabled = new KeyValuePair<int, bool>(0, false);
-        this.StateHasChanged();
-    }
-
-    private void ShowPage(int pageToShow)
-    {
-        this.viewableComicSerie = this.filteredComicSerie.Skip((pageToShow - 1) * this.PageSize).Take(this.PageSize);
-        this.currentPage = pageToShow;
-
-        this.pagerMin = pageToShow - this.pagerSize <= 0 ? 1 : pageToShow - this.pagerSize;
-        this.pagerMax = pageToShow + this.pagerSize >= this.totalPages ? this.totalPages : pageToShow + this.pagerSize;
-
-        this.StateHasChanged();
-    }
-
-    protected void ApplySearchFilter()
-    {
-        if (string.IsNullOrEmpty(this.Filter)) this.filteredComicSerie = this.fullComicSerieList;
-        else this.filteredComicSerie = this.fullComicSerieList.Where(serie => serie.Name.Contains(this.Filter)).ToList();
-
-        this.StateHasChanged();
-        this.ShowPage(this.currentPage);
-    }
-
+    <span class="float-right btn btn-link disabled">Nb Series : @(this.FullComicSerieList.Count)</span>
 }
