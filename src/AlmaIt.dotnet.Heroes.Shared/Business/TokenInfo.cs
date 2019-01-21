@@ -8,6 +8,6 @@ namespace AlmaIt.dotnet.Heroes.Shared.Business
         
         public string Token { get; set; }
 
-        public DateTime ExpirationDate { get; set; }
+        public DateTime Expired { get; set; }
     }
 }
