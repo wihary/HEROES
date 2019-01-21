@@ -7,7 +7,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Tags",
+                name: "ObjectTag",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -17,14 +17,14 @@ namespace AlmaIt.dotnet.Heroes.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tags", x => x.Id);
+                    table.PrimaryKey("PK_ObjectTag", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Tags");
+                name: "ObjectTag");
         }
     }
 }
