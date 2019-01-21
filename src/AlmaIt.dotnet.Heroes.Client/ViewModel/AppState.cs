@@ -24,7 +24,7 @@ namespace AlmaIt.dotnet.Heroes.Client.ViewModel
         private readonly SessionStorage sessionStorage;
         private readonly IUriHelper uriHelper;
 
-        public bool IsLoggedin { get; set; }
+        public bool IsLoggedin { get; private set; }
 
         public event EventHandler UserHasLoggedIn;
         public event EventHandler UserHasLoggedOut;
