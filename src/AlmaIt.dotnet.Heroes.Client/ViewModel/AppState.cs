@@ -7,6 +7,10 @@ namespace AlmaIt.dotnet.Heroes.Client.ViewModel
     using Blazor.Extensions.Storage;
     using System;
     using AlmaIt.dotnet.Heroes.Shared.Business;
+    using Dotnet.JsonIdentityProvider.IdentityProvider.Model;
+    using Microsoft.AspNetCore.Blazor;
+    using Newtonsoft.Json;
+    using System.Text;
 
     /// <summary>
     ///     This class is use as an authentification manager for the client
@@ -42,7 +46,7 @@ namespace AlmaIt.dotnet.Heroes.Client.ViewModel
                 else
                 {
                     this.IsLoggedin = true;
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -51,8 +55,19 @@ namespace AlmaIt.dotnet.Heroes.Client.ViewModel
             return this.IsLoggedin;
         }
 
-        public void Login()
+        public async Task LoginAsync(CredentialModel user)
         {
+            try
+            {
+                var jsonContent = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+                var result = await this.httpClient.PostAsync("/api/auth/token", jsonContent);
+
+                Console.WriteLine(await result.Content.ReadAsStringAsync());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
 
         }
 
