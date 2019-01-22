@@ -27,7 +27,13 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="claims">Claims</span>
                     </div>
-                    <input type="input" class="form-control" aria-describedby="claims" bind="@this.inputClaim"/>
+                    <select class="form-control" aria-describedby="Serie" bind="@this.inputClaim">
+                    <option value="">-- Select related Serie --</option>
+                        <option value="SuperUser">SuperUser</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Write">Write</option>
+                        <option value="Read">Read</option>
+                    </select>
                     <div class="input-group-apend">
                         <button class="btn btn-default" onclick="@(() => this.AddClaim())">Add</button>
                      </div>
@@ -39,7 +45,7 @@
                 <div class="form-group">
                     @foreach (var claim in this.user.Claims)
                     {
-                        <span class="badge badge-primary"data-toggle="tooltip" data-placement="bottom" title="Click to remove" 
+                        <span class="badge badge-primary"data-toggle="tooltip" data-placement="bottom" title="Click to remove"
                             onclick="@(() => this.RemoveClaim(claim))" style="cursor: pointer;">
                             @claim
                         </span>
