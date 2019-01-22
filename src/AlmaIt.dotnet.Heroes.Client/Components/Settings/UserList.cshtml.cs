@@ -32,6 +32,12 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
         /// <returns></returns>
         protected override async Task OnInitAsync()
         {
+            await this.RefreshUserListAsync();
+        }
+
+        public async Task RefreshUserListAsync()
+        {
+            Console.WriteLine("Refresh request received !");
             var response = await Http.GetAsync($"api/user", HttpCompletionOption.ResponseHeadersRead);
 
             if (response.StatusCode == HttpStatusCode.OK)
@@ -59,6 +65,8 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
 
             if (this.Users == null)
                 this.Users = new List<UserModel>();
+
+                this.StateHasChanged();
         }
     }
 }

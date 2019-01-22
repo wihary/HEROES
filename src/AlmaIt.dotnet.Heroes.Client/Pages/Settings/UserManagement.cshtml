@@ -12,6 +12,6 @@
 
 <h1>Manage authorized Users</h1>
 
-<AddUser />
+<AddUser UserAdded="@this.OnUserAdded" />
 
-<UserList />
+<UserList ref="@this.UserListComponent"/>

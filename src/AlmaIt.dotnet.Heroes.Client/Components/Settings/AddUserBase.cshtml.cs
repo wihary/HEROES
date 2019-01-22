@@ -1,23 +1,34 @@
 namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
+    using System.Text;
     using System.Threading.Tasks;
+    using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration;
     using Dotnet.JsonIdentityProvider.IdentityProvider.Model;
     using Microsoft.AspNetCore.Blazor;
     using Microsoft.AspNetCore.Blazor.Components;
+    using Newtonsoft.Json;
 
     public class AddUserBase : BlazorComponent
     {
         [Inject]
-        protected HttpClient Http { get; set; }
+        private HttpClient Http { get; set; }
+
+        [Parameter]
+        public Func<bool, Task> UserAdded { get; set; }
 
         protected UserModel user = new UserModel();
 
         protected string inputClaim = string.Empty;
 
-        protected bool showAddUserPanel = false;
+        protected bool ShowAddUserPanel = false;
+
+        protected string Message { get; set; }
+
+        protected AlertType MessageType { get; set; }
 
         protected override void OnInit()
         {
@@ -26,13 +37,29 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
 
         protected void ToggleShowAddUser()
         {
-            this.showAddUserPanel = !this.showAddUserPanel;
+            this.ShowAddUserPanel = !this.ShowAddUserPanel;
             StateHasChanged();
         }
 
         protected async Task CreateUser()
         {
-            await Http.SendJsonAsync(HttpMethod.Post, "/api/user", user);
+            var response = await this.Http.PostAsync("/api/user", new StringContent(JsonConvert.SerializeObject(this.user),
+                Encoding.UTF8, "application/json"));
+
+            if (response.IsSuccessStatusCode)
+            {
+                this.Message = $"User '{this.user.Name}' has been added successfully !";
+                this.MessageType = AlertType.success;
+                this.ResetUserForm();
+                await this.UserAdded(true);
+            }
+            else
+            {
+                this.Message = $"Error while creating user '{this.user.Name}' = [{(int)response.StatusCode}]{response.ReasonPhrase}";
+                this.MessageType = AlertType.danger;
+            }
+
+            this.StateHasChanged();
         }
 
         protected void AddClaim()
@@ -44,6 +71,14 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
         protected void RemoveClaim(string claim)
         {
             this.user.Claims.RemoveAll(x => x.Contains(claim));
+        }
+
+        protected void ResetUserForm()
+        {
+            this.user = new UserModel();
+            this.user.Claims = new List<string>();
+            this.inputClaim = string.Empty;
+            this.ShowAddUserPanel = false;
         }
     }
 }

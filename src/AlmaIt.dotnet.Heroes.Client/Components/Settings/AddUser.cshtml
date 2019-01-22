@@ -1,11 +1,14 @@
+@using AlmaIt.dotnet.Heroes.Client.Components
 @inherits AlmaIt.dotnet.Heroes.Client.Components.Settings.AddUserBase
+
+<TopAlertMessage Message="@this.Message" AlertType="@this.MessageType"/>
 
 <div class="row">
     <div class="col-md-3 px-3 py-3">
         <button class="btn btn-primary btn-sm" type="button" onclick="@(() => ToggleShowAddUser())">Add User</button>
     </div>
 </div>
-@if(this.showAddUserPanel)
+@if(this.ShowAddUserPanel)
 {
     <div class="alert alert-primary" role="alert">
         <h3>Add new User</h3>
