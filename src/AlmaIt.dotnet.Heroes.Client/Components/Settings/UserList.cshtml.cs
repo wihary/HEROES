@@ -7,6 +7,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
+    using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration;
     using Dotnet.JsonIdentityProvider.IdentityProvider.Model;
     using Microsoft.AspNetCore.Blazor.Components;
     using Microsoft.AspNetCore.Blazor.Services;
@@ -15,16 +16,18 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
     public class UserListBase : BlazorComponent
     {
         [Inject]
-        protected IUriHelper UriHelper { get; set; }
+        private IUriHelper UriHelper { get; set; }
 
         [Inject]
-        protected HttpClient Http { get; set; }
+        private HttpClient Http { get; set; }
 
-        public List<UserModel> Users { get; set; }
+        protected List<UserModel> Users { get; set; }
 
-        public bool IsErrorMessage { get; set; } = false;
+        protected bool IsErrorMessage { get; set; } = false;
 
-        public string Message { get; set; }
+        protected string Message { get; set; }
+
+        protected AlertType MessageType { get; set; }
 
         /// <summary>
         ///
@@ -37,7 +40,6 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
 
         public async Task RefreshUserListAsync()
         {
-            Console.WriteLine("Refresh request received !");
             var response = await Http.GetAsync($"api/user", HttpCompletionOption.ResponseHeadersRead);
 
             if (response.StatusCode == HttpStatusCode.OK)
@@ -56,17 +58,36 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
                 {
                     this.IsErrorMessage = true;
                     this.Message = ex.Message;
+                    this.MessageType = AlertType.warning;
                 }
             }
             else
             {
                 this.Message = $"[{(int)response.StatusCode}] : {response.ReasonPhrase}";
+                this.MessageType = AlertType.danger;
             }
 
             if (this.Users == null)
                 this.Users = new List<UserModel>();
 
-                this.StateHasChanged();
+            this.StateHasChanged();
+        }
+
+        protected async Task DeleteUser(string username)
+        {
+            var response = await Http.DeleteAsync($"api/user/{username}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                this.Message = $"User '{username}' has been removed successfully !";
+                this.MessageType = AlertType.success;
+                await this.RefreshUserListAsync();
+            }
+            else
+            {
+                this.Message = $"Error occured while removing User '{username}' = [{(int)response.StatusCode}] : {response.ReasonPhrase}";
+                this.MessageType = AlertType.danger;
+            }
         }
     }
 }
