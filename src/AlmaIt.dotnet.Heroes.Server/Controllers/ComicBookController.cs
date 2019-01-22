@@ -12,6 +12,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
 
     [Produces("application/json")]
     [Route("api/[controller]")]
+    [Authorize]
     public class ComicBookController : Controller
     {
         private readonly IComicBookAccessLayer comicBookContext;
@@ -34,6 +35,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <param name="id">Comic book id to retrieve</param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [Authorize(Policy = "ReadOnlyUsers")]
         public async Task<IActionResult> GetAsync([FromQuery] int id)
         {
             var result = await this.comicBookContext.GetAsync(id);
@@ -50,6 +52,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <param name="name">Comic book name</param>
         /// <returns></returns>
         [HttpGet("{name}")]
+        [Authorize(Policy = "ReadOnlyUsers")]
         public IActionResult GetByName([FromQuery] string name)
         {
             var result = this.comicBookContext.Where(x => x.Title.Contains(name)).FirstOrDefault();
@@ -66,6 +69,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <returns></returns>
         //[Authorize(Policy = "ReadOnlyUsers")]
         [HttpGet]
+        [Authorize(Policy = "ReadOnlyUsers")]
         public IActionResult GetAll()
         {
             var result = this.comicBookContext.GetAllComcisAndSerieInfo();
@@ -81,6 +85,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("{page}/{size}")]
+        [Authorize(Policy = "ReadOnlyUsers")]
         public async Task<IActionResult> GetAllAsync(int page, int size)
         {
             var response = new PageResponseData<ComicBook>();
@@ -100,6 +105,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("type/{status}/{page}/{size}")]
+        [Authorize(Policy = "ReadOnlyUsers")]
         public async Task<IActionResult> GetByStatusAsync([FromRoute]ComicBookStatus status,[FromRoute] int page, [FromRoute] int size)
         {
             return await this.GetByStatusAsync(status, page, size, string.Empty);
@@ -110,6 +116,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("type/{status}/{page}/{size}/{filter}")]
+        [Authorize(Policy = "ReadOnlyUsers")]
         public async Task<IActionResult> GetByStatusAsync([FromRoute]ComicBookStatus status,[FromRoute] int page, [FromRoute] int size, [FromRoute]string filter = "")
         {
             var response = new PageResponseData<ComicBook>();
@@ -133,6 +140,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <param name="comicBook">Comic book model to create</param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(Policy = "WriteUsers")]
         public async Task<IActionResult> AddAsync([FromBody] ComicBook comicBook)
         {
             var result = await this.comicBookContext.AddAsync(comicBook);
@@ -145,6 +153,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <param name="id">Id of the comic book to remove</param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [Authorize(Policy = "Administrators")]
         public async Task<IActionResult> RemoveAsync([FromRoute] int id)
         {
             var comicBook = await this.comicBookContext.GetAsync(id);
@@ -165,6 +174,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <param name="comicBook">Comic book model to create</param>
         /// <returns></returns>
         [HttpPut]
+        [Authorize(Policy = "WriteUsers")]
         public async Task<IActionResult> UpdateAsync([FromBody] ComicBook comicBook)
         {
             // Empty Navigation property which should not be send while updating entity
