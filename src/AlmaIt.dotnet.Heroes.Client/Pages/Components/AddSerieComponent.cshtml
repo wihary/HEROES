@@ -3,10 +3,10 @@
 
 <div class="row">
     <div class="col-md-3 px-3 py-3">
-        <button class="btn btn-primary btn-sm" type="button" onclick="@(() => ToggleShowAddSerie())">Add comics serie</button>
+        <button class="btn btn-primary btn-sm" type="button" onclick="@(() => this.ToggleShowAddSerie())">Add comics serie</button>
     </div>
 </div>
-@if(showAddSeriePanel)
+@if(this.showAddSeriePanel)
 {
     <div class="alert alert-primary" role="alert">
         <h3>Add Comic Book Serie</h3>
@@ -16,13 +16,13 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="Title">Title</span>
                     </div>
-                    <input type="text" class="form-control" aria-describedby="Title" bind="@comicSerie.Name" />
+                    <input type="text" class="form-control" aria-describedby="Title" bind="@(this.comicSerie.Name)" />
                 </div>
             </div>
         </div>
         <div class="form-row">
             <div class="col-auto">
-                <button class="btn btn-default" onclick="@(async () => await CreateComicSerie())">Save</button>
+                <button class="btn btn-default" onclick="@(async () => await this.CreateComicSerie())">Save</button>
             </div>
         </div>
     </div>
@@ -36,7 +36,7 @@
 
     protected async Task CreateComicSerie()
     {
-        await Http.SendJsonAsync(HttpMethod.Post, "/api/ComicSerie", comicSerie);
+        await this.Http.SendJsonAsync(HttpMethod.Post, "/api/ComicSerie", this.comicSerie);
 
         await this.ComicSerieAdded(true);
     }
@@ -44,6 +44,6 @@
     protected void ToggleShowAddSerie()
     {
         this.showAddSeriePanel = !this.showAddSeriePanel;
-        StateHasChanged();
+        this.StateHasChanged();
     }
 }

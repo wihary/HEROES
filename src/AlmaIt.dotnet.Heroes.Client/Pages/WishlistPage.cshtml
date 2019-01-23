@@ -24,8 +24,8 @@
     protected async Task OnCollectionChanged(bool success)
     {
         if(success)
-            await comicsBrowser.ReloadDataList();
+            await this.comicsBrowser.ReloadDataList();
 
-        StateHasChanged();
+        this.StateHasChanged();
     }
 }

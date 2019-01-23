@@ -9,14 +9,14 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="Title">Title</span>
                 </div>
-                <input type="text" class="form-control" aria-describedby="Title" bind="@SelectedSerie.Name" />
+                <input type="text" class="form-control" aria-describedby="Title" bind="@(this.SelectedSerie.Name)" />
             </div>
         </div>
     </div>
     <div class="form-row">
         <div class="col-auto">
-            <button class="btn btn-default" onclick="@(async () => await EditionCompleted(false))">Cancel</button>
-            <button class="btn btn-default" onclick="@(async () => await UpdateComicSerie())">Save</button>
+            <button class="btn btn-default" onclick="@(async () => await this.EditionCompleted(false))">Cancel</button>
+            <button class="btn btn-default" onclick="@(async () => await this.UpdateComicSerie())">Save</button>
         </div>
     </div>
 </div>
@@ -34,7 +34,7 @@
 
     protected async Task UpdateComicSerie()
     {
-        await Http.SendJsonAsync(HttpMethod.Put, "/api/ComicSerie", this.SelectedSerie);
+        await this.Http.SendJsonAsync(HttpMethod.Put, "/api/ComicSerie", this.SelectedSerie);
         await this.EditionCompleted(true);
     }
 }

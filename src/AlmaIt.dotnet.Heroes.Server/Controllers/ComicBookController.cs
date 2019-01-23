@@ -26,7 +26,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         public ComicBookController(IComicBookAccessLayer ComicBookContext, IComicSeriesAccessLayer ComicSerieContext)
         {
             this.comicBookContext = ComicBookContext;
-            comicSerieContext = ComicSerieContext;
+            this.comicSerieContext = ComicSerieContext;
         }
 
         /// <summary>
@@ -40,9 +40,9 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             var result = await this.comicBookContext.GetAsync(id);
 
             if (result == null)
-                return NoContent();
+                return this.NoContent();
 
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -56,9 +56,9 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             var result = this.comicBookContext.Where(x => x.Title.Contains(name)).FirstOrDefault();
 
             if (result == null)
-                return NoContent();
+                return this.NoContent();
 
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -71,9 +71,9 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             var result = await this.comicBookContext.GetAllComcisAndSerieInfo();
 
             if (result == null)
-                return NoContent();
+                return this.NoContent();
 
-            return Ok(result.AsQueryable().Sort(sortBy));
+            return this.Ok(result.AsQueryable().Sort(sortBy));
         }
 
         /// <summary>
@@ -87,12 +87,12 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             var result = await this.comicBookContext.GetAllComcisAndSerieInfo();
 
             if (result == null)
-                return NoContent();
+                return this.NoContent();
             result = result.AsQueryable().Sort(sortBy);
             response.TotalResult = result.Count();
             response.MaxPage = (int) Math.Ceiling(result.Count() / (decimal) size);
             response.Result = result.Skip((page - 1) * size).Take(size);
-            return Ok(response);
+            return this.Ok(response);
         }
 
         /// <summary>
@@ -119,12 +119,12 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
                 result = result.Where(book => book.Title.Contains(filter, StringComparison.InvariantCultureIgnoreCase) || book.ComicSerie.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase));
 
             if (result == null)
-                return NoContent();
+                return this.NoContent();
             result = result.AsQueryable().Sort(sortBy);
             response.TotalResult = result.Count();
             response.MaxPage = (int) Math.Ceiling(result.Count() / (decimal) size);
             response.Result = result.Skip((page - 1) * size).Take(size);
-            return Ok(response);
+            return this.Ok(response);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         public async Task<IActionResult> AddAsync([FromBody] ComicBook comicBook)
         {
             var result = await this.comicBookContext.AddAsync(comicBook);
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -152,10 +152,10 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             if (comicBook != null)
             {
                 var result = await this.comicBookContext.RemoveAsync(comicBook);
-                return Ok(result);
+                return this.Ok(result);
             }
 
-            return NoContent();
+            return this.NoContent();
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
                 comicBook.ComicSerieId = null;
 
             var result = await this.comicBookContext.UpdateAsync(comicBook);
-            return Ok(result);
+            return this.Ok(result);
         }
     }
 }
