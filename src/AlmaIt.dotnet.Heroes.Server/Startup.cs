@@ -67,12 +67,6 @@ namespace AlmaIt.dotnet.Heroes.Server
                 });
             });
 
-            services.AddHttpsRedirection(options =>
-            {
-                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-                options.HttpsPort = 5001;
-            });
-
             // Add data context and Db provider based on entity core
             services.AddData();
         }

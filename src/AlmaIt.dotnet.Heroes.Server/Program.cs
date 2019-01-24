@@ -31,7 +31,6 @@ namespace AlmaIt.dotnet.Heroes.Server
                 .UseConfiguration(new ConfigurationBuilder()
                     .AddCommandLine(args)
                     .Build())
-                .UseStartup<Startup>()
-                .UseUrls("http://*:5000","https://*:5001");
+                .UseStartup<Startup>();
     }
 }
