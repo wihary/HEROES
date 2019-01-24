@@ -29,8 +29,9 @@ namespace AlmaIt.dotnet.Heroes.Server
         private static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(new ConfigurationBuilder()
-                        .AddCommandLine(args)
-                        .Build())
-                .UseStartup<Startup>();
+                    .AddCommandLine(args)
+                    .Build())
+                .UseStartup<Startup>()
+                .UseUrls("http://*:5000","https://*:5001");
     }
 }

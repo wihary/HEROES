@@ -5,6 +5,7 @@ namespace AlmaIt.dotnet.Heroes.Server
     using Microsoft.AspNetCore.Blazor.Server;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.ResponseCompression;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -66,6 +67,12 @@ namespace AlmaIt.dotnet.Heroes.Server
                 });
             });
 
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                options.HttpsPort = 5001;
+            });
+
             // Add data context and Db provider based on entity core
             services.AddData();
         }
@@ -84,12 +91,14 @@ namespace AlmaIt.dotnet.Heroes.Server
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHsts();
+            app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "default", template: "{controller}/{action}/{id?}");
             });
-              
+
             app.UseBlazor<Client.Startup>();
         }
     }
