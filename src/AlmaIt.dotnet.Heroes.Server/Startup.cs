@@ -1,7 +1,9 @@
-namespace AlmaIt.dotnet.Heroes.Server
+namespace AlmaIt.Dotnet.Heroes.Server
 {
-    using AlmaIt.dotnet.Heroes.Server.Data;
-    using Dotnet.JsonIdentityProvider.Services;
+    using System.Linq;
+    using System.Net.Mime;
+    using AlmaIt.Dotnet.Heroes.Server.Data;
+    using global::Dotnet.JsonIdentityProvider.Services;
     using Microsoft.AspNetCore.Blazor.Server;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -10,8 +12,6 @@ namespace AlmaIt.dotnet.Heroes.Server
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json.Serialization;
-    using System.Linq;
-    using System.Net.Mime;
 
     public class Startup
     {
@@ -51,8 +51,8 @@ namespace AlmaIt.dotnet.Heroes.Server
 
             // Initialize base core MVC pattern, also add external assembly controller
             services.AddMvc()
-                .AddApplicationPart(typeof(Dotnet.JsonIdentityProvider.Controllers.AuthController).Assembly)
-                .AddApplicationPart(typeof(Dotnet.JsonIdentityProvider.Controllers.UserController).Assembly)
+                .AddApplicationPart(typeof(global::Dotnet.JsonIdentityProvider.Controllers.AuthController).Assembly)
+                .AddApplicationPart(typeof(global::Dotnet.JsonIdentityProvider.Controllers.UserController).Assembly)
                 .AddControllersAsServices()
                 .AddJsonOptions(
                     options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -93,7 +93,7 @@ namespace AlmaIt.dotnet.Heroes.Server
                 routes.MapRoute(name: "default", template: "{controller}/{action}/{id?}");
             });
 
-            app.UseBlazor<Client.Startup>();
+            app.UseBlazor<dotnet.Heroes.Client.Startup>();
         }
     }
 }

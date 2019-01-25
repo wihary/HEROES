@@ -1,8 +1,8 @@
-namespace AlmaIt.dotnet.Heroes.Server.Controllers
+namespace AlmaIt.Dotnet.Heroes.Server.Controllers
 {
     using System.Linq;
     using System.Threading.Tasks;
-    using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface;
+    using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
     using AlmaIt.dotnet.Heroes.Shared.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -37,9 +37,9 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             var result = await this.comicSerieContext.GetAsync(id);
 
             if (result == null)
-                return NoContent();
+                return this.NoContent();
 
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -54,9 +54,9 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             var result = this.comicSerieContext.Where(x => x.Name.Contains(name)).FirstOrDefault();
 
             if (result == null)
-                return NoContent();
+                return this.NoContent();
 
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -70,9 +70,9 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             var result = this.comicSerieContext.GetAllAsync().ToEnumerable();
 
             if (result == null)
-                return NoContent();
+                return this.NoContent();
 
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         public async Task<IActionResult> AddAsync([FromBody] ComicSeries comicserie)
         {
             var result = await this.comicSerieContext.AddAsync(comicserie);
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -97,9 +97,9 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [Authorize(Policy = "Administrators")]
         public async Task<IActionResult> RemoveAsync([FromRoute] int id)
         {
-            if(this.comicBookContext.Where(book => book.ComicSerieId == id).Any())
+            if (this.comicBookContext.Where(book => book.ComicSerieId == id).Any())
             {
-                return BadRequest($"Some comic book still reference this serie, therefor it cannot be deleted");
+                return this.BadRequest($"Some comic book still reference this serie, therefor it cannot be deleted");
             }
 
             var comicSerie = await this.comicSerieContext.GetAsync(id);
@@ -107,10 +107,10 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             if (comicSerie != null)
             {
                 var result = await this.comicSerieContext.RemoveAsync(comicSerie);
-                return Ok(result);
+                return this.Ok(result);
             }
 
-            return NoContent();
+            return this.NoContent();
         }
 
 
@@ -124,7 +124,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         public async Task<IActionResult> UpdateAsync([FromBody] ComicSeries comicserie)
         {
             var result = await this.comicSerieContext.UpdateAsync(comicserie);
-            return Ok(result);
+            return this.Ok(result);
         }
     }
 }

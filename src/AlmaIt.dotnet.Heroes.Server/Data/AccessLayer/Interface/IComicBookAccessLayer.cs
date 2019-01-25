@@ -1,4 +1,4 @@
-namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface
+namespace AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;

@@ -1,9 +1,9 @@
-namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
+namespace AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer
 {
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface;
+    using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
     using AlmaIt.dotnet.Heroes.Shared.Models;
     using Microsoft.EntityFrameworkCore;
 

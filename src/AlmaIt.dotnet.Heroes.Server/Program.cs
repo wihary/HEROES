@@ -1,11 +1,11 @@
-﻿using AlmaIt.dotnet.Heroes.Server.Data;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace AlmaIt.dotnet.Heroes.Server
+﻿namespace AlmaIt.Dotnet.Heroes.Server
 {
+    using AlmaIt.Dotnet.Heroes.Server.Data;
+    using Microsoft.AspNetCore;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+
     public class Program
     {
         public static void Main(string[] args)

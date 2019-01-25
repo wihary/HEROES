@@ -1,8 +1,8 @@
-namespace AlmaIt.dotnet.Heroes.Server.Data
+namespace AlmaIt.Dotnet.Heroes.Server.Data
 {
     using System;
-    using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer;
-    using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface;
+    using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer;
+    using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
     using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace AlmaIt.dotnet.Heroes.Server.Migrations
+namespace AlmaIt.Dotnet.Heroes.Server.Migrations
 {
     public partial class InitializeDataStore : Migration
     {

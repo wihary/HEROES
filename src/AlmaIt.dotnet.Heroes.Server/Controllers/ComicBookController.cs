@@ -1,9 +1,9 @@
-namespace AlmaIt.dotnet.Heroes.Server.Controllers
+namespace AlmaIt.Dotnet.Heroes.Server.Controllers
 {
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-    using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface;
+    using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
     using AlmaIt.dotnet.Heroes.Shared.Business;
     using AlmaIt.dotnet.Heroes.Shared.Enumeration;
     using AlmaIt.dotnet.Heroes.Shared.Models;
@@ -26,7 +26,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         public ComicBookController(IComicBookAccessLayer ComicBookContext, IComicSeriesAccessLayer ComicSerieContext)
         {
             this.comicBookContext = ComicBookContext;
-            comicSerieContext = ComicSerieContext;
+            this.comicSerieContext = ComicSerieContext;
         }
 
         /// <summary>
@@ -41,9 +41,9 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             var result = await this.comicBookContext.GetAsync(id);
 
             if (result == null)
-                return NoContent();
+            { return this.NoContent(); }
 
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -58,16 +58,15 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             var result = this.comicBookContext.Where(x => x.Title.Contains(name)).FirstOrDefault();
 
             if (result == null)
-                return NoContent();
+            { return this.NoContent(); }
 
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
         ///     API endpoint use to retrieve all comic books info
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Policy = "ReadOnlyUsers")]
         [HttpGet]
         [Authorize(Policy = "ReadOnlyUsers")]
         public IActionResult GetAll()
@@ -75,9 +74,9 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             var result = this.comicBookContext.GetAllComcisAndSerieInfo();
 
             if (result == null)
-                return NoContent();
+            { return this.NoContent(); }
 
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -92,12 +91,12 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             var result = await this.comicBookContext.GetAllComcisAndSerieInfo();
 
             if (result == null)
-                return NoContent();
+            { return this.NoContent(); }
 
             response.TotalResult = result.Count();
             response.MaxPage = (int)Math.Ceiling(result.Count() / (decimal)size);
             response.Result = result.Skip((page - 1) * size).Take(size);
-            return Ok(response);
+            return this.Ok(response);
         }
 
         /// <summary>
@@ -106,7 +105,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <returns></returns>
         [HttpGet("type/{status}/{page}/{size}")]
         [Authorize(Policy = "ReadOnlyUsers")]
-        public async Task<IActionResult> GetByStatusAsync([FromRoute]ComicBookStatus status,[FromRoute] int page, [FromRoute] int size)
+        public async Task<IActionResult> GetByStatusAsync([FromRoute]ComicBookStatus status, [FromRoute] int page, [FromRoute] int size)
         {
             return await this.GetByStatusAsync(status, page, size, string.Empty);
         }
@@ -117,21 +116,21 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <returns></returns>
         [HttpGet("type/{status}/{page}/{size}/{filter}")]
         [Authorize(Policy = "ReadOnlyUsers")]
-        public async Task<IActionResult> GetByStatusAsync([FromRoute]ComicBookStatus status,[FromRoute] int page, [FromRoute] int size, [FromRoute]string filter = "")
+        public async Task<IActionResult> GetByStatusAsync([FromRoute]ComicBookStatus status, [FromRoute] int page, [FromRoute] int size, [FromRoute]string filter = "")
         {
             var response = new PageResponseData<ComicBook>();
             var result = (await this.comicBookContext.GetAllComcisAndSerieInfo()).Where(book => book.Status == status);
 
-            if(!string.IsNullOrEmpty(filter))
-                result = result.Where(book => book.Title.Contains(filter, StringComparison.InvariantCultureIgnoreCase) || book.ComicSerie.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase));
+            if (!string.IsNullOrEmpty(filter))
+            { result = result.Where(book => book.Title.Contains(filter, StringComparison.InvariantCultureIgnoreCase) || book.ComicSerie.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase)); }
 
             if (result == null)
-                return NoContent();
+            { return this.NoContent(); }
 
             response.TotalResult = result.Count();
             response.MaxPage = (int)Math.Ceiling(result.Count() / (decimal)size);
             response.Result = result.Skip((page - 1) * size).Take(size);
-            return Ok(response);
+            return this.Ok(response);
         }
 
         /// <summary>
@@ -144,7 +143,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         public async Task<IActionResult> AddAsync([FromBody] ComicBook comicBook)
         {
             var result = await this.comicBookContext.AddAsync(comicBook);
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -161,12 +160,11 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             if (comicBook != null)
             {
                 var result = await this.comicBookContext.RemoveAsync(comicBook);
-                return Ok(result);
+                return this.Ok(result);
             }
 
-            return NoContent();
+            return this.NoContent();
         }
-
 
         /// <summary>
         ///     API endpoint use to update an existing comic book
@@ -182,10 +180,10 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
 
             // Check if comic book series exists, in order to avoid Access Layer error
             if (!comicBook.ComicSerieId.HasValue || !this.comicSerieContext.Exists(comicBook.ComicSerieId.Value))
-                comicBook.ComicSerieId = null;
+            { comicBook.ComicSerieId = null; }
 
             var result = await this.comicBookContext.UpdateAsync(comicBook);
-            return Ok(result);
+            return this.Ok(result);
         }
     }
 }
