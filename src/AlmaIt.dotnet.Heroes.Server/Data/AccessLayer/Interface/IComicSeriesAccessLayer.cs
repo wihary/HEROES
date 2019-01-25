@@ -7,6 +7,5 @@ namespace AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface
     /// </summary>
     public interface IComicSeriesAccessLayer : IBaseAccessLayer<ComicSeries, int>
     {
-
     }
 }

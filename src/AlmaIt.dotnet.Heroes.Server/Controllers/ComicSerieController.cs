@@ -17,12 +17,12 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
         /// <summary>
         ///     ctro of <see cref="ComicSerieController"/>
         /// </summary>
-        /// <param name="ComicSerieContext">DI for comic series context</param>
-        /// <param name="ComicBookContext">DI for comic book context</param>
-        public ComicSerieController(IComicSeriesAccessLayer ComicSerieContext, IComicBookAccessLayer ComicBookContext)
+        /// <param name="comicSerieContext">DI for comic series context</param>
+        /// <param name="comicBookContext">DI for comic book context</param>
+        public ComicSerieController(IComicSeriesAccessLayer comicSerieContext, IComicBookAccessLayer comicBookContext)
         {
-            this.comicSerieContext = ComicSerieContext;
-            this.comicBookContext = ComicBookContext;
+            this.comicSerieContext = comicSerieContext;
+            this.comicBookContext = comicBookContext;
         }
 
         /// <summary>
