@@ -52,7 +52,7 @@ namespace AlmaIt.dotnet.Heroes.Client.ViewModel
                 }
                 else
                 {
-                    await this.SetAuthorizationHeader();
+                    await this.SetAuthorizationHeader().ConfigureAwait(false);
                     this.IsLoggedin = true;
                 }
             }
@@ -79,7 +79,7 @@ namespace AlmaIt.dotnet.Heroes.Client.ViewModel
                 await this.sessionStorage.SetItem<TokenInfo>("authToken", token);
 
                 // Ensure that everything is set correctly, including headers with bearer authentification
-                if (await this.IsLoggedInAsync())
+                if (await this.IsLoggedInAsync().ConfigureAwait(false))
                 {
                     this.OnUserLoggedIn(EventArgs.Empty);
                     return (true, $"Successfully logged in, Welcome {token.UserName} !");
@@ -100,7 +100,7 @@ namespace AlmaIt.dotnet.Heroes.Client.ViewModel
         {
             await this.sessionStorage.RemoveItem("authToken");
 
-            if (!await this.IsLoggedInAsync())
+            if (!await this.IsLoggedInAsync().ConfigureAwait(false))
             {
                 await this.sessionStorage.SetItem<string>("message", "Your are now disconnected !");
                 await this.sessionStorage.SetItem<string>("messageType", AlertType.success.ToString());
@@ -136,13 +136,13 @@ namespace AlmaIt.dotnet.Heroes.Client.ViewModel
         protected virtual void OnUserLoggedIn(EventArgs e)
         {
             if (this.UserHasLoggedIn != null)
-                this.UserHasLoggedIn(this, e);
+            { this.UserHasLoggedIn(this, e); }
         }
 
         protected virtual void OnUserLoggedOut(EventArgs e)
         {
             if (this.UserHasLoggedOut != null)
-                this.UserHasLoggedOut(this, e);
+            { this.UserHasLoggedOut(this, e); }
         }
     }
 }

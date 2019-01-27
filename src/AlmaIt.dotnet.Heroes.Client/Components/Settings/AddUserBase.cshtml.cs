@@ -24,7 +24,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
 
         protected string inputClaim = string.Empty;
 
-        protected bool ShowAddUserPanel = false;
+        protected bool ShowAddUserPanel;
 
         protected string Message { get; set; }
 
@@ -51,7 +51,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
                 this.Message = $"User '{this.user.Name}' has been added successfully !";
                 this.MessageType = AlertType.success;
                 this.ResetUserForm();
-                await this.UserAdded(true);
+                await this.UserAdded(true).ConfigureAwait(false);
             }
             else
             {

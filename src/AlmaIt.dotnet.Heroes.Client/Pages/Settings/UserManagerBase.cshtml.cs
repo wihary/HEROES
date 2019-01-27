@@ -14,8 +14,8 @@ namespace AlmaIt.dotnet.Heroes.Client.Pages.Settings
 
         protected async Task OnUserAdded(bool success)
         {
-            if(success)
-                await this.UserListComponent.RefreshUserListAsync();
+            if (success)
+            { await this.UserListComponent.RefreshUserListAsync(); }
 
             this.StateHasChanged();
         }

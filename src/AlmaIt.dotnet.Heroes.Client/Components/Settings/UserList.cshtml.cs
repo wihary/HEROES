@@ -23,7 +23,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
 
         protected List<UserModel> Users { get; set; }
 
-        protected bool IsErrorMessage { get; set; } = false;
+        protected bool IsErrorMessage { get; set; }
 
         protected string Message { get; set; }
 
@@ -68,7 +68,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
             }
 
             if (this.Users == null)
-                this.Users = new List<UserModel>();
+            { this.Users = new List<UserModel>(); }
 
             this.StateHasChanged();
         }
@@ -81,7 +81,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
             {
                 this.Message = $"User '{username}' has been removed successfully !";
                 this.MessageType = AlertType.success;
-                await this.RefreshUserListAsync();
+                await this.RefreshUserListAsync().ConfigureAwait(false);
             }
             else
             {

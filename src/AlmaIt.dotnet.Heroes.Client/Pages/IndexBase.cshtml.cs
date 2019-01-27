@@ -21,7 +21,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Pages
 
         protected override async Task OnInitAsync()
         {
-            this.AppState.UserHasLoggedOut += new EventHandler(async (s, e) => await this.UserLoggedOutAsync(s, e));
+            this.AppState.UserHasLoggedOut += async (s, e) => await this.UserLoggedOutAsync(s, e).ConfigureAwait(false);
 
             await this.DisplayAvailableMessageAsync();
         }
@@ -42,7 +42,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Pages
 
         private async Task UserLoggedOutAsync(object sender, EventArgs e)
         {
-            await this.DisplayAvailableMessageAsync();
+            await this.DisplayAvailableMessageAsync().ConfigureAwait(false);
             this.StateHasChanged();
         }
     }
