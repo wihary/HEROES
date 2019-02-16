@@ -90,8 +90,7 @@
                     response = await this.Http.GetStreamAsync($"api/ComicBook/{pageToShow}/{size}/{filter}{(string.IsNullOrEmpty(sortBy) ? "" : $"?sortBy={sortBy}")}");
                     break;
                 default:
-                    response = await this.Http.GetStreamAsync(
-                                   $"api/ComicBook/type/{browserType}/{pageToShow}/{size}/{filter}{(string.IsNullOrEmpty(sortBy) ? "" : $"?sortBy={sortBy}")}");
+                    response = await this.Http.GetStreamAsync($"api/ComicBook/type/{browserType}/{pageToShow}/{size}/{filter}{(string.IsNullOrEmpty(sortBy) ? "" : $"?sortBy={sortBy}")}");
                     break;
             }
 

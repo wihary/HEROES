@@ -1,13 +1,9 @@
 namespace AlmaIt.dotnet.Heroes.Client
 {
-    #region Usings
-
     using AlmaIt.dotnet.Heroes.Client.Helpers;
 
     using Microsoft.AspNetCore.Blazor.Builder;
     using Microsoft.Extensions.DependencyInjection;
-
-    #endregion
 
     public class Startup
     {

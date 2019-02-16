@@ -25,9 +25,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Helpers
             var memberInfo = GetPropertyInformation(propertyExpression.Body);
             if (memberInfo == null)
             {
-                throw new ArgumentException(
-                    "No property reference expression was found.",
-                    nameof(propertyExpression));
+                throw new ArgumentException("No property reference expression was found.", nameof(propertyExpression));
             }
 
             var attr = GetAttribute<DisplayNameAttribute>(memberInfo, false);
@@ -41,12 +39,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Helpers
 
             if (attribute == null && isRequired)
             {
-                throw new ArgumentException(
-                    string.Format(
-                        CultureInfo.InvariantCulture,
-                        "The {0} attribute must be defined on member {1}",
-                        typeof(T).Name,
-                        member.Name));
+                throw new ArgumentException($"The {typeof(T).Name} attribute must be defined on member {member.Name}");
             }
 
             return (T)attribute;

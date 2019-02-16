@@ -19,7 +19,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         private readonly IComicSeriesAccessLayer comicSerieContext;
 
         /// <summary>
-        ///     ctro of <see cref="ComicBookController"/>
+        ///     ctor of <see cref="ComicBookController"/>
         /// </summary>
         /// <param name="ComicSerieContext">DI for comic series context</param>
         /// <param name="ComicBookContext">DI for comic book context</param>
