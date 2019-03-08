@@ -12,7 +12,7 @@
 @if(!string.IsNullOrEmpty(this.Message))
 {
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        @this.Message
+        @(this.Message)
     </div>
 }
 
@@ -26,7 +26,7 @@
 </div>
 
 <p>
-    <AddSerieComponent ComicSerieAdded="@OnCollectionChanged"/>
+    <AddSerie ComicSerieAdded="@OnCollectionChanged"/>
 </p>
 
 <p>
@@ -42,7 +42,7 @@
     protected async Task OnCollectionChanged(bool success)
     {
         if(success)
-            await seriesBrowser.ReloadDataList();
+            await this.seriesBrowser.ReloadDataList();
 
         this.StateHasChanged();
     }

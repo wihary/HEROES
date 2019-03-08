@@ -1,5 +1,6 @@
 @using AlmaIt.dotnet.Heroes.Shared.Enumeration
 @using AlmaIt.dotnet.Heroes.Client.Converters
+@using AlmaIt.dotnet.Heroes.Shared.Models
 
 @inherits AlmaIt.dotnet.Heroes.Client.Components.AddComicBase
 
@@ -19,7 +20,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="Title">Title</span>
                     </div>
-                    <input type="text" class="form-control" aria-describedby="Title" bind="@comicBook.Title" />
+                    <input type="text" class="form-control" aria-describedby="Title" bind="@(this.comicBook.Title)" />
                 </div>
             </div>
             <div class="col-2">
@@ -27,7 +28,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="Issue">Issue</span>
                     </div>
-                    <input type="text" class="form-control" aria-describedby="Issue" bind="@comicBook.IssueNumber" />
+                    <input type="text" class="form-control" aria-describedby="Issue" bind="@(this.comicBook.IssueNumber)" />
                 </div>
             </div>
             <div class="col-auto">
@@ -35,7 +36,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="Parution">Parution</span>
                     </div>
-                    <input type="date" class="form-control" aria-describedby="Parution" bind="@comicBook.ParutionDate" format-value="yyyy-MM-dd" />
+                    <input type="date" class="form-control" aria-describedby="Parution" bind="@(this.comicBook.ParutionDate)" format-value="yyyy-MM-dd" />
                 </div>
             </div>
         </div>
@@ -45,9 +46,9 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="Serie">Related to</span>
                     </div>
-                    <select class="form-control" aria-describedby="Serie" bind="@selectedComicSerie">
+                    <select class="form-control" aria-describedby="Serie" bind="@(this.selectedComicSerie)">
                     <option value="">-- Select related Serie --</option>
-                        @foreach (var comicSerie in comicSerieList)
+                        @foreach (var comicSerie in this.comicSerieList)
                         {
                             <option value="@comicSerie.Id">@comicSerie.Name</option>
                         }
@@ -82,7 +83,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="Serie">Tags</span>
                     </div>
-                    <select class="form-control" aria-describedby="Serie" bind="@this.SelectedTag">
+                    <select class="form-control" aria-describedby="Serie" bind="@(this.SelectedTag)">
                     <option value="">-- Select related Serie --</option>
                         @foreach (var tag in this.objectTagList)
                         {

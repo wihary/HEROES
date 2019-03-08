@@ -8,12 +8,12 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
     using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface;
     using AlmaIt.dotnet.Heroes.Shared.Models;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Query;
 
     /// <summary>
-    ///     Interface defining base CRUD operation on model data
+    ///     Interface defining base CRUD operation on model data.
     /// </summary>
-    /// <typeparam name="TModel">Object Model that is using this implementation</typeparam>
+    /// <typeparam name="TContext">Data context that is using this implementation.</typeparam>
+    /// <typeparam name="TModel">Object Model that is using this implementation.</typeparam>
     /// <typeparam name="TIdentity">Primary key type.</typeparam>
     internal abstract class BaseAccessLayer<TContext, TModel, TIdentity> : IBaseAccessLayer<TModel, TIdentity>
         where TModel : class, IDataObject<TIdentity>
@@ -21,12 +21,12 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         where TContext : DbContext
     {
         /// <summary>
-        /// Get Db context
+        /// Get Db context.
         /// </summary>
         private readonly TContext context;
 
         /// <summary>
-        ///     Initialize a new instance of a data layer access <see cref="BaseAccessLayer{TContext, TModel, TIdentity}" />.
+        /// Initializes a new instance of the <see cref="BaseAccessLayer{TContext, TModel, TIdentity}"/> class.
         /// </summary>
         /// <param name="context">The context.</param>
         protected BaseAccessLayer(TContext context)
@@ -36,7 +36,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         }
 
         /// <summary>
-        /// Get the dataset for implemented data model object
+        /// Gets the dataset for implemented data model object.
         /// </summary>
         protected DbSet<TModel> ModelSet { get; }
 
@@ -65,33 +65,31 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         }
 
         /// <summary>
-        ///     Method that verify if object exists based on its primary key
+        ///     Method that verify if object exists based on its primary key.
         /// </summary>
-        /// <param name="id">Primary key</param>
-        /// <returns>Return true if object exists in db</returns>
+        /// <param name="id">Primary key.</param>
+        /// <returns>Return true if object exists in db.</returns>
         public bool Exists(TIdentity id) => this.ModelSet.Any(e => e.Id.CompareTo(id) == 0);
 
         /// <summary>
-        ///     Async Method that retrieve data based on primary key
+        ///     Async Method that retrieve data based on primary key.
         /// </summary>
-        /// <param name="id">Primary key</param>
-        /// <returns>Returns <see cref="TModel"/></returns>
+        /// <param name="id">Primary key.</param>
+        /// <returns>Returns <typeparamref name="TModel"/>.</returns>
         public virtual async Task<TModel> GetAsync(TIdentity id)
-        {
-            return await this.ModelSet.SingleOrDefaultAsync(model => model.Id.CompareTo(id) == 0).ConfigureAwait(false);
-        }
+            => await this.ModelSet.SingleOrDefaultAsync(model => model.Id.CompareTo(id) == 0).ConfigureAwait(false);
 
         /// <summary>
-        ///     Async Method that return all data object existing in Db
+        ///     Async Method that return all data object existing in Db.
         /// </summary>
-        /// <returns>List of <see cref="TModel"/></returns>
+        /// <returns>List of <typeparamref cref="TModel"/>.</returns>
         public virtual IAsyncEnumerable<TModel> GetAllAsync() => this.ModelSet.ToAsyncEnumerable();
 
         /// <summary>
         ///     Async Method that remove a specific object in Db.
         /// </summary>
-        /// <param name="model">The object data model to remove</param>
-        /// <returns>Returns number of state entries written to the database</returns>
+        /// <param name="model">The object data model to remove.</param>
+        /// <returns>Returns number of state entries written to the database.</returns>
         public async Task<int> RemoveAsync(TModel model)
         {
             this.ModelSet.Remove(model);
@@ -99,10 +97,10 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         }
 
         /// <summary>
-        ///     Async method using bulk deletion method to remove data object from db context
+        ///     Async method using bulk deletion method to remove data object from db context.
         /// </summary>
-        /// <param name="models">Enumerable of Data object to remove</param>
-        /// <returns>Returns number of state entries written to the database</returns>
+        /// <param name="models">Enumerable of Data object to remove.</param>
+        /// <returns>Returns number of state entries written to the database.</returns>
         public async Task<int> RemoveRangeAsync(IEnumerable<TModel> models)
         {
             this.ModelSet.RemoveRange(models);
@@ -110,9 +108,9 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         }
 
         /// <summary>
-        ///     Async method using bulk deletion method to remove all objects from db context
+        ///     Async method using bulk deletion method to remove all objects from db context.
         /// </summary>
-        /// <returns>Returns number of state entries written to the database</returns>
+        /// <returns>Returns number of state entries written to the database.</returns>
         public async Task<int> RemoveAllAsync()
         {
             this.ModelSet.RemoveRange(this.GetAllAsync().ToEnumerable());
@@ -120,10 +118,10 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         }
 
         /// <summary>
-        ///     Async method that update a specific data object
+        ///     Async method that update a specific data object.
         /// </summary>
-        /// <param name="model">The object data model to update</param>
-        /// <returns>Returns number of state entries written to the database</returns>
+        /// <param name="model">The object data model to update.</param>
+        /// <returns>Returns number of state entries written to the database.</returns>
         public async Task<int> UpdateAsync(TModel model)
         {
             this.ModelSet.Update(model);
@@ -131,10 +129,10 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         }
 
         /// <summary>
-        ///     Method that retrieve data based on Filter Expression as parameter
+        ///     Method that retrieve data based on Filter Expression as parameter.
         /// </summary>
-        /// <param name="filters">Linq expression use to filter the data</param>
-        /// <returns>Return Queryable of <see cref="TModel"/></returns>
+        /// <param name="filters">Linq expression use to filter the data.</param>
+        /// <returns>Return Queryable of <see cref="TModel"/>.</returns>
         public IQueryable<TModel> Where(Expression<Func<TModel, bool>> filters)
             => this.ModelSet.Where(filters);
     }

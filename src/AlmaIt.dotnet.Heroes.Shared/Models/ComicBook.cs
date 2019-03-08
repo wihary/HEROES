@@ -2,60 +2,62 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
+
     using AlmaIt.dotnet.Heroes.Shared.Enumeration;
 
     /// <summary>
-    /// Represent a comic book or issue
+    /// Represent a comic book or issue.
     /// </summary>
-    /// <typeparam name="int">Unique identifier (primary key)</typeparam>
     public class ComicBook : IDataObject<int>
     {
         /// <summary>
-        /// Primary key
+        /// Gets or sets the primary key.
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// Primary key of associated comics serie
+        /// Gets or sets the primary key of associated comics serie.
         /// </summary>
         public int? ComicSerieId { get; set; }
 
         /// <summary>
-        /// Instance of the related comic serie
+        /// Gets or sets the instance of the related comic serie.
         /// </summary>
-        /// <value></value>
         public ComicSeries ComicSerie { get; set; }
 
         /// <summary>
-        /// Comic book Title
+        /// Gets or sets the comic book Title.
         /// </summary>
         [Required]
+        [DisplayName("Title")]
         public string Title { get; set; } = string.Empty;
 
         /// <summary>
-        /// Comic book number
+        /// Gets or sets the comic book number.
         /// </summary>
         [Required]
+        [DisplayName("Issue number")]
         public int IssueNumber { get; set; } = 0;
 
         /// <summary>
-        /// Comic book parution date
+        /// Gets or sets the comic book parution date.
         /// </summary>
         [Required]
         public DateTime ParutionDate { get; set; } = DateTime.Now;
 
         /// <summary>
-        /// Object latest update date
+        /// Gets or sets the object latest update date.
         /// </summary>
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime UpdateDate { get; set; } = DateTime.Now;
 
         /// <summary>
-        /// Status of the comic book
+        /// Gets or sets the status of the comic book.
         /// </summary>
         public ComicBookStatus Status { get; set; } = ComicBookStatus.None;
 

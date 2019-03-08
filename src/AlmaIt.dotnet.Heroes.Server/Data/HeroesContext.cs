@@ -18,7 +18,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Data
         /// <summary>
         /// Represent the whole dataset of available Tags
         /// </summary>
-        public DbSet<ObjectTag> Tags { get; set; }
+        public DbSet<ObjectTag> ObjectTag { get; set; }
 
         /// <summary>
         /// Represent the whole dataset of associated comic books and tags

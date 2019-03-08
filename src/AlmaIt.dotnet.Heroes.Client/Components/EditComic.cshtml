@@ -12,7 +12,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="EditTitle">Title</span>
                 </div>
-                <input type="text" class="form-control" aria-describedby="EditTitle" bind="@EditedComicBook.Title" />
+                <input type="text" class="form-control" aria-describedby="EditTitle" bind="@(this.EditedComicBook.Title)" />
             </div>
         </div>
         <div class="col-1">
@@ -20,7 +20,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="EditIssue">Issue</span>
                 </div>
-                <input type="text" class="form-control" aria-describedby="EditIssue" bind="@EditedComicBook.IssueNumber" />
+                <input type="text" class="form-control" aria-describedby="EditIssue" bind="@(this.EditedComicBook.IssueNumber)" />
             </div>
         </div>
         <div class="col-auto">
@@ -28,7 +28,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="EditParution">Parution</span>
                 </div>
-                <input type="date" class="form-control" aria-describedby="EditParution" bind="@EditedComicBook.ParutionDate" format-value="yyyy-MM-dd" />
+                <input type="date" class="form-control" aria-describedby="EditParution" bind="@(this.EditedComicBook.ParutionDate)" format-value="yyyy-MM-dd" />
             </div>
         </div>
     </div>
@@ -38,9 +38,9 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="EditSerie">Related to</span>
                 </div>
-                <select class="form-control" aria-describedby="EditSerie" bind="@this.selectedComicSerie">
+                <select class="form-control" aria-describedby="EditSerie" bind="@(this.selectedComicSerie)">
                 <option value="0">-- Select related Serie --</option>
-                    @foreach (var comicSerie in comicSerieList)
+                    @foreach (var comicSerie in this.comicSerieList)
                     {
                         <option value="@comicSerie.Id">@comicSerie.Name</option>
                     }
@@ -73,7 +73,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="Serie">Tags</span>
                 </div>
-                <select class="form-control" aria-describedby="Serie" bind="@this.SelectedTag">
+                <select class="form-control" aria-describedby="Serie" bind="@(this.SelectedTag)">
                 <option value="">-- Select related Serie --</option>
                     @foreach (var tag in this.objectTagList)
                     {
@@ -101,14 +101,10 @@
     </div>
     <div class="form-row">
         <div class="col-auto">
-            <button class="btn btn-default" onclick="@(async () => await EditionCompleted(false))">Cancel</button>
+            <button class="btn btn-default" onclick="@(async () => await this.EditionCompleted(false))">Cancel</button>
         </div>
         <div class="col-auto">
-            <button class="btn btn-default" onclick="@(async () => await UpdateComicBook())">Save</button>
+            <button class="btn btn-default" onclick="@(async () => await this.UpdateComicBook())">Save</button>
         </div>
     </div>
 </div>
-
-@functions {
-
-}

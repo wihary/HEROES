@@ -1,12 +1,13 @@
 {
-    "profiles": {
-      "Production": {
-        "commandName": "Project",
-        "launchBrowser": true,
-        "environmentVariables": {
-          "ASPNETCORE_ENVIRONMENT": "Staging"
-        },
-        "applicationUrl": "http://*:5050/"
-      }
+  "profiles": {
+    "Production": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:5050/",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Staging"
+      },
+      "applicationUrl": "http://localhost:5050/"
     }
   }
+}
