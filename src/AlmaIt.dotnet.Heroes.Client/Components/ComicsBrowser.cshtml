@@ -11,7 +11,7 @@
 
 @using AlmaIt.dotnet.Heroes.Client.Helpers
 @using AlmaIt.dotnet.Heroes.Shared.Models
-@inherits AlmaIt.dotnet.Heroes.Client.Pages.Components.ComicsBrowserComponentBase
+@inherits AlmaIt.dotnet.Heroes.Client.Pages.Components.ComicsBrowserBase
 
 @if (string.IsNullOrEmpty(this.Statistics))
 {
@@ -88,7 +88,7 @@ else
             {
                 <tr>
                     <td colspan="4" class="px-5 py-3">
-                        <EditComicComponent EditedComicBook="@comicBook" EditCompleted="@OnEditionCompleted"/>
+                        <EditComic EditedComicBook="@comicBook" EditCompleted="@OnEditionCompleted"/>
                     </td>
                 </tr>
             }

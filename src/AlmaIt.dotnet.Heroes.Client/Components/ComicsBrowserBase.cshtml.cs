@@ -16,7 +16,7 @@
     using Newtonsoft.Json;
 
     /// <summary>Class representing the comics blazor component of the comics.</summary>
-    public class ComicsBrowserComponentBase : BlazorComponent
+    public class ComicsBrowserBase : BlazorComponent
     {
         private const int PagerSize = 5;
 

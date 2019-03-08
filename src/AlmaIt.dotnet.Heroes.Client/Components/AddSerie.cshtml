@@ -1,5 +1,6 @@
 @using AlmaIt.dotnet.Heroes.Shared.Models
-@inject HttpClient Http
+
+@inherits AddSerieBase
 
 <div class="row">
     <div class="col-md-3 px-3 py-3">
@@ -29,31 +30,5 @@
 }
 
 @functions {
-    private bool showAddSeriePanel = false;
-
-    [Parameter]
-    Func<bool, Task> ComicSerieAdded { get; set; }
-    private ComicSeries comicSerie = new ComicSeries();
-
-    protected async Task CreateComicSerie()
-    {
-        await this.Http.SendJsonAsync(HttpMethod.Post, "/api/ComicSerie", this.comicSerie);
-
-        await this.ComicSerieAdded(true);
-    }
-
-    protected void ToggleShowAddSerie()
-    {
-        this.showAddSeriePanel = !this.showAddSeriePanel;
-        this.StateHasChanged();
-    }
-
-
-    protected void HandleKeyPress(UIKeyboardEventArgs args)
-    {
-        if (args.Key == "Enter")
-        {
-            Console.WriteLine(this.comicSerie?.Name);
-        }
-    }
+    
 }
