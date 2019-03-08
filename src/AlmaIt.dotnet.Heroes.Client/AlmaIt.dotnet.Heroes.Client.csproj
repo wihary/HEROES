@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -15,14 +15,40 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Pages\Components\**" />
-    <Content Remove="Pages\Components\**" />
-    <EmbeddedResource Remove="Pages\Components\**" />
-    <None Remove="Pages\Components\**" />
+    <Content Remove="stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="stylecop.json" />
+    <Content Include="Components/Settings/AddTag.cshtml" />
+    <Compile Include="Components/Settings/AddTagBase.cshtml.cs">
+      <DependentUpon>Components/Settings/AddTag.cshtml</DependentUpon>
+    </Compile>
+
+    <Content Include="Pages/Settings/TagManager.cshtml" />
+    <Compile Include="Pages/Settings/TagManagerBase.cshtml.cs">
+      <DependentUpon>Pages/Settings/TagManager.cshtml</DependentUpon>
+    </Compile>
+
+    <Content Include="Components/AddComicComponent.cshtml" />
+    <Compile Include="Components/AddComicBase.cshtml.cs">
+      <DependentUpon>Components/AddComicComponent.cshtml</DependentUpon>
+    </Compile>
+
+    <Content Include="Components/EditComicComponent.cshtml" />
+    <Compile Include="Components/EditComicBase.cshtml.cs">
+      <DependentUpon>Components/EditComicComponent.cshtml</DependentUpon>
+    </Compile>
+
+    <Content Include="Components/ComicsBrowserComponent.cshtml" />
+    <Compile Include="Components/ComicsBrowserComponentBase.cshtml.cs">
+      <DependentUpon>Components/ComicsBrowserComponent.cshtml</DependentUpon>
+    </Compile>
+
+    <Content Include="Components/SeriesBrowser.cshtml" />
+    <Compile Include="Components/SeriesBrowserBase.cshtml.cs">
+      <DependentUpon>Components/SeriesBrowser.cshtml</DependentUpon>
+    </Compile>
+
   </ItemGroup>
 
   <ItemGroup>
