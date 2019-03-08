@@ -26,7 +26,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Migrations
                     table.ForeignKey(
                         name: "FK_ComicBookTags_Tags_TagId",
                         column: x => x.TagId,
-                        principalTable: "Tags",
+                        principalTable: "ObjectTag",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -51,7 +51,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Migrations
                     table.ForeignKey(
                         name: "FK_ComicSerieTags_Tags_TagId",
                         column: x => x.TagId,
-                        principalTable: "Tags",
+                        principalTable: "ObjectTag",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });

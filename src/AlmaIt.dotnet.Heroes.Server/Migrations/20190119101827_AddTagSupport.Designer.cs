@@ -105,7 +105,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("ObjectTag");
                 });
 
             modelBuilder.Entity("AlmaIt.dotnet.Heroes.Shared.Models.ComicBook", b =>

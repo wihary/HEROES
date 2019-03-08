@@ -70,6 +70,9 @@
     </div>
     <div class="form-row">
         <div class="col-auto">
+<<<<<<< HEAD:src/AlmaIt.dotnet.Heroes.Client/Pages/Components/EditComicComponent.cshtml
+            <button class="btn btn-default" onclick="@(async () => await this.EditionCompleted(false))">Cancel</button>
+=======
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="Serie">Tags</span>
@@ -103,6 +106,7 @@
     <div class="form-row">
         <div class="col-auto">
             <button class="btn btn-default" onclick="@(async () => await EditionCompleted(false))">Cancel</button>
+>>>>>>> develop:src/AlmaIt.dotnet.Heroes.Client/Components/EditComicComponent.cshtml
         </div>
         <div class="col-auto">
             <button class="btn btn-default" onclick="@(async () => await this.UpdateComicBook())">Save</button>
@@ -111,6 +115,7 @@
 </div>
 
 @functions {
+<<<<<<< HEAD:src/AlmaIt.dotnet.Heroes.Client/Pages/Components/EditComicComponent.cshtml
     [Parameter]
     Func<bool, Task> EditCompleted { get; set; }
     [Parameter]
@@ -142,4 +147,7 @@
         await this.Http.SendJsonAsync(HttpMethod.Put, "/api/ComicBook", this.EditedComicBook);
         await this.EditionCompleted(true);
     }
+=======
+
+>>>>>>> develop:src/AlmaIt.dotnet.Heroes.Client/Components/EditComicComponent.cshtml
 }

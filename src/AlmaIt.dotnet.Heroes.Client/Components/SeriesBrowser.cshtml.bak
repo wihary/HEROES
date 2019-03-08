@@ -1,12 +1,15 @@
+<<<<<<< HEAD:src/AlmaIt.dotnet.Heroes.Client/Pages/Components/SeriesBrowser.cshtml
+=======
 @using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration
 @using AlmaIt.dotnet.Heroes.Client.Components
 @using AlmaIt.dotnet.Heroes.Shared.Enumeration
 @using AlmaIt.dotnet.Heroes.Shared.Models
 @using System.Net
+>>>>>>> develop:src/AlmaIt.dotnet.Heroes.Client/Components/SeriesBrowser.cshtml
 @inject HttpClient Http
 @using AlmaIt.dotnet.Heroes.Client.Helpers
 @using AlmaIt.dotnet.Heroes.Shared.Models
-@inherits AlmaIt.dotnet.Heroes.Client.Pages.Components.SeriesBrowserBase
+@inherits SeriesBrowserBase
 
 @if (this.FullComicSerieList == null)
 {
@@ -65,7 +68,8 @@ else
 
     <ul class="pagination float-left">
         <li class="page-item @(this.CurrentPage > 1 ? "enabled" : "disabled")">
-            <a class="page-link" onclick=@(() => this.ShowPage(1)) aria-label="Previous" aria-disabled=@(this.CurrentPage > 1 ? "false" : "true")>
+            <a class="page-link" onclick=
+@(() => this.ShowPage(1)) aria-label="Previous" aria-disabled=@(this.CurrentPage > 1 ? "false" : "true")>
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
@@ -88,7 +92,8 @@ else
             }
         }
         <li class="page-item @(this.CurrentPage < this.TotalPages ? "enabled" : "disabled")">
-            <a class="page-link" onclick=@(() => this.ShowPage(this.CurrentPage + 1)) tabindex="-1" aria-disabled=@(this.CurrentPage < this.TotalPages ? "false" : "true")>
+            <a class="page-link" onclick=
+@(() => this.ShowPage(this.CurrentPage + 1)) tabindex="-1" aria-disabled=@(this.CurrentPage < this.TotalPages ? "false" : "true")>
                 Next
             </a>
         </li>

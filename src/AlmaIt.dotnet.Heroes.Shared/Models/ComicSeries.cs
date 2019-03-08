@@ -39,11 +39,6 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
         public DateTime NextReleaseDate { get; set; } = DateTime.Now;
 
         /// <summary>
-        /// True if a comic serie is finished (no more issue are planned)
-        /// </summary>
-        public bool IsSerieCompleted { get; set; }
-
-        /// <summary>
         /// List of all associated Tag object
         /// </summary>
         public ICollection<ComicSeriesTags> RelatedTags { get; set; }

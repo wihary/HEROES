@@ -17,21 +17,21 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
     [Route("api/[controller]")]
     public class ComicBookController : Controller
     {
-        private readonly IComicBookAccessLayer comicBookContext;
-        private readonly IComicSeriesAccessLayer comicSerieContext;
-        private readonly IObjectTagAccessLayer objectTagContext;
+        private readonly IComicBookAccessLayer comicBookLayer;
+        private readonly IComicSeriesAccessLayer comicSerieLayer;
+        private readonly IObjectTagAccessLayer objectTagLayer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComicBookController"/> class.
         /// </summary>
-        /// <param name="comicSerieContext">DI for comic series context</param>
-        /// <param name="comicBookContext">DI for comic book context</param>
-        /// <param name="objectTagContext">DI for tags context</param>
-        public ComicBookController(IComicBookAccessLayer comicBookContext, IComicSeriesAccessLayer comicSerieContext, IObjectTagAccessLayer objectTagContext)
+        /// <param name="comicSerieLayer">DI for comic series context</param>
+        /// <param name="comicBookLayer">DI for comic book context</param>
+        /// <param name="objectTagLayer">DI for tags context</param>
+        public ComicBookController(IComicBookAccessLayer comicBookLayer, IComicSeriesAccessLayer comicSerieLayer, IObjectTagAccessLayer objectTagLayer)
         {
-            this.comicBookContext = comicBookContext;
-            this.comicSerieContext = comicSerieContext;
-            this.objectTagContext = objectTagContext;
+            this.comicBookLayer = comicBookLayer;
+            this.comicSerieLayer = comicSerieLayer;
+            this.objectTagLayer = objectTagLayer;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromQuery] int id)
         {
-            var result = await this.comicBookContext.GetAsync(id).ConfigureAwait(false);
+            var result = await this.comicBookLayer.GetAsync(id).ConfigureAwait(false);
 
             if (result == null)
                 return this.NoContent();
@@ -58,7 +58,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [HttpGet("{name}")]
         public IActionResult GetByName([FromQuery] string name)
         {
-            var result = this.comicBookContext.Where(x => x.Title.Contains(name)).FirstOrDefault();
+            var result = this.comicBookLayer.Where(x => x.Title.Contains(name)).FirstOrDefault();
 
             if (result == null)
                 return this.NoContent();
@@ -73,7 +73,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string sortBy)
         {
-            var result = await this.comicBookContext.GetAllComcisAndSerieInfo().ConfigureAwait(false);
+            var result = await this.comicBookLayer.GetAllComcisAndSerieInfo().ConfigureAwait(false);
 
             if (result == null)
                 return this.NoContent();
@@ -89,7 +89,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         public async Task<IActionResult> GetAllAsync(int page, int size, [FromQuery] string sortBy)
         {
             var response = new PageResponseData<ComicBook>();
-            var result = await this.comicBookContext.GetAllComcisAndSerieInfo().ConfigureAwait(false);
+            var result = await this.comicBookLayer.GetAllComcisAndSerieInfo().ConfigureAwait(false);
 
             if (result == null)
                 return this.NoContent();
@@ -118,7 +118,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         public async Task<IActionResult> GetByStatusAsync([FromRoute] ComicBookStatus status, [FromRoute] int page, [FromRoute] int size, [FromQuery] string sortBy, [FromRoute] string filter = "")
         {
             var response = new PageResponseData<ComicBook>();
-            var result = (await this.comicBookContext.GetAllComcisAndSerieInfo().ConfigureAwait(false)).Where(book => book.Status == status);
+            var result = (await this.comicBookLayer.GetAllComcisAndSerieInfo().ConfigureAwait(false)).Where(book => book.Status == status);
 
             if (!string.IsNullOrEmpty(filter))
                 result = result.Where(book => book.Title.Contains(filter, StringComparison.InvariantCultureIgnoreCase) || book.ComicSerie.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase));
@@ -148,12 +148,12 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
                 comicBook.RelatedTags.Add(
                     new ComicBookTags
                     {
-                        Tag = await this.objectTagContext.GetAsync(linkedTag.Id)
+                        Tag = await this.objectTagLayer.GetAsync(linkedTag.Id)
                     }
                 );
             }
 
-            var result = await this.comicBookContext.AddAsync(comicBook);
+            var result = await this.comicBookLayer.AddAsync(comicBook);
             return this.Ok(result);
         }
 
@@ -165,11 +165,11 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveAsync([FromRoute] int id)
         {
-            var comicBook = await this.comicBookContext.GetAsync(id);
+            var comicBook = await this.comicBookLayer.GetAsync(id);
 
             if (comicBook != null)
             {
-                var result = await this.comicBookContext.RemoveAsync(comicBook);
+                var result = await this.comicBookLayer.RemoveAsync(comicBook);
                 return this.Ok(result);
             }
 
@@ -190,16 +190,16 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             model.ComicSerie = null;
 
             // Check if comic book series exists, in order to avoid Access Layer error
-            if (!model.ComicSerieId.HasValue || !this.comicSerieContext.Exists(model.ComicSerieId.Value))
+            if (!model.ComicSerieId.HasValue || !this.comicSerieLayer.Exists(model.ComicSerieId.Value))
             { model.ComicSerieId = null; }
 
             // Update comic changes
-            await this.comicBookContext.UpdateAsync(model);
+            await this.comicBookLayer.UpdateAsync(model);
 
             // Handle related tags, so that we can update relation if tag have been added or removed
             // First we get model object from db, we clear all related tags
             // related tags or then rebuild from what the client sent
-            var comicBookUpdated = await this.comicBookContext.GetAsync(model.Id);
+            var comicBookUpdated = await this.comicBookLayer.GetAsync(model.Id);
             comicBookUpdated.RelatedTags.Clear();
 
             foreach (var linkedTag in tagList)
@@ -207,11 +207,11 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
                 comicBookUpdated.RelatedTags.Add(
                     new ComicBookTags
                     {
-                        Tag = await this.objectTagContext.GetAsync(linkedTag.Id)
+                        Tag = await this.objectTagLayer.GetAsync(linkedTag.Id)
                     }
                 );
             }
-            var result = await this.comicBookContext.UpdateAsync(comicBookUpdated);
+            var result = await this.comicBookLayer.UpdateAsync(comicBookUpdated);
 
             return Ok(result);
         }

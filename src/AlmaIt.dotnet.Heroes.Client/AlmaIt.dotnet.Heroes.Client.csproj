@@ -5,10 +5,7 @@
     <OutputType>Exe</OutputType>
     <LangVersion>7.3</LangVersion>
     <BlazorLinkOnBuild>False</BlazorLinkOnBuild>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <CodeAnalysisRuleSet>AlmaIt.dotnet.Heroes.Client.ruleset</CodeAnalysisRuleSet>
+	<CodeAnalysisRuleSet>AlmaIt.dotnet.Heroes.Client.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -16,6 +13,13 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>bin\Debug\netstandard2.0\AlmaIt.dotnet.Heroes.Client.xml</DocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Pages\Components\**" />
+    <Content Remove="Pages\Components\**" />
+    <EmbeddedResource Remove="Pages\Components\**" />
+    <None Remove="Pages\Components\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Remove="stylecop.json" />

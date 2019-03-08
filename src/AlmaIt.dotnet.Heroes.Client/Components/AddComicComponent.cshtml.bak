@@ -1,6 +1,5 @@
 @using AlmaIt.dotnet.Heroes.Shared.Enumeration
 @using AlmaIt.dotnet.Heroes.Client.Converters
-@using AlmaIt.dotnet.Heroes.Shared.Models
 
 @inherits AlmaIt.dotnet.Heroes.Client.Components.AddComicBase
 
@@ -9,8 +8,12 @@
         <button class="btn btn-primary btn-sm" type="button" onclick="@(() => this.ToggleShowAddComic())">Add comic book</button>
     </div>
 </div>
+<<<<<<< HEAD:src/AlmaIt.dotnet.Heroes.Client/Pages/Components/AddComicComponent.cshtml
+@if(this.showAddComicPanel)
+=======
 
 @if(this.ShowAddComicPanel)
+>>>>>>> develop:src/AlmaIt.dotnet.Heroes.Client/Components/AddComicComponent.cshtml
 {
     <div class="alert alert-primary" role="alert">
         <h4>Add new Comic Book</h4>
@@ -79,6 +82,8 @@
         </div>
         <div class="form-row">
             <div class="col-auto">
+<<<<<<< HEAD:src/AlmaIt.dotnet.Heroes.Client/Pages/Components/AddComicComponent.cshtml
+=======
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="Serie">Tags</span>
@@ -111,8 +116,46 @@
         </div>
         <div class="form-row">
             <div class="col-auto">
+>>>>>>> develop:src/AlmaIt.dotnet.Heroes.Client/Components/AddComicComponent.cshtml
                 <button class="btn btn-default" onclick="@(async () => await this.CreateComicBook())">Save</button>
             </div>
         </div>
     </div>
+<<<<<<< HEAD:src/AlmaIt.dotnet.Heroes.Client/Pages/Components/AddComicComponent.cshtml
+}
+
+
+@functions {
+    private bool showAddComicPanel = false;
+    ComicBook comicBook = new ComicBook();
+    List<ComicSeries> comicSerieList = new List<ComicSeries>();
+    int selectedComicSerie = 0;
+    ComicBookStatus selectedBookStatus = ComicBookStatus.None;
+
+    [Parameter]
+    Func<bool, Task> ComicBookAdded { get; set; }
+
+    protected override async Task OnInitAsync()
+    {
+        this.comicSerieList = await this.Http.GetJsonAsync<List<ComicSeries>>("api/ComicSerie");
+    }
+
+    protected async Task CreateComicBook()
+    {
+        if(this.selectedComicSerie != 0)
+            this.comicBook.ComicSerieId = this.selectedComicSerie;
+        this.comicBook.Status = this.selectedBookStatus;
+
+        await this.Http.SendJsonAsync(HttpMethod.Post, "/api/ComicBook", this.comicBook);
+
+        await this.ComicBookAdded(true);
+    }
+
+    protected void ToggleShowAddComic()
+    {
+        this.showAddComicPanel = !this.showAddComicPanel;
+        this.StateHasChanged();
+    }
+=======
+>>>>>>> develop:src/AlmaIt.dotnet.Heroes.Client/Components/AddComicComponent.cshtml
 }
