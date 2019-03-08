@@ -1,8 +1,8 @@
-namespace AlmaIt.dotnet.Heroes.Client.Shared
+namespace AlmaIt.Dotnet.Heroes.Client.Shared
 {
     using System;
     using System.Threading.Tasks;
-    using AlmaIt.dotnet.Heroes.Client.ViewModel;
+    using AlmaIt.Dotnet.Heroes.Client.ViewModel;
     using Microsoft.AspNetCore.Blazor.Components;
 
     public class NavMenuBase : BlazorComponent

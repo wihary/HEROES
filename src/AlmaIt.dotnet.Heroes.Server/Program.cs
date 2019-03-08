@@ -1,4 +1,4 @@
-﻿namespace AlmaIt.dotnet.Heroes.Server
+﻿namespace AlmaIt.Dotnet.Heroes.Server
 {
     using AlmaIt.Dotnet.Heroes.Server.Data;
     using Microsoft.AspNetCore;

@@ -4,13 +4,13 @@
     <OutputType>Exe</OutputType>
     <LangVersion>7.3</LangVersion>
     <BlazorLinkOnBuild>False</BlazorLinkOnBuild>
-	<CodeAnalysisRuleSet>AlmaIt.dotnet.Heroes.Client.ruleset</CodeAnalysisRuleSet>
+	<CodeAnalysisRuleSet>AlmaIt.Dotnet.Heroes.Client.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <CodeAnalysisRuleSet>AlmaIt.dotnet.Heroes.Client.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>AlmaIt.Dotnet.Heroes.Client.ruleset</CodeAnalysisRuleSet>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>bin\Debug\netstandard2.0\AlmaIt.dotnet.Heroes.Client.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netstandard2.0\AlmaIt.Dotnet.Heroes.Client.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,6 +36,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AlmaIt.dotnet.Heroes.Shared\AlmaIt.dotnet.Heroes.Shared.csproj"/>
+    <ProjectReference Include="..\AlmaIt.Dotnet.Heroes.Shared\AlmaIt.Dotnet.Heroes.Shared.csproj"/>
   </ItemGroup>
 </Project>

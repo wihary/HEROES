@@ -1,4 +1,4 @@
-using AlmaIt.dotnet.Heroes.Server.Data;
+using AlmaIt.Dotnet.Heroes.Server.Data;
 using AlmaIt.Dotnet.Heroes.Server.Data;
 using Dotnet.JsonIdentityProvider.Services;
 using Microsoft.AspNetCore.Blazor.Server;
@@ -11,7 +11,7 @@ using Newtonsoft.Json.Serialization;
 using System.Linq;
 using System.Net.Mime;
 
-namespace AlmaIt.dotnet.Heroes.Server
+namespace AlmaIt.Dotnet.Heroes.Server
 {
     public class Startup
     {

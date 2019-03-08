@@ -1,4 +1,4 @@
-﻿namespace AlmaIt.dotnet.Heroes.Client
+﻿namespace AlmaIt.Dotnet.Heroes.Client
 {
     using Microsoft.AspNetCore.Blazor.Hosting;
 

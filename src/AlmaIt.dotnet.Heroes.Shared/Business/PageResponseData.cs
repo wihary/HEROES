@@ -1,4 +1,4 @@
-namespace AlmaIt.dotnet.Heroes.Shared.Business
+namespace AlmaIt.Dotnet.Heroes.Shared.Business
 {
     using System.Collections.Generic;
 

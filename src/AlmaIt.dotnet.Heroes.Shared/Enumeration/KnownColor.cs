@@ -1,4 +1,4 @@
-namespace AlmaIt.dotnet.Heroes.Shared.Enumeration
+namespace AlmaIt.Dotnet.Heroes.Shared.Enumeration
 {
     public enum KnownColor
     {

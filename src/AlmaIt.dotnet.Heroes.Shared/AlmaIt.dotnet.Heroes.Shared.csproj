@@ -6,12 +6,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <CodeAnalysisRuleSet>AlmaIt.dotnet.Heroes.Shared.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>AlmaIt.Dotnet.Heroes.Shared.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <CodeAnalysisRuleSet>AlmaIt.dotnet.Heroes.Shared.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\Debug\netstandard2.0\AlmaIt.dotnet.Heroes.Shared.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AlmaIt.Dotnet.Heroes.Shared.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Debug\netstandard2.0\AlmaIt.Dotnet.Heroes.Shared.xml</DocumentationFile>
     <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
 

@@ -1,8 +1,8 @@
-namespace AlmaIt.dotnet.Heroes.Client.Pages.Settings
+namespace AlmaIt.Dotnet.Heroes.Client.Pages.Settings
 {
     using System.Net.Http;
     using System.Threading.Tasks;
-    using AlmaIt.dotnet.Heroes.Client.Components.Settings;
+    using AlmaIt.Dotnet.Heroes.Client.Components.Settings;
     using Microsoft.AspNetCore.Blazor.Components;
 
     public class UserManagerBase : BlazorComponent

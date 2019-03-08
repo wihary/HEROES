@@ -1,4 +1,4 @@
-namespace AlmaIt.dotnet.Heroes.Shared.Enumeration
+namespace AlmaIt.Dotnet.Heroes.Shared.Enumeration
 {
     /// <summary>
     /// Enum for comic book status.

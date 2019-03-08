@@ -1,4 +1,4 @@
-namespace AlmaIt.dotnet.Heroes.Shared.Models
+namespace AlmaIt.Dotnet.Heroes.Shared.Models
 {
     public class ComicSeriesTags : IDataObject<int>
     {

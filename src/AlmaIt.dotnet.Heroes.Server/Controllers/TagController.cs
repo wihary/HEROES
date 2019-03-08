@@ -1,9 +1,9 @@
-namespace AlmaIt.dotnet.Heroes.Server.Controllers
+namespace AlmaIt.Dotnet.Heroes.Server.Controllers
 {
     using System.Linq;
     using System.Threading.Tasks;
-    using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface;
-    using AlmaIt.dotnet.Heroes.Shared.Models;
+    using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
+    using AlmaIt.Dotnet.Heroes.Shared.Models;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/[controller]")]

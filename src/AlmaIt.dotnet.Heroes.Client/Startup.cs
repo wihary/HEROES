@@ -1,6 +1,6 @@
-namespace AlmaIt.dotnet.Heroes.Client
+namespace AlmaIt.Dotnet.Heroes.Client
 {
-    using AlmaIt.dotnet.Heroes.Client.ViewModel;
+    using AlmaIt.Dotnet.Heroes.Client.ViewModel;
     using Blazor.Extensions.Storage;
     using Microsoft.AspNetCore.Blazor.Builder;
     using Microsoft.Extensions.DependencyInjection;

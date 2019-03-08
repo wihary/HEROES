@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 
-namespace AlmaIt.dotnet.Heroes.Client.Converters
+namespace AlmaIt.Dotnet.Heroes.Client.Converters
 {
     public static class ColorManager
     {

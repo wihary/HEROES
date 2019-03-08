@@ -1,12 +1,12 @@
-namespace AlmaIt.dotnet.Heroes.Client.Pages
+namespace AlmaIt.Dotnet.Heroes.Client.Pages
 {
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using AlmaIt.dotnet.Heroes.Client.ViewModel;
-    using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration;
+    using AlmaIt.Dotnet.Heroes.Client.ViewModel;
+    using AlmaIt.Dotnet.Heroes.Client.ViewModel.Enumeration;
     using Blazor.Extensions.Storage;
-    using Dotnet.JsonIdentityProvider.IdentityProvider.Model;
+    using global::Dotnet.JsonIdentityProvider.IdentityProvider.Model;
     using Microsoft.AspNetCore.Blazor.Components;
     using Microsoft.AspNetCore.Blazor.Services;
     using Microsoft.JSInterop;

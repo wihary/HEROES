@@ -18,7 +18,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024");
 
-            modelBuilder.Entity("AlmaIt.dotnet.Heroes.Shared.Models.ComicBook", b =>
+            modelBuilder.Entity("AlmaIt.Dotnet.Heroes.Shared.Models.ComicBook", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -43,7 +43,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Migrations
                     b.ToTable("ComicBooks");
                 });
 
-            modelBuilder.Entity("AlmaIt.dotnet.Heroes.Shared.Models.ComicSeries", b =>
+            modelBuilder.Entity("AlmaIt.Dotnet.Heroes.Shared.Models.ComicSeries", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -64,9 +64,9 @@ namespace AlmaIt.Dotnet.Heroes.Server.Migrations
                     b.ToTable("ComicSeries");
                 });
 
-            modelBuilder.Entity("AlmaIt.dotnet.Heroes.Shared.Models.ComicBook", b =>
+            modelBuilder.Entity("AlmaIt.Dotnet.Heroes.Shared.Models.ComicBook", b =>
                 {
-                    b.HasOne("AlmaIt.dotnet.Heroes.Shared.Models.ComicSeries", "ComicSerie")
+                    b.HasOne("AlmaIt.Dotnet.Heroes.Shared.Models.ComicSeries", "ComicSerie")
                         .WithMany("AssociatedComnicBooksExtended")
                         .HasForeignKey("ComicSerieId");
                 });

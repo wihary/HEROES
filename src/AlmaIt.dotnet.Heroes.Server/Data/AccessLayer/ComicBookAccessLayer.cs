@@ -4,7 +4,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer
     using System.Linq;
     using System.Threading.Tasks;
     using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
-    using AlmaIt.dotnet.Heroes.Shared.Models;
+    using AlmaIt.Dotnet.Heroes.Shared.Models;
     using Microsoft.EntityFrameworkCore;
 
     /// <summary>

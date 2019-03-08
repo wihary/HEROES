@@ -1,4 +1,4 @@
-namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
+namespace AlmaIt.Dotnet.Heroes.Client.Components.Settings
 {
     using System;
     using System.Collections.Generic;
@@ -6,9 +6,8 @@ namespace AlmaIt.dotnet.Heroes.Client.Components.Settings
     using System.Net.Http;
     using System.Text;
     using System.Threading.Tasks;
-    using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration;
-    using Dotnet.JsonIdentityProvider.IdentityProvider.Model;
-    using Microsoft.AspNetCore.Blazor;
+    using AlmaIt.Dotnet.Heroes.Client.ViewModel.Enumeration;
+    using global::Dotnet.JsonIdentityProvider.IdentityProvider.Model;
     using Microsoft.AspNetCore.Blazor.Components;
     using Newtonsoft.Json;
 

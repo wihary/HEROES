@@ -1,4 +1,4 @@
-namespace AlmaIt.dotnet.Heroes.Client.ViewModel
+namespace AlmaIt.Dotnet.Heroes.Client.ViewModel
 {
     using System.Net.Http;
     using System.Net.Http.Headers;
@@ -6,13 +6,13 @@ namespace AlmaIt.dotnet.Heroes.Client.ViewModel
     using Microsoft.JSInterop;
     using Blazor.Extensions.Storage;
     using System;
-    using AlmaIt.dotnet.Heroes.Shared.Business;
-    using Dotnet.JsonIdentityProvider.IdentityProvider.Model;
+    using AlmaIt.Dotnet.Heroes.Shared.Business;
     using Microsoft.AspNetCore.Blazor;
     using Newtonsoft.Json;
     using System.Text;
-    using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration;
+    using AlmaIt.Dotnet.Heroes.Client.ViewModel.Enumeration;
     using Microsoft.AspNetCore.Blazor.Services;
+    using global::Dotnet.JsonIdentityProvider.IdentityProvider.Model;
 
     /// <summary>
     ///     This class is use as an authentification manager for the client

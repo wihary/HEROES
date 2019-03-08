@@ -4,11 +4,11 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface;
-    using AlmaIt.dotnet.Heroes.Shared.Business;
-    using AlmaIt.dotnet.Heroes.Shared.Enumeration;
-    using AlmaIt.dotnet.Heroes.Shared.Helpers;
-    using AlmaIt.dotnet.Heroes.Shared.Models;
+    using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
+    using AlmaIt.Dotnet.Heroes.Shared.Business;
+    using AlmaIt.Dotnet.Heroes.Shared.Enumeration;
+    using AlmaIt.Dotnet.Heroes.Shared.Helpers;
+    using AlmaIt.Dotnet.Heroes.Shared.Models;
     using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;

@@ -5,11 +5,11 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{06666BC3-8EF8-4BAE-8018-828C0B94818D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlmaIt.dotnet.Heroes.Client", "src\AlmaIt.dotnet.Heroes.Client\AlmaIt.dotnet.Heroes.Client.csproj", "{202979B7-177E-4596-9337-0382E0775234}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlmaIt.Dotnet.Heroes.Client", "src\AlmaIt.Dotnet.Heroes.Client\AlmaIt.Dotnet.Heroes.Client.csproj", "{202979B7-177E-4596-9337-0382E0775234}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlmaIt.Dotnet.Heroes.Server", "src\AlmaIt.Dotnet.Heroes.Server\AlmaIt.Dotnet.Heroes.Server.csproj", "{95B07D12-5EB0-4EB1-A902-0DBDC152129D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlmaIt.dotnet.Heroes.Shared", "src\AlmaIt.dotnet.Heroes.Shared\AlmaIt.dotnet.Heroes.Shared.csproj", "{3256C815-5812-43CC-AA39-F16C5232EDDE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlmaIt.Dotnet.Heroes.Shared", "src\AlmaIt.Dotnet.Heroes.Shared\AlmaIt.Dotnet.Heroes.Shared.csproj", "{3256C815-5812-43CC-AA39-F16C5232EDDE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
