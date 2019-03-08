@@ -1,0 +1,16 @@
+@using AlmaIt.Dotnet.Heroes.Client.ViewModel.Enumeration
+
+@if(!string.IsNullOrEmpty(this.Message))
+{
+    <div class="alert alert-@this.AlertType.ToString() alert-dismissible fade show" role="alert">
+        @this.Message
+    </div>
+}
+
+@functions {
+    [Parameter]
+    protected string Message { get; set; }
+
+    [Parameter]
+    protected AlertType AlertType { get; set; }
+}

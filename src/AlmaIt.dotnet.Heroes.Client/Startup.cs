@@ -1,11 +1,10 @@
-namespace AlmaIt.dotnet.Heroes.Client
+namespace AlmaIt.Dotnet.Heroes.Client
 {
+    using AlmaIt.Dotnet.Heroes.Client.ViewModel;
+    using Blazor.Extensions.Storage;
     using Microsoft.AspNetCore.Blazor.Builder;
     using Microsoft.Extensions.DependencyInjection;
 
-    /// <summary>
-    /// Start up class of client.
-    /// </summary>
     public class Startup
     {
         /// <summary>
@@ -21,6 +20,8 @@ namespace AlmaIt.dotnet.Heroes.Client
         /// <param name="services">Collection of services for dependency injection.</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddStorage();
+            services.AddSingleton<AppState>();
         }
     }
 }

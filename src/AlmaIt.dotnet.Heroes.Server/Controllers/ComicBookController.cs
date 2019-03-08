@@ -1,20 +1,21 @@
-namespace AlmaIt.dotnet.Heroes.Server.Controllers
+namespace AlmaIt.Dotnet.Heroes.Server.Controllers
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using System;
-
-    using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface;
-    using AlmaIt.dotnet.Heroes.Shared.Business;
-    using AlmaIt.dotnet.Heroes.Shared.Enumeration;
-    using AlmaIt.dotnet.Heroes.Shared.Helpers;
-    using AlmaIt.dotnet.Heroes.Shared.Models;
-
+    using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
+    using AlmaIt.Dotnet.Heroes.Shared.Business;
+    using AlmaIt.Dotnet.Heroes.Shared.Enumeration;
+    using AlmaIt.Dotnet.Heroes.Shared.Helpers;
+    using AlmaIt.Dotnet.Heroes.Shared.Models;
+    using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    [Produces("application/json")]
     [Route("api/[controller]")]
+    [Authorize]
     public class ComicBookController : Controller
     {
         private readonly IComicBookAccessLayer comicBookLayer;
@@ -40,12 +41,13 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <param name="id">Comic book id to retrieve</param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [Authorize(Policy = "ReadOnlyUsers")]
         public async Task<IActionResult> GetAsync([FromQuery] int id)
         {
             var result = await this.comicBookLayer.GetAsync(id).ConfigureAwait(false);
 
             if (result == null)
-                return this.NoContent();
+            { return this.NoContent(); }
 
             return this.Ok(result);
         }
@@ -56,12 +58,13 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <param name="name">Comic book name</param>
         /// <returns></returns>
         [HttpGet("{name}")]
+        [Authorize(Policy = "ReadOnlyUsers")]
         public IActionResult GetByName([FromQuery] string name)
         {
             var result = this.comicBookLayer.Where(x => x.Title.Contains(name)).FirstOrDefault();
 
             if (result == null)
-                return this.NoContent();
+            { return this.NoContent(); }
 
             return this.Ok(result);
         }
@@ -71,12 +74,13 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Policy = "ReadOnlyUsers")]
         public async Task<IActionResult> GetAll([FromQuery] string sortBy)
         {
             var result = await this.comicBookLayer.GetAllComcisAndSerieInfo().ConfigureAwait(false);
 
             if (result == null)
-                return this.NoContent();
+            { return this.NoContent(); }
 
             return this.Ok(result.AsQueryable().Sort(sortBy));
         }
@@ -86,13 +90,15 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("{page}/{size}")]
+        [Authorize(Policy = "ReadOnlyUsers")]
         public async Task<IActionResult> GetAllAsync(int page, int size, [FromQuery] string sortBy)
         {
             var response = new PageResponseData<ComicBook>();
             var result = await this.comicBookLayer.GetAllComcisAndSerieInfo().ConfigureAwait(false);
 
             if (result == null)
-                return this.NoContent();
+            { return this.NoContent(); }
+
             result = result.AsQueryable().Sort(sortBy);
             response.TotalResult = result.Count();
             response.MaxPage = (int) Math.Ceiling(result.Count() / (decimal) size);
@@ -105,6 +111,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("type/{status}/{page}/{size}")]
+        [Authorize(Policy = "ReadOnlyUsers")]
         public async Task<IActionResult> GetByStatusAsync([FromRoute] ComicBookStatus status, [FromRoute] int page, [FromRoute] int size, [FromQuery] string sortBy)
         {
             return await this.GetByStatusAsync(status, page, size, sortBy, string.Empty).ConfigureAwait(false);
@@ -115,16 +122,18 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("type/{status}/{page}/{size}/{filter}")]
+        [Authorize(Policy = "ReadOnlyUsers")]
         public async Task<IActionResult> GetByStatusAsync([FromRoute] ComicBookStatus status, [FromRoute] int page, [FromRoute] int size, [FromQuery] string sortBy, [FromRoute] string filter = "")
         {
             var response = new PageResponseData<ComicBook>();
             var result = (await this.comicBookLayer.GetAllComcisAndSerieInfo().ConfigureAwait(false)).Where(book => book.Status == status);
 
             if (!string.IsNullOrEmpty(filter))
-                result = result.Where(book => book.Title.Contains(filter, StringComparison.InvariantCultureIgnoreCase) || book.ComicSerie.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase));
+            { result = result.Where(book => book.Title.Contains(filter, StringComparison.InvariantCultureIgnoreCase) || book.ComicSerie.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase)); }
 
             if (result == null)
-                return this.NoContent();
+            { return this.NoContent(); }
+
             result = result.AsQueryable().Sort(sortBy);
             response.TotalResult = result.Count();
             response.MaxPage = (int) Math.Ceiling(result.Count() / (decimal) size);
@@ -138,6 +147,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <param name="comicBook">Comic book model to create</param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(Policy = "WriteUsers")]
         public async Task<IActionResult> AddAsync([FromBody] ComicBook comicBook)
         {
             var tagList = new List<ObjectTag>(comicBook.Tags);
@@ -163,6 +173,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <param name="id">Id of the comic book to remove</param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [Authorize(Policy = "Administrators")]
         public async Task<IActionResult> RemoveAsync([FromRoute] int id)
         {
             var comicBook = await this.comicBookLayer.GetAsync(id);
@@ -182,6 +193,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <param name="model">Comic book model to create</param>
         /// <returns></returns>
         [HttpPut]
+        [Authorize(Policy = "WriteUsers")]
         public async Task<IActionResult> UpdateAsync([FromBody] ComicBook model)
         {
             var tagList = new List<ObjectTag>(model.Tags);

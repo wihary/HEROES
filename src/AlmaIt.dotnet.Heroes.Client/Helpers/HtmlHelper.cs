@@ -1,4 +1,4 @@
-namespace AlmaIt.dotnet.Heroes.Client.Helpers
+namespace AlmaIt.Dotnet.Heroes.Client.Helpers
 {
     using System;
     using System.ComponentModel;

@@ -1,4 +1,4 @@
-namespace AlmaIt.dotnet.Heroes.Shared.Models
+namespace AlmaIt.Dotnet.Heroes.Shared.Models
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
 
-    using AlmaIt.dotnet.Heroes.Shared.Enumeration;
+    using AlmaIt.Dotnet.Heroes.Shared.Enumeration;
 
     /// <summary>
     /// Represent a comic book or issue.

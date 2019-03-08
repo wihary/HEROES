@@ -1,4 +1,4 @@
-﻿namespace AlmaIt.dotnet.Heroes.Client.Pages.Components
+﻿namespace AlmaIt.Dotnet.Heroes.Client.Pages.Components
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@
     using System.Net.Http;
     using System.Threading.Tasks;
 
-    using AlmaIt.dotnet.Heroes.Shared.Models;
+    using AlmaIt.Dotnet.Heroes.Shared.Models;
 
     using Microsoft.AspNetCore.Blazor;
     using Microsoft.AspNetCore.Blazor.Components;

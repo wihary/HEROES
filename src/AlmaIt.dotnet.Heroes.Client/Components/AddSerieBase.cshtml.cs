@@ -1,11 +1,11 @@
 ﻿#pragma warning disable SA1401 // Fields should be private
-namespace AlmaIt.dotnet.Heroes.Client.Components
+namespace AlmaIt.Dotnet.Heroes.Client.Components
 {
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;
 
-    using AlmaIt.dotnet.Heroes.Shared.Models;
+    using AlmaIt.Dotnet.Heroes.Shared.Models;
 
     using Microsoft.AspNetCore.Blazor;
     using Microsoft.AspNetCore.Blazor.Components;

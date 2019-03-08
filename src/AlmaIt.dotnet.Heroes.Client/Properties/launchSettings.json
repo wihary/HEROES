@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "AlmaIt.dotnet.Heroes.Client": {
+    "AlmaIt.Dotnet.Heroes.Client": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

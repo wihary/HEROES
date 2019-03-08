@@ -1,4 +1,4 @@
-namespace AlmaIt.dotnet.Heroes.Client.Pages.Settings
+namespace AlmaIt.Dotnet.Heroes.Client.Pages.Settings
 {
     using System.Collections.Generic;
     using System.IO;
@@ -7,8 +7,8 @@ namespace AlmaIt.dotnet.Heroes.Client.Pages.Settings
     using System.Threading.Tasks;
     using System;
 
-    using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration;
-    using AlmaIt.dotnet.Heroes.Shared.Models;
+    using AlmaIt.Dotnet.Heroes.Client.ViewModel.Enumeration;
+    using AlmaIt.Dotnet.Heroes.Shared.Models;
 
     using Microsoft.AspNetCore.Blazor.Components;
 

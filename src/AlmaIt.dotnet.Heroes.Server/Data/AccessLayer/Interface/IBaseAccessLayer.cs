@@ -1,11 +1,11 @@
-namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface
+namespace AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Threading.Tasks;
-    using AlmaIt.dotnet.Heroes.Shared.Models;
+    using AlmaIt.Dotnet.Heroes.Shared.Models;
 
     /// <summary>
     ///     Interface defining base CRUD operation on model data

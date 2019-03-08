@@ -1,4 +1,4 @@
-namespace AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration
+namespace AlmaIt.Dotnet.Heroes.Client.ViewModel.Enumeration
 {
     /// <summary>
     /// Enum of comics browser type.
