@@ -10,23 +10,30 @@ namespace AlmaIt.dotnet.Heroes.Client.Components
     using Microsoft.AspNetCore.Blazor;
     using Microsoft.AspNetCore.Blazor.Components;
 
+    /// <summary>
+    /// Add comic composant base.
+    /// </summary>
     public class AddComicBase : BlazorComponent
     {
+        /// <summary>
+        /// Gest or sets the http client.
+        /// </summary>
         [Inject]
         protected HttpClient Http { get; set; }
 
+        /// <summary>
+        /// Gets or sets the event raises when a comic book added.
+        /// </summary>
         [Parameter]
-        Func<bool, Task> ComicBookAdded { get; set; }
+        protected Func<bool, Task> ComicBookAdded { get; set; }
 
         /// <summary>
-        /// Referential list of all available series in DB
+        /// Referential list of all available series in DB.
         /// </summary>
-        /// <typeparam name="ComicSeries"></typeparam>
-        /// <returns></returns>
         protected List<ComicSeries> comicSerieList = new List<ComicSeries>();
 
         /// <summary>
-        /// Referential list of all available tags in Db
+        /// Referential list of all available tags in Db.
         /// </summary>
         /// <typeparam name="ObjectTag"></typeparam>
         /// <returns></returns>
@@ -43,27 +50,29 @@ namespace AlmaIt.dotnet.Heroes.Client.Components
 
         protected override async Task OnInitAsync()
         {
-            this.comicSerieList = await Http.GetJsonAsync<List<ComicSeries>>("api/ComicSerie");
-            this.objectTagList = await Http.GetJsonAsync<List<ObjectTag>>("api/tag");
+            this.comicSerieList = await this.Http.GetJsonAsync<List<ComicSeries>>("api/ComicSerie");
+            this.objectTagList = await this.Http.GetJsonAsync<List<ObjectTag>>("api/tag");
         }
 
         protected async Task CreateComicBook()
         {
-            if (selectedComicSerie != 0)
-            { comicBook.ComicSerieId = selectedComicSerie; }
+            if (this.selectedComicSerie != 0)
+            {
+                this.comicBook.ComicSerieId = this.selectedComicSerie;
+            }
 
-            comicBook.Status = selectedBookStatus;
+            this.comicBook.Status = this.selectedBookStatus;
 
-            await Http.SendJsonAsync(HttpMethod.Post, "/api/ComicBook", comicBook);
+            await this.Http.SendJsonAsync(HttpMethod.Post, "/api/ComicBook", this.comicBook);
 
             await this.ComicBookAdded(true).ConfigureAwait(false);
-            StateHasChanged();
+            this.StateHasChanged();
         }
 
         protected void ToggleShowAddComic()
         {
             this.ShowAddComicPanel = !this.ShowAddComicPanel;
-            StateHasChanged();
+            this.StateHasChanged();
         }
 
         protected void AddTagSelected()
@@ -81,12 +90,12 @@ namespace AlmaIt.dotnet.Heroes.Client.Components
                         Tag = selectedTag
                     });
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
 
-            StateHasChanged();
+            this.StateHasChanged();
         }
 
         protected void RemoveTag(string tagName)

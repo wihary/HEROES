@@ -37,8 +37,8 @@ namespace AlmaIt.dotnet.Heroes.Client.Components
 
         protected override async Task OnInitAsync()
         {
-            this.objectTagList = await Http.GetJsonAsync<List<ObjectTag>>("api/tag");
-            this.comicSerieList = await Http.GetJsonAsync<List<ComicSeries>>("api/ComicSerie");
+            this.objectTagList = await this.Http.GetJsonAsync<List<ObjectTag>>("api/tag");
+            this.comicSerieList = await this.Http.GetJsonAsync<List<ComicSeries>>("api/ComicSerie");
 
             if (this.EditedComicBook.ComicSerieId.HasValue)
             { this.selectedComicSerie = this.EditedComicBook.ComicSerieId.Value; }
@@ -56,7 +56,7 @@ namespace AlmaIt.dotnet.Heroes.Client.Components
             this.EditedComicBook.ComicSerieId = this.selectedComicSerie;
             this.EditedComicBook.Status = this.selectedBookStatus;
 
-            await Http.SendJsonAsync(HttpMethod.Put, "/api/ComicBook", this.EditedComicBook);
+            await this.Http.SendJsonAsync(HttpMethod.Put, "/api/ComicBook", this.EditedComicBook);
             await this.EditionCompleted(true).ConfigureAwait(false);
         }
         protected void AddTagSelected()
@@ -74,12 +74,12 @@ namespace AlmaIt.dotnet.Heroes.Client.Components
                         Tag = selectedTag
                     });
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
 
-            StateHasChanged();
+            this.StateHasChanged();
         }
 
         protected void RemoveTag(string tagName)

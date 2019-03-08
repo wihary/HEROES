@@ -74,7 +74,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="Serie">Tags</span>
                 </div>
-                <select class="form-control" aria-describedby="Serie" bind="@this.SelectedTag">
+                <select class="form-control" aria-describedby="Serie" bind="@(this.SelectedTag)">
                 <option value="">-- Select related Serie --</option>
                     @foreach (var tag in this.objectTagList)
                     {
@@ -102,7 +102,7 @@
     </div>
     <div class="form-row">
         <div class="col-auto">
-            <button class="btn btn-default" onclick="@(async () => await EditionCompleted(false))">Cancel</button>
+            <button class="btn btn-default" onclick="@(async () => await this.EditionCompleted(false))">Cancel</button>
         </div>
         <div class="col-auto">
             <button class="btn btn-default" onclick="@(async () => await this.UpdateComicBook())">Save</button>

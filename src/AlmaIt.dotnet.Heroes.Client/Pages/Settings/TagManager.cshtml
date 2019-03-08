@@ -16,8 +16,8 @@
 
 @if(!string.IsNullOrEmpty(this.Message))
 {
-    <div class="alert alert-@this.Level.ToString() alert-dismissible fade show" role="alert">
-        @this.Message
+    <div class="alert alert-@(this.Level.ToString()) alert-dismissible fade show" role="alert">
+        @(this.Message)
     </div>
 }
 <p>

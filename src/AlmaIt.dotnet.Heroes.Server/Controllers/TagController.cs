@@ -31,9 +31,9 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             var result = await this.objectTagAccess.GetAsync(id);
 
             if (result == null)
-            { return NoContent(); }
+            { return this.NoContent(); }
 
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -47,9 +47,9 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             var result = this.objectTagAccess.Where(x => x.Name.Contains(name)).FirstOrDefault();
 
             if (result == null)
-            { return NoContent(); }
+            { return this.NoContent(); }
 
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -62,9 +62,9 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             var result = this.objectTagAccess.GetAllAsync().ToEnumerable();
 
             if (result == null)
-            { return NoContent(); }
+            { return this.NoContent(); }
 
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             { return this.BadRequest(); }
 
             var result = await this.objectTagAccess.AddAsync(tag);
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -95,10 +95,10 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             if (tagObject != null)
             {
                 var result = await this.objectTagAccess.RemoveAsync(tagObject);
-                return Ok(result);
+                return this.Ok(result);
             }
 
-            return NoContent();
+            return this.NoContent();
         }
 
 
@@ -111,7 +111,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         public async Task<IActionResult> UpdateAsync([FromBody] ObjectTag tag)
         {
             var result = await this.objectTagAccess.UpdateAsync(tag);
-            return Ok(result);
+            return this.Ok(result);
         }
     }
 }

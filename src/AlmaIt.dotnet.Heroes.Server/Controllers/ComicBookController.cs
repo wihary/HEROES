@@ -213,7 +213,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
             }
             var result = await this.comicBookLayer.UpdateAsync(comicBookUpdated);
 
-            return Ok(result);
+            return this.Ok(result);
         }
     }
 }
