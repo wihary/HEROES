@@ -30,6 +30,7 @@
 
 @functions {
     private bool showAddSeriePanel = false;
+
     [Parameter]
     Func<bool, Task> ComicSerieAdded { get; set; }
     private ComicSeries comicSerie = new ComicSeries();
@@ -45,5 +46,14 @@
     {
         this.showAddSeriePanel = !this.showAddSeriePanel;
         this.StateHasChanged();
+    }
+
+
+    protected void HandleKeyPress(UIKeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            Console.WriteLine(this.comicSerie?.Name);
+        }
     }
 }

@@ -1,5 +1,4 @@
 @inject HttpClient Http
-@inject HtmlHelper Html
 @using AlmaIt.dotnet.Heroes.Client.Helpers
 @using AlmaIt.dotnet.Heroes.Shared.Models
 @inherits SeriesBrowserBase
@@ -28,10 +27,10 @@ else
         <thead>
         <tr>
             <th>
-                <button class="btn btn-link" onclick="@(async () => await this.SortSeriesByName())">@(this.Html.DisplayName<ComicSeries>(cs => cs.Name))</button>
+                <button class="btn btn-link" onclick="@(async () => await this.SortSeriesByName())">@(HtmlHelper.DisplayName<ComicSeries>(cs => cs.Name))</button>
             </th>
             <th>
-                <button class="btn btn-link" onclick="@(async () => await this.SortSeriesByIssueCount())">@(this.Html.DisplayName<ComicSeries>(cs => cs.IssuesCount))</button>
+                <button class="btn btn-link" onclick="@(async () => await this.SortSeriesByIssueCount())">@(HtmlHelper.DisplayName<ComicSeries>(cs => cs.IssuesCount))</button>
             </th>
             <th></th>
         </tr>

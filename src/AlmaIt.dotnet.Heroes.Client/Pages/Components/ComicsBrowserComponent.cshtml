@@ -1,5 +1,4 @@
 @inject HttpClient Http
-@inject HtmlHelper Html
 
 @using AlmaIt.dotnet.Heroes.Client.Helpers
 @using AlmaIt.dotnet.Heroes.Shared.Models
@@ -33,13 +32,13 @@ else
         <thead>
         <tr>
             <th scope="col">
-                <button class="btn btn-link" onclick="@(async () => await this.SortSeriesBySerieName())">@(this.Html.DisplayName<ComicBook>(cs => cs.ComicSerie.Name))</button>
+                <button class="btn btn-link" onclick="@(async () => await this.SortSeriesBySerieName())">@(HtmlHelper.DisplayName<ComicBook>(cs => cs.ComicSerie.Name))</button>
             </th>
             <th scope="col">
-                <button class="btn btn-link" onclick="@(async () => await this.SortSeriesByTitle())">@(this.Html.DisplayName<ComicBook>(cs => cs.Title))</button>
+                <button class="btn btn-link" onclick="@(async () => await this.SortSeriesByTitle())">@(HtmlHelper.DisplayName<ComicBook>(cs => cs.Title))</button>
             </th>
             <th scope="col">
-                <button class="btn btn-link" onclick="@(async () => await this.SortSeriesByIssueNumber())">@(this.Html.DisplayName<ComicBook>(cs => cs.IssueNumber))</button>
+                <button class="btn btn-link" onclick="@(async () => await this.SortSeriesByIssueNumber())">@(HtmlHelper.DisplayName<ComicBook>(cs => cs.IssueNumber))</button>
             </th>
             <th scope="col"></th>
         </tr>
