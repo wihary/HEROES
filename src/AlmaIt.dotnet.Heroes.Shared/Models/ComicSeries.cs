@@ -38,10 +38,9 @@ namespace AlmaIt.Dotnet.Heroes.Shared.Models
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime NextReleaseDate { get; set; } = DateTime.Now;
 
-        /// <summary>
-        /// List of all associated Tag object
-        /// </summary>
+        /// <summary>Gets or sets list of all associated Tag object.</summary>
         public ICollection<ComicSeriesTags> RelatedTags { get; set; }
+
         /// <summary>Gets or sets the date indicates the latest update of object.</summary>
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
