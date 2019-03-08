@@ -38,6 +38,15 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime NextReleaseDate { get; set; } = DateTime.Now;
 
+        /// <summary>
+        /// True if a comic serie is finished (no more issue are planned)
+        /// </summary>
+        public bool IsSerieCompleted { get; set; }
+
+        /// <summary>
+        /// List of all associated Tag object
+        /// </summary>
+        public ICollection<ComicSeriesTags> RelatedTags { get; set; }
         /// <summary>Gets or sets the date indicates the latest update of object.</summary>
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]

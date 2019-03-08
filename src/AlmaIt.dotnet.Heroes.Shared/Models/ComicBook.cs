@@ -56,5 +56,22 @@ namespace AlmaIt.dotnet.Heroes.Shared.Models
         /// Gets or sets the status of the comic book.
         /// </summary>
         public ComicBookStatus Status { get; set; } = ComicBookStatus.None;
+
+        /// <summary>
+        /// List of all associated Tag object
+        /// </summary>
+        //TODO: [JsonIgnore] == we are not yet ready for this, should come with business layer separation
+        public ICollection<ComicBookTags> RelatedTags { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="t.Tag"></param>
+        /// <returns></returns>
+        [NotMapped]
+        public List<ObjectTag> Tags
+        {
+            get => this.RelatedTags == null ? new List<ObjectTag>() : this.RelatedTags.Select(t => t.Tag).ToList();
+        }
     }
 }

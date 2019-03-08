@@ -24,8 +24,13 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         /// <summary>
         ///     Async Method that return all data object existing in Db.
         /// </summary>
-        /// <returns>List of <see cref="ComicBook"/>.</returns>
-        public override IAsyncEnumerable<ComicBook> GetAllAsync() => this.ModelSet.Include(book => book.ComicSerie).ToAsyncEnumerable();
+        /// <returns>List of <see cref="TModel"/></returns>
+        public override IAsyncEnumerable<ComicBook> GetAllAsync() => this.ModelSet
+            .Include(book => book.ComicSerie)
+            .Include(book => book.RelatedTags).ThenInclude(tag => tag.Tag)
+            .ToAsyncEnumerable();
+
+        public virtual async Task<ComicBook> GetAsync(int id) => await this.GetAllAsync().SingleOrDefault(model => model.Id.CompareTo(id) == 0);
 
         /// <summary>
         ///     Async method that returns all comics info and their associated serie
@@ -35,7 +40,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         public async Task<IEnumerable<ComicBook>> GetAllComcisAndSerieInfo()
         {
             var result = await this.GetAllAsync().ToList();
-            Parallel.ForEach(result, book => book.ComicSerie.AssociatedComnicBooksExtended.Clear());
+            Parallel.ForEach(result, book => book?.ComicSerie?.AssociatedComnicBooksExtended?.Clear());
 
             return result;
         }

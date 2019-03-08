@@ -3,14 +3,16 @@ using System;
 using AlmaIt.dotnet.Heroes.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AlmaIt.dotnet.Heroes.Server.Migrations
 {
     [DbContext(typeof(HeroesContext))]
-    partial class HeroesContextModelSnapshot : ModelSnapshot
+    [Migration("20190115122643_AddObjectTags")]
+    partial class AddObjectTags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,21 +43,6 @@ namespace AlmaIt.dotnet.Heroes.Server.Migrations
                     b.ToTable("ComicBooks");
                 });
 
-            modelBuilder.Entity("AlmaIt.dotnet.Heroes.Shared.Models.ComicBookTags", b =>
-                {
-                    b.Property<int>("ComicBookId");
-
-                    b.Property<int>("TagId");
-
-                    b.Property<int>("Id");
-
-                    b.HasKey("ComicBookId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("ComicBookTags");
-                });
-
             modelBuilder.Entity("AlmaIt.dotnet.Heroes.Shared.Models.ComicSeries", b =>
                 {
                     b.Property<int>("Id")
@@ -77,21 +64,6 @@ namespace AlmaIt.dotnet.Heroes.Server.Migrations
                     b.ToTable("ComicSeries");
                 });
 
-            modelBuilder.Entity("AlmaIt.dotnet.Heroes.Shared.Models.ComicSeriesTags", b =>
-                {
-                    b.Property<int>("ComicSerieId");
-
-                    b.Property<int>("TagId");
-
-                    b.Property<int>("Id");
-
-                    b.HasKey("ComicSerieId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("ComicSerieTags");
-                });
-
             modelBuilder.Entity("AlmaIt.dotnet.Heroes.Shared.Models.ObjectTag", b =>
                 {
                     b.Property<int>("Id")
@@ -111,32 +83,6 @@ namespace AlmaIt.dotnet.Heroes.Server.Migrations
                     b.HasOne("AlmaIt.dotnet.Heroes.Shared.Models.ComicSeries", "ComicSerie")
                         .WithMany("AssociatedComnicBooksExtended")
                         .HasForeignKey("ComicSerieId");
-                });
-
-            modelBuilder.Entity("AlmaIt.dotnet.Heroes.Shared.Models.ComicBookTags", b =>
-                {
-                    b.HasOne("AlmaIt.dotnet.Heroes.Shared.Models.ComicBook", "ComicBook")
-                        .WithMany("Tags")
-                        .HasForeignKey("ComicBookId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("AlmaIt.dotnet.Heroes.Shared.Models.ObjectTag", "Tag")
-                        .WithMany("ComicBookTags")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("AlmaIt.dotnet.Heroes.Shared.Models.ComicSeriesTags", b =>
-                {
-                    b.HasOne("AlmaIt.dotnet.Heroes.Shared.Models.ComicSeries", "ComicSerie")
-                        .WithMany("Tags")
-                        .HasForeignKey("ComicSerieId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("AlmaIt.dotnet.Heroes.Shared.Models.ObjectTag", "Tag")
-                        .WithMany("ComicSerieTags")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

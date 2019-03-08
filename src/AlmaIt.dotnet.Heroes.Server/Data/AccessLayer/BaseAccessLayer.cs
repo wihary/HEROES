@@ -44,8 +44,8 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         ///     Async Method that add new object in Db.
         /// </summary>
         /// <param name="model">Object model to add.</param>
-        /// <returns>Returns Id of newly created data object.</returns>
-        public async Task<TIdentity> AddAsync(TModel model)
+        /// <returns>Returns Id of newly created data object</returns>
+        public virtual async Task<TIdentity> AddAsync(TModel model)
         {
             var result = this.ModelSet.Add(model);
             await this.context.SaveChangesAsync().ConfigureAwait(false);
@@ -57,8 +57,8 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         ///     Async Method that add a range of new object in Db.
         /// </summary>
         /// <param name="models">Enumerable of objects model to add.</param>
-        /// <returns>Returns number of state entries written to the database.</returns>
-        public async Task<int> AddRangeAsync(IEnumerable<TModel> models)
+        /// <returns>Returns number of state entries written to the database</returns>
+        public virtual async Task<int> AddRangeAsync(IEnumerable<TModel> models)
         {
             this.ModelSet.AddRange(models);
             return await this.context.SaveChangesAsync().ConfigureAwait(false);
@@ -76,7 +76,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Data.AccessLayer
         /// </summary>
         /// <param name="id">Primary key.</param>
         /// <returns>Returns <typeparamref name="TModel"/>.</returns>
-        public async Task<TModel> GetAsync(TIdentity id)
+        public virtual async Task<TModel> GetAsync(TIdentity id)
             => await this.ModelSet.SingleOrDefaultAsync(model => model.Id.CompareTo(id) == 0).ConfigureAwait(false);
 
         /// <summary>
