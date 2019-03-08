@@ -19,7 +19,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         private readonly IComicSeriesAccessLayer comicSerieContext;
 
         /// <summary>
-        ///     ctor of <see cref="ComicBookController"/>
+        /// Initializes a new instance of the <see cref="ComicBookController"/> class.
         /// </summary>
         /// <param name="ComicSerieContext">DI for comic series context</param>
         /// <param name="ComicBookContext">DI for comic book context</param>
@@ -37,7 +37,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromQuery] int id)
         {
-            var result = await this.comicBookContext.GetAsync(id);
+            var result = await this.comicBookContext.GetAsync(id).ConfigureAwait(false);
 
             if (result == null)
                 return this.NoContent();
@@ -68,7 +68,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string sortBy)
         {
-            var result = await this.comicBookContext.GetAllComcisAndSerieInfo();
+            var result = await this.comicBookContext.GetAllComcisAndSerieInfo().ConfigureAwait(false);
 
             if (result == null)
                 return this.NoContent();
@@ -84,7 +84,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         public async Task<IActionResult> GetAllAsync(int page, int size, [FromQuery] string sortBy)
         {
             var response = new PageResponseData<ComicBook>();
-            var result = await this.comicBookContext.GetAllComcisAndSerieInfo();
+            var result = await this.comicBookContext.GetAllComcisAndSerieInfo().ConfigureAwait(false);
 
             if (result == null)
                 return this.NoContent();
@@ -102,7 +102,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         [HttpGet("type/{status}/{page}/{size}")]
         public async Task<IActionResult> GetByStatusAsync([FromRoute] ComicBookStatus status, [FromRoute] int page, [FromRoute] int size, [FromQuery] string sortBy)
         {
-            return await this.GetByStatusAsync(status, page, size, sortBy, string.Empty);
+            return await this.GetByStatusAsync(status, page, size, sortBy, string.Empty).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         public async Task<IActionResult> GetByStatusAsync([FromRoute] ComicBookStatus status, [FromRoute] int page, [FromRoute] int size, [FromQuery] string sortBy, [FromRoute] string filter = "")
         {
             var response = new PageResponseData<ComicBook>();
-            var result = (await this.comicBookContext.GetAllComcisAndSerieInfo()).Where(book => book.Status == status);
+            var result = (await this.comicBookContext.GetAllComcisAndSerieInfo().ConfigureAwait(false)).Where(book => book.Status == status);
 
             if (!string.IsNullOrEmpty(filter))
                 result = result.Where(book => book.Title.Contains(filter, StringComparison.InvariantCultureIgnoreCase) || book.ComicSerie.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase));
