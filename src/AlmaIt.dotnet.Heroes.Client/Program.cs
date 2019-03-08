@@ -1,16 +1,18 @@
-﻿using Microsoft.AspNetCore.Blazor.Hosting;
-
-namespace AlmaIt.dotnet.Heroes.Client
+﻿namespace AlmaIt.dotnet.Heroes.Client
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+    using Microsoft.AspNetCore.Blazor.Hosting;
 
-        public static IWebAssemblyHostBuilder CreateHostBuilder(string[] args) =>
+    /// <summary>Entry point class.</summary>
+    public static class Program
+    {
+        /// <summary>Entry point of program.</summary>
+        public static void Main()
+            => CreateHostBuilder().Build().Run();
+
+        /// <summary>Method of blazor host builder.</summary>
+        /// <returns>Return the web builder.</returns>
+        private static IWebAssemblyHostBuilder CreateHostBuilder() =>
             BlazorWebAssemblyHost.CreateDefaultBuilder()
-                .UseBlazorStartup<Startup>();
+                                 .UseBlazorStartup<Startup>();
     }
 }

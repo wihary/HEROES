@@ -2,8 +2,9 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
 {
     using System.Linq;
     using System.Threading.Tasks;
-    using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
     using AlmaIt.dotnet.Heroes.Shared.Models;
+    using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
+    using AlmaIt.dotnet.Heroes.Shared.Helpers;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
@@ -37,7 +38,9 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
             var result = await this.comicSerieContext.GetAsync(id);
 
             if (result == null)
+            {
                 return this.NoContent();
+            }
 
             return this.Ok(result);
         }
@@ -54,7 +57,9 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
             var result = this.comicSerieContext.Where(x => x.Name.Contains(name)).FirstOrDefault();
 
             if (result == null)
+            {
                 return this.NoContent();
+            }
 
             return this.Ok(result);
         }
@@ -65,12 +70,14 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
         /// <returns></returns>
         [HttpGet]
         [Authorize(Policy = "ReadOnlyUsers")]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery] string sortBy)
         {
-            var result = this.comicSerieContext.GetAllAsync().ToEnumerable();
+            var result = this.comicSerieContext.GetAllAsync().ToEnumerable().AsQueryable().Sort(sortBy);
 
             if (result == null)
+            {
                 return this.NoContent();
+            }
 
             return this.Ok(result);
         }
@@ -102,28 +109,28 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
                 return this.BadRequest($"Some comic book still reference this serie, therefor it cannot be deleted");
             }
 
-            var comicSerie = await this.comicSerieContext.GetAsync(id);
+            var serie = await this.comicSerieContext.GetAsync(id);
 
-            if (comicSerie != null)
+            if (serie == null)
             {
-                var result = await this.comicSerieContext.RemoveAsync(comicSerie);
-                return this.Ok(result);
+                return this.NoContent();
             }
 
-            return this.NoContent();
-        }
+            var result = await this.comicSerieContext.RemoveAsync(serie);
+            return this.Ok(result);
 
+        }
 
         /// <summary>
         ///     API endpoint use to update an existing comic serie
         /// </summary>
-        /// <param name="ComicSeries">Comic serie model to create</param>
+        /// <param name="comicSerie">Comic serie model to create</param>
         /// <returns></returns>
         [HttpPut]
         [Authorize(Policy = "WriteUsers")]
-        public async Task<IActionResult> UpdateAsync([FromBody] ComicSeries comicserie)
+        public async Task<IActionResult> UpdateAsync([FromBody] ComicSeries comicSerie)
         {
-            var result = await this.comicSerieContext.UpdateAsync(comicserie);
+            var result = await this.comicSerieContext.UpdateAsync(comicSerie);
             return this.Ok(result);
         }
     }

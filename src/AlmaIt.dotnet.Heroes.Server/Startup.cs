@@ -1,18 +1,18 @@
-namespace AlmaIt.Dotnet.Heroes.Server
-{
-    using System.Linq;
-    using System.Net.Mime;
-    using AlmaIt.Dotnet.Heroes.Server.Data;
-    using global::Dotnet.JsonIdentityProvider.Services;
-    using Microsoft.AspNetCore.Blazor.Server;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.ResponseCompression;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Newtonsoft.Json.Serialization;
+using AlmaIt.dotnet.Heroes.Server.Data;
+using AlmaIt.Dotnet.Heroes.Server.Data;
+using Dotnet.JsonIdentityProvider.Services;
+using Microsoft.AspNetCore.Blazor.Server;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Serialization;
+using System.Linq;
+using System.Net.Mime;
 
+namespace AlmaIt.dotnet.Heroes.Server
+{
     public class Startup
     {
         /// <summary>
@@ -58,12 +58,14 @@ namespace AlmaIt.Dotnet.Heroes.Server
                     options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
 
+            services.AddLogging();
+
             services.AddResponseCompression(options =>
             {
                 options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
                 {
                     MediaTypeNames.Application.Octet,
-                    WasmMediaTypeNames.Application.Wasm,
+                    WasmMediaTypeNames.Application.Wasm
                 });
             });
 
@@ -93,7 +95,7 @@ namespace AlmaIt.Dotnet.Heroes.Server
                 routes.MapRoute(name: "default", template: "{controller}/{action}/{id?}");
             });
 
-            app.UseBlazor<dotnet.Heroes.Client.Startup>();
+            app.UseBlazor<Client.Startup>();
         }
     }
 }

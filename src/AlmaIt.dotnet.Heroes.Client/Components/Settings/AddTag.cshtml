@@ -1,0 +1,50 @@
+@using System.Drawing
+@using AlmaIt.dotnet.Heroes.Client.Converters
+@using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration
+@inherits AlmaIt.dotnet.Heroes.Client.Components.Settings.AddTagBase
+
+<div class="row">
+    <div class="col-md-3 px-3 py-3">
+        <button class="btn btn-primary btn-sm" type="button" onclick="@(() => this.ToggleVisibility())">Add new Tag</button>
+    </div>
+</div>
+
+@if(this.IsVisible)
+{
+    <div class="bfh-colorpicker" data-name="colorpicker1">
+</div>
+    <div class="alert alert-primary" role="alert">
+        <h4>Add new Tag</h4>
+        <div class="form-row">
+            <div class="col-4">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="Name">Name</span>
+                    </div>
+                    <input type="text" class="form-control" aria-describedby="Name" bind="@(this.tag.Name)" />
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="Color">Color: </span>
+                    </div>
+                    <select class="form-control" aria-describedby="Color" style="background-color: @(this.tag.Argb.ToHtml())"  bind="@(this.tag.Argb)">
+                        @foreach (var color in this.AvailableColor)
+                        {
+                            <option value="@color.ToArgb()" style="background-color: @color.ToHtml()"></option>
+                        }
+                    </select>
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" disabled>#@(this.tag.Color.Name)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-auto">
+                <button class="btn btn-default" onclick="@(async () => await this.CreateTag())">Save</button>
+            </div>
+        </div>
+    </div>
+}

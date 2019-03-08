@@ -1,0 +1,118 @@
+@using AlmaIt.dotnet.Heroes.Shared.Enumeration
+@using AlmaIt.dotnet.Heroes.Client.Converters
+@using AlmaIt.dotnet.Heroes.Shared.Models
+
+@inherits AlmaIt.dotnet.Heroes.Client.Components.AddComicBase
+
+<div class="row">
+    <div class="col-md-3 px-3 py-3">
+        <button class="btn btn-primary btn-sm" type="button" onclick="@(() => this.ToggleShowAddComic())">Add comic book</button>
+    </div>
+</div>
+
+@if(this.ShowAddComicPanel)
+{
+    <div class="alert alert-primary" role="alert">
+        <h4>Add new Comic Book</h4>
+        <div class="form-row">
+            <div class="col-4">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="Title">Title</span>
+                    </div>
+                    <input type="text" class="form-control" aria-describedby="Title" bind="@(this.comicBook.Title)" />
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="Issue">Issue</span>
+                    </div>
+                    <input type="text" class="form-control" aria-describedby="Issue" bind="@(this.comicBook.IssueNumber)" />
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="Parution">Parution</span>
+                    </div>
+                    <input type="date" class="form-control" aria-describedby="Parution" bind="@(this.comicBook.ParutionDate)" format-value="yyyy-MM-dd" />
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-auto">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="Serie">Related to</span>
+                    </div>
+                    <select class="form-control" aria-describedby="Serie" bind="@(this.selectedComicSerie)">
+                    <option value="">-- Select related Serie --</option>
+                        @foreach (var comicSerie in this.comicSerieList)
+                        {
+                            <option value="@comicSerie.Id">@comicSerie.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-auto">
+                <div class="form-group">
+                    <label for="bookStatusOption">
+                        Where does this Comic Book belong:
+                    </label><br/>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="bookStatusOption" id="optionCollection" checked="@(this.selectedBookStatus == ComicBookStatus.Collection)" onchange="@(() => this.selectedBookStatus = ComicBookStatus.Collection)" />
+                        <label class="form-check-label" for="optionCollection">Collection</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="bookStatusOption" id="optionWishlist" checked="@(this.selectedBookStatus == ComicBookStatus.Wishlist)" onchange="@(() => this.selectedBookStatus = ComicBookStatus.Wishlist)" />
+                        <label class="form-check-label" for="optionWishlist">Wishlist</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="bookStatusOption" id="optionNone" checked="@(this.selectedBookStatus == ComicBookStatus.None)" onchange="@(() => this.selectedBookStatus = ComicBookStatus.None)" />
+                        <label class="form-check-label" for="optionNone">Neither</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-auto">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="Serie">Tags</span>
+                    </div>
+                    <select class="form-control" aria-describedby="Serie" bind="@(this.SelectedTag)">
+                    <option value="">-- Select related Serie --</option>
+                        @foreach (var tag in this.objectTagList)
+                        {
+                            <option value="@tag.Name" style="background-color: @tag.Color.ToHtml()">@tag.Name</option>
+                        }
+                    </select>
+                    <div class="input-group-apend">
+                        <button class="btn btn-default" onclick="@(() => this.AddTagSelected())">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-auto">
+                <div class="form-group">
+                    @foreach (var comicBookTags in this.comicBook.Tags)
+                    {
+                        <span class="badge badge-primary"data-toggle="tooltip" data-placement="bottom" title="Click to remove" 
+                            onclick="@(() => this.RemoveTag(comicBookTags.Name))" style="cursor: pointer; background-color: @comicBookTags.Color.ToHtml()">
+                            @comicBookTags.Name
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-auto">
+                <button class="btn btn-default" onclick="@(async () => await this.CreateComicBook())">Save</button>
+            </div>
+        </div>
+    </div>
+}

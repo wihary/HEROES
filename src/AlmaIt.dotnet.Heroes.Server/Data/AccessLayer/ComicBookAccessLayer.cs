@@ -13,7 +13,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer
     internal class ComicBookAccessLayer : BaseAccessLayer<HeroesContext, ComicBook, int>, IComicBookAccessLayer
     {
         /// <summary>
-        ///     Initialize new instance of data access layer <see cref="ComicBookAccessLayer" />.
+        /// Initializes a new instance of the <see cref="ComicBookAccessLayer"/> class.
         /// </summary>
         /// <param name="context">Data base context.</param>
         public ComicBookAccessLayer(HeroesContext context)
@@ -22,20 +22,25 @@ namespace AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer
         }
 
         /// <summary>
-        ///     Async Method that return all data object existing in Db
+        ///     Async Method that return all data object existing in Db.
         /// </summary>
         /// <returns>List of <see cref="TModel"/></returns>
-        public override IAsyncEnumerable<ComicBook> GetAllAsync() => this.ModelSet.Include(book => book.ComicSerie).ToAsyncEnumerable();
+        public override IAsyncEnumerable<ComicBook> GetAllAsync() => this.ModelSet
+            .Include(book => book.ComicSerie)
+            .Include(book => book.RelatedTags).ThenInclude(tag => tag.Tag)
+            .ToAsyncEnumerable();
+
+        public virtual async Task<ComicBook> GetAsync(int id) => await this.GetAllAsync().SingleOrDefault(model => model.Id.CompareTo(id) == 0);
 
         /// <summary>
         ///     Async method that returns all comics info and their associated serie
-        ///     Filter ComicSerie object so that not all related comicBook's serie get included
+        ///     Filter ComicSerie object so that not all related comicBook's serie get included.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Return a list of comic book and their series <see cref="IEnumerable{ComicBook}"/>.</returns>
         public async Task<IEnumerable<ComicBook>> GetAllComcisAndSerieInfo()
         {
             var result = await this.GetAllAsync().ToList();
-            Parallel.ForEach<ComicBook>(result, book => book.ComicSerie.AssociatedComnicBooksExtended.Clear());
+            Parallel.ForEach(result, book => book?.ComicSerie?.AssociatedComnicBooksExtended?.Clear());
 
             return result;
         }

@@ -1,0 +1,52 @@
+@using AlmaIt.dotnet.Heroes.Client.Components
+@using AlmaIt.dotnet.Heroes.Client.Converters
+@using AlmaIt.dotnet.Heroes.Client.ViewModel.Enumeration
+@page "/settings/tags"
+@inherits AlmaIt.dotnet.Heroes.Client.Pages.Settings.TagManagerBase
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Home</a></li>
+    <li class="breadcrumb-item"><a href="/settings">Settings</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Tags</li>
+  </ol>
+</nav>
+
+<h1>Manage Object Tags</h1>
+
+@if(!string.IsNullOrEmpty(this.Message))
+{
+    <div class="alert alert-@(this.Level.ToString()) alert-dismissible fade show" role="alert">
+        @(this.Message)
+    </div>
+}
+<p>
+    <AddTag TagCreated="@OnCollectionChanged"/>
+</p>
+
+@if (this.Tags == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Tag</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tag in this.Tags)
+            {
+                <tr>
+                    <td style="width: 1%; white-space: nowarp; background-color: @tag.Color.ToHtml()"></td>
+                    <td>@tag.Name</td>
+                    <td><button class="btn btn-default" onclick="@(async () => await this.DeleteTag(tag.Id))">Delete</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
