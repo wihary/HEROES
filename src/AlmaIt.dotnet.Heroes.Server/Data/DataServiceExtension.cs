@@ -1,8 +1,10 @@
-namespace AlmaIt.dotnet.Heroes.Server.Data
+namespace AlmaIt.Dotnet.Heroes.Server.Data
 {
     using System;
-    using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer;
-    using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface;
+    using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer;
+    using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
+    using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer;
+    using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
     using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
@@ -21,6 +23,7 @@ namespace AlmaIt.dotnet.Heroes.Server.Data
 
             services.AddTransient<IComicBookAccessLayer, ComicBookAccessLayer>();
             services.AddTransient<IComicSeriesAccessLayer, ComicSeriesAccessLayer>();
+            services.AddTransient<IObjectTagAccessLayer, ObjectTagAccessLayer>();
             services.AddTransient<InitializeDb>();
 
             return services;

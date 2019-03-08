@@ -1,22 +1,46 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CodeAnalysisRuleSet>AlmaIt.Dotnet.Heroes.Server.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CodeAnalysisRuleSet>AlmaIt.Dotnet.Heroes.Server.ruleset</CodeAnalysisRuleSet>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>bin\Debug\netcoreapp2.1\AlmaIt.Dotnet.Heroes.Server.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App"/>
+    <Content Remove="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Server" Version="0.7.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.4"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.4"/>
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.4" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.1-rc.114">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\AlmaIt.dotnet.Heroes.Client\AlmaIt.dotnet.Heroes.Client.csproj" />
-    <ProjectReference Include="..\AlmaIt.dotnet.Heroes.Shared\AlmaIt.dotnet.Heroes.Shared.csproj" />
+    <Reference Include="Dotnet.JsonIdentityProvider">
+      <HintPath>..\..\lib\Dotnet.JsonIdentityProvider.dll</HintPath>
+    </Reference>
   </ItemGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\AlmaIt.Dotnet.Heroes.Client\AlmaIt.Dotnet.Heroes.Client.csproj"/>
+    <ProjectReference Include="..\AlmaIt.Dotnet.Heroes.Shared\AlmaIt.Dotnet.Heroes.Shared.csproj"/>
+  </ItemGroup>
 </Project>

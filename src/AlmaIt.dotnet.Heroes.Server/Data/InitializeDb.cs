@@ -1,4 +1,4 @@
-namespace AlmaIt.dotnet.Heroes.Server.Data
+namespace AlmaIt.Dotnet.Heroes.Server.Data
 {
     using Microsoft.EntityFrameworkCore;
 

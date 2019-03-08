@@ -1,12 +1,15 @@
-namespace AlmaIt.dotnet.Heroes.Server.Controllers
+namespace AlmaIt.Dotnet.Heroes.Server.Controllers
 {
     using System.Linq;
     using System.Threading.Tasks;
-    using AlmaIt.dotnet.Heroes.Server.Data.AccessLayer.Interface;
-    using AlmaIt.dotnet.Heroes.Shared.Models;
+    using AlmaIt.Dotnet.Heroes.Shared.Models;
+    using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
+    using AlmaIt.Dotnet.Heroes.Shared.Helpers;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/[controller]")]
+    [Authorize]
     public class ComicSerieController : Controller
     {
         private readonly IComicSeriesAccessLayer comicSerieContext;
@@ -15,12 +18,12 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <summary>
         ///     ctro of <see cref="ComicSerieController"/>
         /// </summary>
-        /// <param name="ComicSerieContext">DI for comic series context</param>
-        /// <param name="ComicBookContext">DI for comic book context</param>
-        public ComicSerieController(IComicSeriesAccessLayer ComicSerieContext, IComicBookAccessLayer ComicBookContext)
+        /// <param name="comicSerieContext">DI for comic series context</param>
+        /// <param name="comicBookContext">DI for comic book context</param>
+        public ComicSerieController(IComicSeriesAccessLayer comicSerieContext, IComicBookAccessLayer comicBookContext)
         {
-            this.comicSerieContext = ComicSerieContext;
-            this.comicBookContext = ComicBookContext;
+            this.comicSerieContext = comicSerieContext;
+            this.comicBookContext = comicBookContext;
         }
 
         /// <summary>
@@ -29,14 +32,17 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <param name="id">Comic serie id to retrieve</param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [Authorize(Policy = "ReadOnlyUsers")]
         public async Task<IActionResult> GetAsync([FromQuery] int id)
         {
             var result = await this.comicSerieContext.GetAsync(id);
 
             if (result == null)
-                return NoContent();
+            {
+                return this.NoContent();
+            }
 
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -45,14 +51,17 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <param name="name">Comic serie name</param>
         /// <returns></returns>
         [HttpGet("{name}")]
+        [Authorize(Policy = "ReadOnlyUsers")]
         public IActionResult GetByName([FromQuery] string name)
         {
             var result = this.comicSerieContext.Where(x => x.Name.Contains(name)).FirstOrDefault();
 
             if (result == null)
-                return NoContent();
+            {
+                return this.NoContent();
+            }
 
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -60,14 +69,17 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult GetAll()
+        [Authorize(Policy = "ReadOnlyUsers")]
+        public IActionResult GetAll([FromQuery] string sortBy)
         {
-            var result = this.comicSerieContext.GetAllAsync().ToEnumerable();
+            var result = this.comicSerieContext.GetAllAsync().ToEnumerable().AsQueryable().Sort(sortBy);
 
             if (result == null)
-                return NoContent();
-                
-            return Ok(result);
+            {
+                return this.NoContent();
+            }
+
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -76,10 +88,11 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <param name="ComicSeries">Comic serie model to create</param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(Policy = "WriteUsers")]
         public async Task<IActionResult> AddAsync([FromBody] ComicSeries comicserie)
         {
             var result = await this.comicSerieContext.AddAsync(comicserie);
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -88,35 +101,37 @@ namespace AlmaIt.dotnet.Heroes.Server.Controllers
         /// <param name="id">Id of the comic serie to remove</param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [Authorize(Policy = "Administrators")]
         public async Task<IActionResult> RemoveAsync([FromRoute] int id)
         {
-            if(this.comicBookContext.Where(book => book.ComicSerieId == id).Any())
+            if (this.comicBookContext.Where(book => book.ComicSerieId == id).Any())
             {
-                return BadRequest($"Some comic book still reference this serie, therefor it cannot be deleted");
+                return this.BadRequest($"Some comic book still reference this serie, therefor it cannot be deleted");
             }
 
-            var comicSerie = await this.comicSerieContext.GetAsync(id);
+            var serie = await this.comicSerieContext.GetAsync(id);
 
-            if (comicSerie != null)
+            if (serie == null)
             {
-                var result = await this.comicSerieContext.RemoveAsync(comicSerie);
-                return Ok(result);
+                return this.NoContent();
             }
 
-            return NoContent();
+            var result = await this.comicSerieContext.RemoveAsync(serie);
+            return this.Ok(result);
+
         }
-
 
         /// <summary>
         ///     API endpoint use to update an existing comic serie
         /// </summary>
-        /// <param name="ComicSeries">Comic serie model to create</param>
+        /// <param name="comicSerie">Comic serie model to create</param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] ComicSeries comicserie)
+        [Authorize(Policy = "WriteUsers")]
+        public async Task<IActionResult> UpdateAsync([FromBody] ComicSeries comicSerie)
         {
-            var result = await this.comicSerieContext.UpdateAsync(comicserie);
-            return Ok(result);
+            var result = await this.comicSerieContext.UpdateAsync(comicSerie);
+            return this.Ok(result);
         }
     }
 }

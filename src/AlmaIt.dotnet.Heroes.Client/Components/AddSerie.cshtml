@@ -1,0 +1,34 @@
+@using AlmaIt.Dotnet.Heroes.Shared.Models
+
+@inherits AddSerieBase
+
+<div class="row">
+    <div class="col-md-3 px-3 py-3">
+        <button class="btn btn-primary btn-sm" type="button" onclick="@(() => this.ToggleShowAddSerie())">Add comics serie</button>
+    </div>
+</div>
+@if(this.showAddSeriePanel)
+{
+    <div class="alert alert-primary" role="alert">
+        <h3>Add Comic Book Serie</h3>
+        <div class="form-row">
+            <div class="col-4">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="Title">Title</span>
+                    </div>
+                    <input type="text" class="form-control" aria-describedby="Title" bind="@(this.comicSerie.Name)" />
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-auto">
+                <button class="btn btn-default" onclick="@(async () => await this.CreateComicSerie())">Save</button>
+            </div>
+        </div>
+    </div>
+}
+
+@functions {
+    
+}

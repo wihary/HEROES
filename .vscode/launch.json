@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/AlmaIt.dotnet.Heroes.Server/bin/Debug/netcoreapp2.1/AlmaIt.dotnet.Heroes.Server.dll",
+            "program": "${workspaceFolder}/src/AlmaIt.Dotnet.Heroes.Server/bin/Debug/netcoreapp2.1/AlmaIt.Dotnet.Heroes.Server.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/AlmaIt.dotnet.Heroes.Server",
+            "cwd": "${workspaceFolder}/src/AlmaIt.Dotnet.Heroes.Server",
             "stopAtEntry": false,
             "console": "integratedTerminal",
             "internalConsoleOptions": "openOnSessionStart",

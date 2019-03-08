@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/src/AlmaIt.dotnet.Heroes.Server/AlmaIt.dotnet.Heroes.Server.csproj"
+                "${workspaceFolder}/src/AlmaIt.Dotnet.Heroes.Server/AlmaIt.Dotnet.Heroes.Server.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

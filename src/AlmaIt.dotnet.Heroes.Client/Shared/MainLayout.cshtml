@@ -1,4 +1,4 @@
-﻿@inherits BlazorLayoutComponent
+﻿@inherits AlmaIt.Dotnet.Heroes.Client.Shared.MainLayoutBase
 
 <div class="sidebar">
     <NavMenu />
@@ -6,10 +6,10 @@
 
 <div class="main">
     <!-- <div class="top-row px-4">
-        <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
+        <a href="/login" target="_blank" class="ml-md-auto">Login</a>
     </div> -->
 
     <div class="content px-4 d-flex flex-column">
-        @Body
+        @(this.Body)
     </div>
 </div>

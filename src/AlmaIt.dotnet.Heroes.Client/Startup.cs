@@ -1,17 +1,27 @@
-using Microsoft.AspNetCore.Blazor.Builder;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace AlmaIt.dotnet.Heroes.Client
+namespace AlmaIt.Dotnet.Heroes.Client
 {
+    using AlmaIt.Dotnet.Heroes.Client.ViewModel;
+    using Blazor.Extensions.Storage;
+    using Microsoft.AspNetCore.Blazor.Builder;
+    using Microsoft.Extensions.DependencyInjection;
+
     public class Startup
     {
+        /// <summary>
+        /// Middleware configure method.
+        /// </summary>
+        /// <param name="app">Blazor application builder.</param>
+        public void Configure(IBlazorApplicationBuilder app)
+            => app.AddComponent<App>("app");
+
+        /// <summary>
+        /// Dependency injection configure method.
+        /// </summary>
+        /// <param name="services">Collection of services for dependency injection.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-        }
-
-        public void Configure(IBlazorApplicationBuilder app)
-        {
-            app.AddComponent<App>("app");
+            services.AddStorage();
+            services.AddSingleton<AppState>();
         }
     }
 }
