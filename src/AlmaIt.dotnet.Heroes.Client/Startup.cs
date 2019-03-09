@@ -5,6 +5,9 @@ namespace AlmaIt.Dotnet.Heroes.Client
     using Microsoft.AspNetCore.Blazor.Builder;
     using Microsoft.Extensions.DependencyInjection;
 
+    /// <summary>
+    /// Startup class of client.
+    /// </summary>
     public class Startup
     {
         /// <summary>

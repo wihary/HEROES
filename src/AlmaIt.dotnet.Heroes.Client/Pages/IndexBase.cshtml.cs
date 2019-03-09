@@ -2,23 +2,42 @@ namespace AlmaIt.Dotnet.Heroes.Client.Pages
 {
     using System;
     using System.Threading.Tasks;
+
     using AlmaIt.Dotnet.Heroes.Client.ViewModel;
     using AlmaIt.Dotnet.Heroes.Client.ViewModel.Enumeration;
+
     using Blazor.Extensions.Storage;
+
     using Microsoft.AspNetCore.Blazor.Components;
 
+    /// <summary>
+    /// Class of index page.
+    /// </summary>
     public class IndexBase : BlazorComponent
     {
+        /// <summary>
+        /// Gets the message of alert.
+        /// </summary>
+        protected string Message { get; private set; }
+
+        /// <summary>
+        /// Gets the type of alert.
+        /// </summary>
+        protected AlertType Type { get; private set; }
+
         [Inject]
-        public AppState AppState { get; set; }
+        private AppState AppState { get; set; }
 
         [Inject]
         private SessionStorage SessionStorage { get; set; }
 
-        protected string Message { get; set; }
-
-        protected AlertType Type { get; set; }
-
+        /// <summary>
+        /// Method invoked when the component is ready to start, having received its
+        /// initial parameters from its parent in the render tree.
+        /// Override this method if you will perform an asynchronous operation and
+        /// want the component to refresh when that operation is completed.
+        /// </summary>
+        /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing any asynchronous operation.</returns>
         protected override async Task OnInitAsync()
         {
             this.AppState.UserHasLoggedOut += async (s, e) => await this.UserLoggedOutAsync(s, e).ConfigureAwait(false);

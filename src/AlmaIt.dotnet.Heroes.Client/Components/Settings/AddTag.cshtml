@@ -9,7 +9,7 @@
     </div>
 </div>
 
-@if(this.IsVisible)
+@if(this.isVisible)
 {
     <div class="bfh-colorpicker" data-name="colorpicker1">
 </div>
@@ -30,7 +30,7 @@
                         <span class="input-group-text" id="Color">Color: </span>
                     </div>
                     <select class="form-control" aria-describedby="Color" style="background-color: @(this.tag.Argb.ToHtml())"  bind="@(this.tag.Argb)">
-                        @foreach (var color in this.AvailableColor)
+                        @foreach (var color in this.availableColor)
                         {
                             <option value="@color.ToArgb()" style="background-color: @color.ToHtml()"></option>
                         }

@@ -92,7 +92,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
         /// <param name="id">Id of the comic serie to remove.</param>
         /// <returns>Return the count of comic serie removed.</returns>
         [HttpDelete("{id}")]
-        [Authorize(Policy = "Administrators")]
+        [Authorize(Policy = "WriteUsers")]
         public async Task<IActionResult> RemoveAsync([FromRoute] int id)
         {
             if (this.comicBookContext.Where(book => book.ComicSerieId == id).Any())

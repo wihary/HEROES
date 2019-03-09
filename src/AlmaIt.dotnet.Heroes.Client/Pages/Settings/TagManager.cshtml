@@ -1,6 +1,5 @@
-@using AlmaIt.Dotnet.Heroes.Client.Components
 @using AlmaIt.Dotnet.Heroes.Client.Converters
-@using AlmaIt.Dotnet.Heroes.Client.ViewModel.Enumeration
+@using Ustilz.Extensions
 @page "/settings/tags"
 @inherits AlmaIt.Dotnet.Heroes.Client.Pages.Settings.TagManagerBase
 
@@ -16,7 +15,7 @@
 
 @if(!string.IsNullOrEmpty(this.Message))
 {
-    <div class="alert alert-@(this.Level.ToString()) alert-dismissible fade show" role="alert">
+    <div class="alert alert-@(this.level.GetEnumDescription()) alert-dismissible fade show" role="alert">
         @(this.Message)
     </div>
 }

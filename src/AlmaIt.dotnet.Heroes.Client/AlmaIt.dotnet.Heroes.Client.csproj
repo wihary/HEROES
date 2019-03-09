@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <OutputType>Exe</OutputType>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>latest</LangVersion>
     <BlazorLinkOnBuild>False</BlazorLinkOnBuild>
 	<CodeAnalysisRuleSet>AlmaIt.Dotnet.Heroes.Client.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -27,8 +27,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Blazor.Extensions.Storage" Version="0.1.7"/>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2"/>
+    <PackageReference Include="Blazor.Extensions.Storage" Version="0.1.7" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Ustilz.Extensions" Version="1.0.0" />
+    <PackageReference Include="Ustilz.UI" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Dotnet.JsonIdentityProvider">
@@ -36,6 +38,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AlmaIt.Dotnet.Heroes.Shared\AlmaIt.Dotnet.Heroes.Shared.csproj"/>
+    <ProjectReference Include="..\AlmaIt.Dotnet.Heroes.Shared\AlmaIt.Dotnet.Heroes.Shared.csproj" />
   </ItemGroup>
 </Project>
