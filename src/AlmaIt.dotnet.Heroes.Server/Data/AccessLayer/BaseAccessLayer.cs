@@ -44,7 +44,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer
         ///     Async Method that add new object in Db.
         /// </summary>
         /// <param name="model">Object model to add.</param>
-        /// <returns>Returns Id of newly created data object</returns>
+        /// <returns>Returns Id of newly created data object.</returns>
         public virtual async Task<TIdentity> AddAsync(TModel model)
         {
             var result = this.ModelSet.Add(model);
@@ -57,7 +57,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer
         ///     Async Method that add a range of new object in Db.
         /// </summary>
         /// <param name="models">Enumerable of objects model to add.</param>
-        /// <returns>Returns number of state entries written to the database</returns>
+        /// <returns>Returns number of state entries written to the database.</returns>
         public virtual async Task<int> AddRangeAsync(IEnumerable<TModel> models)
         {
             this.ModelSet.AddRange(models);
@@ -82,7 +82,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer
         /// <summary>
         ///     Async Method that return all data object existing in Db.
         /// </summary>
-        /// <returns>List of <typeparamref cref="TModel"/>.</returns>
+        /// <returns>Return a <see cref="IAsyncEnumerable{TModel}"/>.</returns>
         public virtual IAsyncEnumerable<TModel> GetAllAsync() => this.ModelSet.ToAsyncEnumerable();
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer
         ///     Method that retrieve data based on Filter Expression as parameter.
         /// </summary>
         /// <param name="filters">Linq expression use to filter the data.</param>
-        /// <returns>Return Queryable of <see cref="TModel"/>.</returns>
+        /// <returns>Return a <see cref="IQueryable{TModel}"/>.</returns>
         public IQueryable<TModel> Where(Expression<Func<TModel, bool>> filters)
             => this.ModelSet.Where(filters);
     }
