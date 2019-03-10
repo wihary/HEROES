@@ -29,8 +29,6 @@
     </PackageReference>
     <PackageReference Include="Blazor.Extensions.Storage" Version="0.1.7" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="Ustilz.Extensions" Version="1.0.0" />
-    <PackageReference Include="Ustilz.UI" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Dotnet.JsonIdentityProvider">

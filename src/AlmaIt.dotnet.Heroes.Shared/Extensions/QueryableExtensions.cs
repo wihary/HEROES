@@ -1,4 +1,4 @@
-namespace AlmaIt.Dotnet.Heroes.Shared.Helpers
+namespace AlmaIt.Dotnet.Heroes.Shared.Extensions
 {
     using System;
     using System.Linq;

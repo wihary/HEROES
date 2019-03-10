@@ -4,7 +4,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
     using System.Threading.Tasks;
 
     using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
-    using AlmaIt.Dotnet.Heroes.Shared.Helpers;
+    using AlmaIt.Dotnet.Heroes.Shared.Extensions;
     using AlmaIt.Dotnet.Heroes.Shared.Models;
 
     using Microsoft.AspNetCore.Authorization;
