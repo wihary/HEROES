@@ -5,10 +5,10 @@
 
 <div class="row">
     <div class="col-md-3 px-3 py-3">
-        <button class="btn btn-primary btn-sm" type="button" onclick="@(() => ToggleShowAddUser())">Add User</button>
+        <button class="btn btn-primary btn-sm" type="button" onclick="@(() => this.ToggleShowAddUser())">Add User</button>
     </div>
 </div>
-@if(this.ShowAddUserPanel)
+@if(this.showAddUserPanel)
 {
     <div class="alert alert-primary" role="alert">
         <h3>Add new User</h3>

@@ -1,4 +1,4 @@
-﻿namespace AlmaIt.Dotnet.Heroes.Client.Pages.Components
+﻿namespace AlmaIt.Dotnet.Heroes.Client.Components
 {
     using System;
     using System.Collections.Generic;
@@ -63,69 +63,6 @@
             this.StateHasChanged();
         }
 
-        /// <summary>Filter application method.</summary>
-        protected void ApplySearchFilter()
-        {
-            this.filteredComicSerie =
-                string.IsNullOrEmpty(this.Filter)
-                    ? this.FullComicSerieList
-                    : this.FullComicSerieList.Where(serie => serie.Name.Contains(this.Filter)).ToList();
-
-            this.StateHasChanged();
-            this.ShowPage(this.CurrentPage);
-        }
-
-        /// <summary>Method of removing a comic serie.</summary>
-        /// <param name="id">Comic serie's id.</param>
-        /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        protected async Task DeleteComicSerie(int id)
-        {
-            var result = await this.Http.DeleteAsync($"/api/ComicSerie/{id}");
-            if (result.StatusCode == HttpStatusCode.BadRequest)
-            {
-                this.SendMessage(await result.Content.ReadAsStringAsync());
-            }
-
-            await this.OnInitAsync();
-            this.StateHasChanged();
-        }
-
-        /// <summary>Editing method of a comic serie.</summary>
-        /// <param name="id">Comic serie's id.</param>
-        protected void EditComicSerie(int id)
-        {
-            this.IsSerieEditionEnabled = new KeyValuePair<int, bool>(id, true);
-
-            this.StateHasChanged();
-        }
-
-        /// <summary>Handler of collection changed.</summary>
-        /// <param name="success">Value indicating whether the collection has changed.</param>
-        /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        protected async Task OnCollectionChanged(bool success)
-        {
-            if (success)
-            {
-                await this.OnInitAsync();
-            }
-
-            this.StateHasChanged();
-        }
-
-        /// <summary>Handler of collection edited.</summary>
-        /// <param name="success">Value indicating whether the collection is edited.</param>
-        /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        protected async Task OnEditionCompleted(bool success)
-        {
-            if (success)
-            {
-                await this.OnInitAsync();
-            }
-
-            this.IsSerieEditionEnabled = new KeyValuePair<int, bool>(0, false);
-            this.StateHasChanged();
-        }
-
         /// <summary>
         ///     Method invoked when the component is ready to start, having received its initial parameters from its parent in the render tree. Override this method if you will perform
         ///     an asynchronous operation and want the component to refresh when that operation is completed.
@@ -152,6 +89,69 @@
 
             this.PagerMin = pageToShow - PagerSize <= 0 ? 1 : pageToShow - PagerSize;
             this.PagerMax = pageToShow + PagerSize >= this.TotalPages ? this.TotalPages : pageToShow + PagerSize;
+
+            this.StateHasChanged();
+        }
+
+        /// <summary>Filter application method.</summary>
+        protected void ApplySearchFilter()
+        {
+            this.filteredComicSerie =
+                string.IsNullOrEmpty(this.Filter)
+                    ? this.FullComicSerieList
+                    : this.FullComicSerieList.Where(serie => serie.Name.Contains(this.Filter)).ToList();
+
+            this.StateHasChanged();
+            this.ShowPage(this.CurrentPage);
+        }
+
+        /// <summary>Editing method of a comic serie.</summary>
+        /// <param name="id">Comic serie's id.</param>
+        protected void EditComicSerie(int id)
+        {
+            this.IsSerieEditionEnabled = new KeyValuePair<int, bool>(id, true);
+
+            this.StateHasChanged();
+        }
+
+        /// <summary>Method of removing a comic serie.</summary>
+        /// <param name="id">Comic serie's id.</param>
+        /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
+        protected async Task DeleteComicSerie(int id)
+        {
+            var result = await this.Http.DeleteAsync($"/api/ComicSerie/{id}");
+            if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                this.SendMessage(await result.Content.ReadAsStringAsync());
+            }
+
+            await this.OnInitAsync();
+            this.StateHasChanged();
+        }
+
+        /// <summary>Handler of collection edited.</summary>
+        /// <param name="success">Value indicating whether the collection is edited.</param>
+        /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
+        protected async Task OnEditionCompleted(bool success)
+        {
+            if (success)
+            {
+                await this.OnInitAsync();
+            }
+
+            this.IsSerieEditionEnabled = new KeyValuePair<int, bool>(0, false);
+            this.StateHasChanged();
+        }
+
+        /// <summary>Handler of collection changed.</summary>
+        /// <param name="success">Value indicating whether the collection has changed.</param>
+        /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
+        protected async Task OnCollectionChanged(bool success)
+        {
+            if (success)
+            {
+                await this.OnInitAsync();
+            }
 
             this.StateHasChanged();
         }

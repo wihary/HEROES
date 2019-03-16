@@ -1,51 +1,64 @@
+#pragma warning disable SA1401 // Fields should be private
 namespace AlmaIt.Dotnet.Heroes.Client.Pages
 {
-    using System;
-    using System.Net.Http;
     using System.Threading.Tasks;
+
     using AlmaIt.Dotnet.Heroes.Client.ViewModel;
     using AlmaIt.Dotnet.Heroes.Client.ViewModel.Enumeration;
+
     using Blazor.Extensions.Storage;
+
     using global::Dotnet.JsonIdentityProvider.IdentityProvider.Model;
+
     using Microsoft.AspNetCore.Blazor.Components;
     using Microsoft.AspNetCore.Blazor.Services;
-    using Microsoft.JSInterop;
 
+    /// <summary>Component represent the login page.</summary>
     public class LoginPageBase : BlazorComponent
     {
+        /// <summary>Gets or sets the user to log.</summary>
+        private protected CredentialModel User { get; set; } = new CredentialModel();
+
+        /// <summary>Gets the login message.</summary>
+        private protected string LoginMessage { get; private set; }
+
+        /// <summary>Gets or sets a value indicating whether the login is successful.</summary>
+        private protected bool IsLoginSucess { get; set; }
+
+        /// <summary>Gets the type of alert.</summary>
+        private protected AlertType GetAlertType => this.IsLoginSucess ? AlertType.Success : AlertType.Danger;
 
         [Inject]
-        protected AppState AppState { get; set; }
+        private AppState AppState { get; set; }
 
         [Inject]
-        protected IUriHelper UriHelper { get; set; }
+        private IUriHelper UriHelper { get; set; }
 
         [Inject]
-        protected SessionStorage SessionStorage { get; set; }
+        private SessionStorage SessionStorage { get; set; }
 
-        public CredentialModel User { get; set; } = new CredentialModel();
-
-        public string LoginMessage { get; set; }
-
-        public bool IsLoginSucess { get; set; }
-
-        public AlertType GetAlertType { get => this.IsLoginSucess ? AlertType.success : AlertType.danger; }
-
+        /// <summary>
+        /// Method to sign-in User.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         protected async Task SignIn()
         {
-            var response = await this.AppState.LoginAsync(this.User);
+            var (success, message) = await this.AppState.LoginAsync(this.User);
 
-            this.LoginMessage = response.Message;
-            this.IsLoginSucess = response.Success;
+            this.LoginMessage = message;
+            this.IsLoginSucess = success;
 
             if (this.IsLoginSucess)
             {
-                await this.SessionStorage.SetItem<string>("message", this.LoginMessage);
-                await this.SessionStorage.SetItem<string>("messageType", this.GetAlertType.ToString());
+                await this.SessionStorage.SetItem("message", this.LoginMessage);
+                await this.SessionStorage.SetItem("messageType", this.GetAlertType.ToString());
                 this.UriHelper.NavigateTo("/home");
             }
             else
-            { this.StateHasChanged(); }
+            {
+                this.StateHasChanged();
+            }
         }
     }
 }
+#pragma warning restore SA1401 // Fields should be private

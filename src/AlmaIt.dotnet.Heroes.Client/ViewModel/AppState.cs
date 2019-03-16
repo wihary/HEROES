@@ -1,34 +1,39 @@
 namespace AlmaIt.Dotnet.Heroes.Client.ViewModel
 {
+    using System;
     using System.Net.Http;
     using System.Net.Http.Headers;
-    using System.Threading.Tasks;
-    using Microsoft.JSInterop;
-    using Blazor.Extensions.Storage;
-    using System;
-    using AlmaIt.Dotnet.Heroes.Shared.Business;
-    using Microsoft.AspNetCore.Blazor;
-    using Newtonsoft.Json;
     using System.Text;
+    using System.Threading.Tasks;
+
     using AlmaIt.Dotnet.Heroes.Client.ViewModel.Enumeration;
-    using Microsoft.AspNetCore.Blazor.Services;
+    using AlmaIt.Dotnet.Heroes.Shared.Business;
+
+    using Blazor.Extensions.Storage;
+
     using global::Dotnet.JsonIdentityProvider.IdentityProvider.Model;
 
+    using Microsoft.AspNetCore.Blazor.Services;
+
+    using Newtonsoft.Json;
+
     /// <summary>
-    ///     This class is use as an authentification manager for the client
-    ///     it contains the loggedIn status and all the methods need to login and logout with the server
+    /// This class is use as an authentification manager for the client it contains the loggedIn status and all the methods need to login and logout with the server.
     /// </summary>
-    public class AppState
+    public sealed class AppState
     {
         private readonly HttpClient httpClient;
+
         private readonly SessionStorage sessionStorage;
+
         private readonly IUriHelper uriHelper;
 
-        public bool IsLoggedin { get; private set; }
-
-        public event EventHandler UserHasLoggedIn;
-        public event EventHandler UserHasLoggedOut;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppState"/> class.
+        /// </summary>
+        /// <param name="httpClient">Http client.</param>
+        /// <param name="localStorage">Session storage.</param>
+        /// <param name="uriHelper">Uri helper.</param>
         public AppState(HttpClient httpClient, SessionStorage localStorage, IUriHelper uriHelper)
         {
             this.httpClient = httpClient;
@@ -37,9 +42,22 @@ namespace AlmaIt.Dotnet.Heroes.Client.ViewModel
         }
 
         /// <summary>
-        ///     Simple method that checks if there is a JWT avaible and if its valid
+        /// Event represent when a user log in.
         /// </summary>
-        /// <value></value>
+        public event EventHandler UserHasLoggedIn;
+
+        /// <summary>
+        /// Event represent when a user log out.
+        /// </summary>
+        public event EventHandler UserHasLoggedOut;
+
+        /// <summary>
+        /// Gets a value indicating whether the user is log.
+        /// </summary>
+        public bool IsLoggedIn { get; private set; }
+
+        /// <summary>Simple method that checks if there is a JWT avaible and if its valid.</summary>
+        /// <returns>Return a value indicating whether the user is log in.</returns>
         public async Task<bool> IsLoggedInAsync()
         {
             try
@@ -48,21 +66,27 @@ namespace AlmaIt.Dotnet.Heroes.Client.ViewModel
                 if (tokenInfo == null || string.IsNullOrEmpty(tokenInfo.Token) || tokenInfo.Expired.CompareTo(DateTime.Now) <= 0)
                 {
                     this.CleanAuthorizationHeader();
-                    this.IsLoggedin = false;
+                    this.IsLoggedIn = false;
                 }
                 else
                 {
                     await this.SetAuthorizationHeader().ConfigureAwait(false);
-                    this.IsLoggedin = true;
+                    this.IsLoggedIn = true;
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
-            return this.IsLoggedin;
+
+            return this.IsLoggedIn;
         }
 
+        /// <summary>
+        /// Method to log a user.
+        /// </summary>
+        /// <param name="user">User to log.</param>
+        /// <returns>Return a <see cref="Tuple"/> that indicating whether the user is authenticate and a message.</returns>
         public async Task<(bool Success, string Message)> LoginAsync(CredentialModel user)
         {
             try
@@ -71,23 +95,23 @@ namespace AlmaIt.Dotnet.Heroes.Client.ViewModel
                 var result = await this.httpClient.PostAsync("/api/auth/token", jsonContent);
 
                 if (!result.IsSuccessStatusCode)
-                { return (false, result.ReasonPhrase); }
+                {
+                    return (false, result.ReasonPhrase);
+                }
 
                 // Get token from API response, add username to it backing info into session storage
                 var token = JsonConvert.DeserializeObject<TokenInfo>(await result.Content.ReadAsStringAsync());
                 token.UserName = user.UserName;
-                await this.sessionStorage.SetItem<TokenInfo>("authToken", token);
+                await this.sessionStorage.SetItem("authToken", token);
 
                 // Ensure that everything is set correctly, including headers with bearer authentification
-                if (await this.IsLoggedInAsync().ConfigureAwait(false))
+                if (!await this.IsLoggedInAsync().ConfigureAwait(false))
                 {
-                    this.OnUserLoggedIn(EventArgs.Empty);
-                    return (true, $"Successfully logged in, Welcome {token.UserName} !");
+                    return (false, "Session storage error occured, token could not be saved !");
                 }
-                else
-                {
-                    return (false, $"Session storage error occured, token could not be saved !");
-                }
+
+                this.OnUserLoggedIn(EventArgs.Empty);
+                return (true, $"Successfully logged in, Welcome {token.UserName} !");
             }
             catch (Exception ex)
             {
@@ -96,26 +120,42 @@ namespace AlmaIt.Dotnet.Heroes.Client.ViewModel
             }
         }
 
+        /// <summary>
+        /// Method to log out a user.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public async Task Logout()
         {
             await this.sessionStorage.RemoveItem("authToken");
 
             if (!await this.IsLoggedInAsync().ConfigureAwait(false))
             {
-                await this.sessionStorage.SetItem<string>("message", "Your are now disconnected !");
-                await this.sessionStorage.SetItem<string>("messageType", AlertType.success.ToString());
+                await this.sessionStorage.SetItem("message", "Your are now disconnected !");
+                await this.sessionStorage.SetItem("messageType", AlertType.Success.ToString());
 
                 this.OnUserLoggedOut(EventArgs.Empty);
             }
             else
             {
-                await this.sessionStorage.SetItem<string>("message", "Logout failed for unknow reason :'(");
-                await this.sessionStorage.SetItem<string>("messageType", AlertType.warning.ToString());
+                await this.sessionStorage.SetItem("message", "Logout failed for unknow reason :'(");
+                await this.sessionStorage.SetItem("messageType", AlertType.Warning.ToString());
 
                 this.OnUserLoggedOut(EventArgs.Empty);
             }
 
             this.uriHelper.NavigateTo("/");
+        }
+
+        private void OnUserLoggedIn(EventArgs e) => this.UserHasLoggedIn?.Invoke(this, e);
+
+        private void OnUserLoggedOut(EventArgs e) => this.UserHasLoggedOut?.Invoke(this, e);
+
+        private void CleanAuthorizationHeader()
+        {
+            if (this.httpClient.DefaultRequestHeaders.Contains("Authorization"))
+            {
+                this.httpClient.DefaultRequestHeaders.Remove("Authorization");
+            }
         }
 
         private async Task SetAuthorizationHeader()
@@ -125,24 +165,6 @@ namespace AlmaIt.Dotnet.Heroes.Client.ViewModel
                 var tokenInfo = await this.sessionStorage.GetItem<TokenInfo>("authToken");
                 this.httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenInfo.Token);
             }
-        }
-
-        private void CleanAuthorizationHeader()
-        {
-            if (this.httpClient.DefaultRequestHeaders.Contains("Authorization"))
-            { this.httpClient.DefaultRequestHeaders.Remove("Authorization"); }
-        }
-
-        protected virtual void OnUserLoggedIn(EventArgs e)
-        {
-            if (this.UserHasLoggedIn != null)
-            { this.UserHasLoggedIn(this, e); }
-        }
-
-        protected virtual void OnUserLoggedOut(EventArgs e)
-        {
-            if (this.UserHasLoggedOut != null)
-            { this.UserHasLoggedOut(this, e); }
         }
     }
 }

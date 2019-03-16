@@ -1,28 +1,30 @@
-using System;
-using System.Drawing;
-
 namespace AlmaIt.Dotnet.Heroes.Client.Converters
 {
+    using System.Drawing;
+
+    /// <summary>
+    /// Class of colors management.
+    /// </summary>
     public static class ColorManager
     {
+        /// <summary>
+        /// Extension method that convert <see cref="Color"/> to html code.
+        /// </summary>
+        /// <param name="color">Color to convert.</param>
+        /// <returns>Return the html color code corresponding to Color.</returns>
         public static string ToHtml(this Color color)
         {
-            string colorString = String.Empty;
+            var colorString = string.Empty;
 
             if (color.IsEmpty)
-            { return colorString; }
+            {
+                return colorString;
+            }
 
             if (color.IsNamedColor)
             {
-                if (color == Color.LightGray)
-                {
-                    // special case due to mismatch between Html and enum spelling
-                    colorString = "LightGrey";
-                }
-                else
-                {
-                    colorString = color.Name;
-                }
+                // special case due to mismatch between Html and enum spelling
+                colorString = color == Color.LightGray ? "LightGrey" : color.Name;
             }
             else
             {
@@ -32,10 +34,12 @@ namespace AlmaIt.Dotnet.Heroes.Client.Converters
             return colorString;
         }
 
+        /// <summary>
+        /// Extension method to convert <see cref="int"/> rgb color to html code color.
+        /// </summary>
+        /// <param name="argb">RGB representation of color.</param>
+        /// <returns>Return the html color code corresponding to Color.</returns>
         public static string ToHtml(this int argb)
-        {
-            var color = Color.FromArgb(argb);
-            return color.ToHtml();
-        }
+            => Color.FromArgb(argb).ToHtml();
     }
 }
