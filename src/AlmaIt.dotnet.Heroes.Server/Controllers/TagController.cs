@@ -4,9 +4,11 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
     using System.Threading.Tasks;
     using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
     using AlmaIt.Dotnet.Heroes.Shared.Models;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/[controller]")]
+    [Authorize]
     public class TagController : Controller
     {
         private readonly IObjectTagAccessLayer objectTagAccess;
@@ -26,6 +28,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
         /// <param name="id">Object Tags id to retrieve</param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [Authorize(Policy = "ReadOnlyUsers")]
         public async Task<IActionResult> GetAsync([FromQuery] int id)
         {
             var result = await this.objectTagAccess.GetAsync(id);
@@ -42,6 +45,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
         /// <param name="name">Object Tags name</param>
         /// <returns></returns>
         [HttpGet("{name}")]
+        [Authorize(Policy = "ReadOnlyUsers")]
         public IActionResult GetByName([FromQuery] string name)
         {
             var result = this.objectTagAccess.Where(x => x.Name.Contains(name)).FirstOrDefault();
@@ -57,6 +61,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Policy = "ReadOnlyUsers")]
         public IActionResult GetAll()
         {
             var result = this.objectTagAccess.GetAllAsync().ToEnumerable();
@@ -70,9 +75,10 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
         /// <summary>
         ///     API endpoint use to create a new Object Tags
         /// </summary>
-        /// <param name="ComicSeries">Object Tags model to create</param>
+        /// <param name="tag">Object Tags model to create</param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(Policy = "WriteUsers")]
         public async Task<IActionResult> AddAsync([FromBody] ObjectTag tag)
         {
             if (tag == null)
@@ -88,6 +94,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
         /// <param name="id">Id of the Object Tags to remove</param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [Authorize(Policy = "Administrators")]
         public async Task<IActionResult> RemoveAsync([FromRoute] int id)
         {
             var tagObject = await this.objectTagAccess.GetAsync(id);
@@ -105,9 +112,10 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
         /// <summary>
         ///     API endpoint use to update an existing Object Tags
         /// </summary>
-        /// <param name="ComicSeries">Object Tags model to create</param>
+        /// <param name="tag">Object Tags model to create</param>
         /// <returns></returns>
         [HttpPut]
+        [Authorize(Policy = "WriteUsers")]
         public async Task<IActionResult> UpdateAsync([FromBody] ObjectTag tag)
         {
             var result = await this.objectTagAccess.UpdateAsync(tag);
