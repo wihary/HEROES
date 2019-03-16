@@ -13,7 +13,7 @@ namespace AlmaIt.Dotnet.Heroes.Client.Pages
     using Microsoft.AspNetCore.Blazor.Components;
     using Microsoft.AspNetCore.Blazor.Services;
 
-    /// <summary>Componenent represent the login page.</summary>
+    /// <summary>Component represent the login page.</summary>
     public class LoginPageBase : BlazorComponent
     {
         /// <summary>Gets or sets the user to log.</summary>
@@ -38,7 +38,7 @@ namespace AlmaIt.Dotnet.Heroes.Client.Pages
         private SessionStorage SessionStorage { get; set; }
 
         /// <summary>
-        /// Method to signin User.
+        /// Method to sign-in User.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         protected async Task SignIn()

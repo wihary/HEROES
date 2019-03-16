@@ -17,7 +17,9 @@ namespace AlmaIt.Dotnet.Heroes.Client.ViewModel
 
     using Newtonsoft.Json;
 
-    /// <summary>This class is use as an authentification manager for the client it contains the loggedIn status and all the methods need to login and logout with the server.</summary>
+    /// <summary>
+    /// This class is use as an authentification manager for the client it contains the loggedIn status and all the methods need to login and logout with the server.
+    /// </summary>
     public sealed class AppState
     {
         private readonly HttpClient httpClient;
@@ -52,7 +54,7 @@ namespace AlmaIt.Dotnet.Heroes.Client.ViewModel
         /// <summary>
         /// Gets a value indicating whether the user is log.
         /// </summary>
-        public bool IsLoggedin { get; private set; }
+        public bool IsLoggedIn { get; private set; }
 
         /// <summary>Simple method that checks if there is a JWT avaible and if its valid.</summary>
         /// <returns>Return a value indicating whether the user is log in.</returns>
@@ -64,12 +66,12 @@ namespace AlmaIt.Dotnet.Heroes.Client.ViewModel
                 if (tokenInfo == null || string.IsNullOrEmpty(tokenInfo.Token) || tokenInfo.Expired.CompareTo(DateTime.Now) <= 0)
                 {
                     this.CleanAuthorizationHeader();
-                    this.IsLoggedin = false;
+                    this.IsLoggedIn = false;
                 }
                 else
                 {
                     await this.SetAuthorizationHeader().ConfigureAwait(false);
-                    this.IsLoggedin = true;
+                    this.IsLoggedIn = true;
                 }
             }
             catch (Exception ex)
@@ -77,7 +79,7 @@ namespace AlmaIt.Dotnet.Heroes.Client.ViewModel
                 Console.WriteLine(ex.ToString());
             }
 
-            return this.IsLoggedin;
+            return this.IsLoggedIn;
         }
 
         /// <summary>
