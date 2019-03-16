@@ -44,7 +44,7 @@ else
         @foreach (var serie in this.ViewableComicSerie)
         {
             <tr>
-                <td>@serie.Name</td>
+                <td><a href="/overview/serie/@serie.Id">@serie.Name</a></td>
                 <td>@serie.IssuesCount</td>
                 <td>
                     <button class="btn btn-default" onclick="@(() => this.EditComicSerie(serie.Id))">Edit</button> |
