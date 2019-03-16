@@ -1,4 +1,4 @@
-@using AlmaIt.Dotnet.Heroes.Client.ViewModel.Enumeration
+@inherits AlmaIt.Dotnet.Heroes.Client.ViewModel.Components.TopAlertMessageBase
 @using AlmaIt.Dotnet.Heroes.Shared.Extensions
 
 @if(!string.IsNullOrEmpty(this.Message))
@@ -6,12 +6,4 @@
     <div class="alert alert-@this.AlertType.GetEnumDescription() alert-dismissible fade show" role="alert">
         @this.Message
     </div>
-}
-
-@functions {
-    [Parameter]
-    protected string Message { get; set; }
-
-    [Parameter]
-    protected AlertType AlertType { get; set; }
 }
