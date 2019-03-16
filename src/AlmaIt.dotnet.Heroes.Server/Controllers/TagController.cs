@@ -19,31 +19,6 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
         public TagController(IObjectTagAccessLayer objectTagAccess)
             => this.objectTagAccess = objectTagAccess;
 
-        /// <summary>API endpoint use to create a new Object Tags.</summary>
-        /// <param name="tag">Object Tags model to create.</param>
-        /// <returns>Returns Id of newly created data object.</returns>
-        [HttpPost]
-        public async Task<IActionResult> AddAsync([FromBody] ObjectTag tag)
-        {
-            if (tag == null)
-            {
-                return this.BadRequest();
-            }
-
-            var result = await this.objectTagAccess.AddAsync(tag);
-            return this.Ok(result);
-        }
-
-        /// <summary>API endpoint use to retrieve all Object Tagss info.</summary>
-        /// <returns>Return all comic tags.</returns>
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var result = this.objectTagAccess.GetAllAsync().ToEnumerable();
-
-            return result == null ? (IActionResult)this.NoContent() : this.Ok(result);
-        }
-
         /// <summary>API endpoint use to retrieve a Object Tags info.</summary>
         /// <param name="id">Object Tags id to retrieve.</param>
         /// <returns>Return a tag corresponding to the id.</returns>
@@ -64,6 +39,31 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
             var result = this.objectTagAccess.Where(x => x.Name.Contains(name)).FirstOrDefault();
 
             return result == null ? (IActionResult)this.NoContent() : this.Ok(result);
+        }
+
+        /// <summary>API endpoint use to retrieve all Object Tagss info.</summary>
+        /// <returns>Return all comic tags.</returns>
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var result = this.objectTagAccess.GetAllAsync().ToEnumerable();
+
+            return result == null ? (IActionResult)this.NoContent() : this.Ok(result);
+        }
+
+        /// <summary>API endpoint use to create a new Object Tags.</summary>
+        /// <param name="tag">Object Tags model to create.</param>
+        /// <returns>Returns Id of newly created data object.</returns>
+        [HttpPost]
+        public async Task<IActionResult> AddAsync([FromBody] ObjectTag tag)
+        {
+            if (tag == null)
+            {
+                return this.BadRequest();
+            }
+
+            var result = await this.objectTagAccess.AddAsync(tag);
+            return this.Ok(result);
         }
 
         /// <summary>API endpoint to remove a Object Tags by its Id.</summary>

@@ -10,17 +10,17 @@ namespace AlmaIt.Dotnet.Heroes.Server.Data
         /// <summary>Gets or sets the whole dataset of comic books.</summary>
         public DbSet<ComicBook> ComicBooks { get; set; }
 
-        /// <summary>Gets or sets the whole dataset of associated comic books and tags.</summary>
-        public DbSet<ComicBookTags> ComicBookTags { get; set; }
-
         /// <summary>Gets or sets the whole dataset of comic series.</summary>
         public DbSet<ComicSeries> ComicSeries { get; set; }
+
+        /// <summary>Gets or sets the whole dataset of available Tags.</summary>
+        public DbSet<ObjectTag> ObjectTag { get; set; }
 
         /// <summary>Gets or sets the whole dataset of associated comic series and tags.</summary>
         public DbSet<ComicSeriesTags> ComicSerieTags { get; set; }
 
-        /// <summary>Gets or sets the whole dataset of available Tags.</summary>
-        public DbSet<ObjectTag> ObjectTag { get; set; }
+        /// <summary>Gets or sets the whole dataset of associated comic books and tags.</summary>
+        public DbSet<ComicBookTags> ComicBookTags { get; set; }
 
         /// <summary>Override This method is called for each instance of the context that is created.</summary>
         /// <param name="optionsBuilder">

@@ -32,26 +32,6 @@ namespace AlmaIt.Dotnet.Heroes.Server
         /// </summary>
         public IConfiguration Configuration { get; }
 
-        /// <summary>This method gets called by the runtime. Use this method to configure the HTTP request pipeline.</summary>
-        /// <param name="app">The application builder, where middleware are registered.</param>
-        /// <param name="env">Object which represent the environment.</param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            app.UseResponseCompression();
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHsts();
-            app.UseHttpsRedirection();
-            app.UseAuthentication();
-            app.UseMvc(routes => { routes.MapRoute("default", "{controller}/{action}/{id?}"); });
-
-            app.UseBlazor<Client.Startup>();
-        }
-
         /// <summary>
         ///     This method gets called by the runtime.
         ///     Use this method to add services to the container.
@@ -93,6 +73,26 @@ namespace AlmaIt.Dotnet.Heroes.Server
 
             // Add data context and Db provider based on entity core
             services.AddData();
+        }
+
+        /// <summary>This method gets called by the runtime. Use this method to configure the HTTP request pipeline.</summary>
+        /// <param name="app">The application builder, where middleware are registered.</param>
+        /// <param name="env">Object which represent the environment.</param>
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            app.UseResponseCompression();
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseHsts();
+            app.UseHttpsRedirection();
+            app.UseAuthentication();
+            app.UseMvc(routes => { routes.MapRoute("default", "{controller}/{action}/{id?}"); });
+
+            app.UseBlazor<Client.Startup>();
         }
     }
 }

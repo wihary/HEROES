@@ -18,12 +18,12 @@ namespace AlmaIt.Dotnet.Heroes.Client.Pages
         /// <summary>
         /// Gets the message of alert.
         /// </summary>
-        protected string Message { get; private set; }
+        private protected string Message { get; private set; }
 
         /// <summary>
         /// Gets the type of alert.
         /// </summary>
-        protected AlertType Type { get; private set; }
+        private protected AlertType Type { get; private set; }
 
         [Inject]
         private AppState AppState { get; set; }

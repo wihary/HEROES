@@ -31,15 +31,6 @@ namespace AlmaIt.Dotnet.Heroes.Client.Components.Settings
         [Parameter]
         private Func<bool, Task> TagCreated { get; set; }
 
-        /// <summary>Method that send a post request to server with Tag object in order to create it.</summary>
-        /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        protected async Task CreateTag()
-        {
-            await this.Http.SendJsonAsync(HttpMethod.Post, "/api/tag", this.tag);
-            await this.TagCreated(true).ConfigureAwait(false);
-            this.StateHasChanged();
-        }
-
         /// <summary>Method invoked when the component is ready to start, having received its initial parameters from its parent in the render tree.</summary>
         protected override void OnInit()
         {
@@ -47,6 +38,15 @@ namespace AlmaIt.Dotnet.Heroes.Client.Components.Settings
             {
                 this.availableColor.Add(Color.FromName(knownColor));
             }
+        }
+
+        /// <summary>Method that send a post request to server with Tag object in order to create it.</summary>
+        /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
+        protected async Task CreateTag()
+        {
+            await this.Http.SendJsonAsync(HttpMethod.Post, "/api/tag", this.tag);
+            await this.TagCreated(true).ConfigureAwait(false);
+            this.StateHasChanged();
         }
 
         /// <summary>Method to toggle component visibility.</summary>

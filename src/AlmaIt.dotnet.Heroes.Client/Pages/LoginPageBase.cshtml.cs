@@ -1,3 +1,4 @@
+#pragma warning disable SA1401 // Fields should be private
 namespace AlmaIt.Dotnet.Heroes.Client.Pages
 {
     using System.Threading.Tasks;
@@ -15,26 +16,26 @@ namespace AlmaIt.Dotnet.Heroes.Client.Pages
     /// <summary>Componenent represent the login page.</summary>
     public class LoginPageBase : BlazorComponent
     {
-        /// <summary>Gets the type of alert.</summary>
-        private protected AlertType GetAlertType => this.IsLoginSucess ? AlertType.Success : AlertType.Danger;
-
-        /// <summary>Gets or sets a value indicating whether the login is successful.</summary>
-        private protected bool IsLoginSucess { get; set; }
+        /// <summary>Gets or sets the user to log.</summary>
+        private protected CredentialModel User { get; set; } = new CredentialModel();
 
         /// <summary>Gets the login message.</summary>
         private protected string LoginMessage { get; private set; }
 
-        /// <summary>Gets or sets the user to log.</summary>
-        private protected CredentialModel User { get; set; } = new CredentialModel();
+        /// <summary>Gets or sets a value indicating whether the login is successful.</summary>
+        private protected bool IsLoginSucess { get; set; }
+
+        /// <summary>Gets the type of alert.</summary>
+        private protected AlertType GetAlertType => this.IsLoginSucess ? AlertType.Success : AlertType.Danger;
 
         [Inject]
         private AppState AppState { get; set; }
 
         [Inject]
-        private SessionStorage SessionStorage { get; set; }
+        private IUriHelper UriHelper { get; set; }
 
         [Inject]
-        private IUriHelper UriHelper { get; set; }
+        private SessionStorage SessionStorage { get; set; }
 
         /// <summary>
         /// Method to signin User.
@@ -60,3 +61,4 @@ namespace AlmaIt.Dotnet.Heroes.Client.Pages
         }
     }
 }
+#pragma warning restore SA1401 // Fields should be private

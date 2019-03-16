@@ -31,29 +31,6 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
             this.comicBookContext = comicBookContext;
         }
 
-        /// <summary>API endpoint use to create a new comic serie.</summary>
-        /// <param name="comicSerie">Comic serie model to create.</param>
-        /// <returns>Return the id of added object.</returns>
-        [HttpPost]
-        [Authorize(Policy = "WriteUsers")]
-        public async Task<IActionResult> AddAsync([FromBody] ComicSeries comicSerie)
-        {
-            var result = await this.comicSerieContext.AddAsync(comicSerie);
-            return this.Ok(result);
-        }
-
-        /// <summary>API endpoint use to retrieve all comic series info.</summary>
-        /// <param name="sortBy">String defini by which field the list will be sort.</param>
-        /// <returns>Return all comic serie sorted.</returns>
-        [HttpGet]
-        [Authorize(Policy = "ReadOnlyUsers")]
-        public IActionResult GetAll([FromQuery] string sortBy)
-        {
-            var result = this.comicSerieContext.GetAllAsync().ToEnumerable().AsQueryable().Sort(sortBy);
-
-            return result == null ? (IActionResult)this.NoContent() : this.Ok(result);
-        }
-
         /// <summary>API endpoint use to retrieve a comic serie info.</summary>
         /// <param name="id">Comic serie id to retrieve.</param>
         /// <returns>Return a comic serie corresponding to the id.</returns>
@@ -85,6 +62,29 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
                 return this.NoContent();
             }
 
+            return this.Ok(result);
+        }
+
+        /// <summary>API endpoint use to retrieve all comic series info.</summary>
+        /// <param name="sortBy">String defini by which field the list will be sort.</param>
+        /// <returns>Return all comic serie sorted.</returns>
+        [HttpGet]
+        [Authorize(Policy = "ReadOnlyUsers")]
+        public IActionResult GetAll([FromQuery] string sortBy)
+        {
+            var result = this.comicSerieContext.GetAllAsync().ToEnumerable().AsQueryable().Sort(sortBy);
+
+            return result == null ? (IActionResult)this.NoContent() : this.Ok(result);
+        }
+
+        /// <summary>API endpoint use to create a new comic serie.</summary>
+        /// <param name="comicSerie">Comic serie model to create.</param>
+        /// <returns>Return the id of added object.</returns>
+        [HttpPost]
+        [Authorize(Policy = "WriteUsers")]
+        public async Task<IActionResult> AddAsync([FromBody] ComicSeries comicSerie)
+        {
+            var result = await this.comicSerieContext.AddAsync(comicSerie);
             return this.Ok(result);
         }
 

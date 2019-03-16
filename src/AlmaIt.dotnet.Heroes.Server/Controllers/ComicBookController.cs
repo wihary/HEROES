@@ -39,66 +39,6 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
             this.objectTagLayer = objectTagLayer;
         }
 
-        /// <summary>API endpoint use to create a new comic book.</summary>
-        /// <param name="comicBook">Comic book model to create.</param>
-        /// <returns>Returns Id of newly created data object.</returns>
-        [HttpPost]
-        [Authorize(Policy = "WriteUsers")]
-        public async Task<IActionResult> AddAsync([FromBody] ComicBook comicBook)
-        {
-            var tagList = new List<ObjectTag>(comicBook.Tags);
-            comicBook.RelatedTags = new List<ComicBookTags>();
-
-            foreach (var linkedTag in tagList)
-            {
-                comicBook.RelatedTags.Add(
-                    new ComicBookTags
-                    {
-                        Tag = await this.objectTagLayer.GetAsync(linkedTag.Id),
-                    });
-            }
-
-            var result = await this.comicBookLayer.AddAsync(comicBook);
-            return this.Ok(result);
-        }
-
-        /// <summary>API endpoint use to retrieve all comic books info.</summary>
-        /// <param name="sortBy">String defini by which field the list will be sort.</param>
-        /// <returns>Return all comic book sorted.</returns>
-        [HttpGet]
-        [Authorize(Policy = "ReadOnlyUsers")]
-        public async Task<IActionResult> GetAll([FromQuery] string sortBy)
-        {
-            var result = await this.comicBookLayer.GetAllComcisAndSerieInfo().ConfigureAwait(false);
-
-            if (result == null)
-            {
-                return this.NoContent();
-            }
-
-            return this.Ok(result.AsQueryable().Sort(sortBy));
-        }
-
-        /// <summary>API endpoint use to retrieve all comic books info.</summary>
-        /// <param name="page">Page to return.</param>
-        /// <param name="size">Size of the page.</param>
-        /// <param name="sortBy">String defini by which field the list will be sort.</param>
-        /// <returns>Return paginated comic book sorted.</returns>
-        [HttpGet("{page}/{size}")]
-        [Authorize(Policy = "ReadOnlyUsers")]
-        public async Task<IActionResult> GetAllAsync(int page, int size, [FromQuery] string sortBy)
-        {
-            var result = await this.comicBookLayer.GetAllComcisAndSerieInfo().ConfigureAwait(false);
-
-            if (result == null)
-            {
-                return this.NoContent();
-            }
-
-            var sortedList = result.AsQueryable().Sort(sortBy);
-            return this.Ok(BuildPagedResponse(sortedList, page, size));
-        }
-
         /// <summary>API endpoint use to retrieve a comic book info.</summary>
         /// <param name="id">Comic book id to retrieve.</param>
         /// <returns>Return a comic book corresponding to the id.</returns>
@@ -121,6 +61,23 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
             var result = this.comicBookLayer.Where(x => x.Title.Contains(name)).FirstOrDefault();
 
             return result == null ? (IActionResult)this.NoContent() : this.Ok(result);
+        }
+
+        /// <summary>API endpoint use to retrieve all comic books info.</summary>
+        /// <param name="sortBy">String defini by which field the list will be sort.</param>
+        /// <returns>Return all comic book sorted.</returns>
+        [HttpGet]
+        [Authorize(Policy = "ReadOnlyUsers")]
+        public async Task<IActionResult> GetAll([FromQuery] string sortBy)
+        {
+            var result = await this.comicBookLayer.GetAllComcisAndSerieInfo().ConfigureAwait(false);
+
+            if (result == null)
+            {
+                return this.NoContent();
+            }
+
+            return this.Ok(result.AsQueryable().Sort(sortBy));
         }
 
         /// <summary>API endpoint use to retrieve all comic books info.</summary>
@@ -156,7 +113,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
             if (!string.IsNullOrEmpty(filter))
             {
                 result = result.Where(book => book.Title.Contains(filter, StringComparison.InvariantCultureIgnoreCase) ||
-                                                    book.ComicSerie.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                                              book.ComicSerie.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase)).ToList();
             }
 
             if (!result.Any())
@@ -166,6 +123,49 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
 
             var sortedList = result.AsQueryable().Sort(sortBy);
             return this.Ok(BuildPagedResponse(sortedList, page, size));
+        }
+
+        /// <summary>API endpoint use to retrieve all comic books info.</summary>
+        /// <param name="page">Page to return.</param>
+        /// <param name="size">Size of the page.</param>
+        /// <param name="sortBy">String defini by which field the list will be sort.</param>
+        /// <returns>Return paginated comic book sorted.</returns>
+        [HttpGet("{page}/{size}")]
+        [Authorize(Policy = "ReadOnlyUsers")]
+        public async Task<IActionResult> GetAllAsync(int page, int size, [FromQuery] string sortBy)
+        {
+            var result = await this.comicBookLayer.GetAllComcisAndSerieInfo().ConfigureAwait(false);
+
+            if (result == null)
+            {
+                return this.NoContent();
+            }
+
+            var sortedList = result.AsQueryable().Sort(sortBy);
+            return this.Ok(BuildPagedResponse(sortedList, page, size));
+        }
+
+        /// <summary>API endpoint use to create a new comic book.</summary>
+        /// <param name="comicBook">Comic book model to create.</param>
+        /// <returns>Returns Id of newly created data object.</returns>
+        [HttpPost]
+        [Authorize(Policy = "WriteUsers")]
+        public async Task<IActionResult> AddAsync([FromBody] ComicBook comicBook)
+        {
+            var tagList = new List<ObjectTag>(comicBook.Tags);
+            comicBook.RelatedTags = new List<ComicBookTags>();
+
+            foreach (var linkedTag in tagList)
+            {
+                comicBook.RelatedTags.Add(
+                    new ComicBookTags
+                    {
+                        Tag = await this.objectTagLayer.GetAsync(linkedTag.Id),
+                    });
+            }
+
+            var result = await this.comicBookLayer.AddAsync(comicBook);
+            return this.Ok(result);
         }
 
         /// <summary>API endpoint to remove a comic book by its Id.</summary>

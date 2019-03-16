@@ -22,68 +22,20 @@ namespace AlmaIt.Dotnet.Heroes.Client.Pages.Settings
         /// <summary>
         /// The alert level.
         /// </summary>
-        protected AlertType level = AlertType.Info;
-
-        /// <summary>
-        /// Gets the alert message.
-        /// </summary>
-        protected string Message { get; private set; }
+        private protected AlertType level = AlertType.Info;
 
         /// <summary>
         /// Gets the tags list.
         /// </summary>
-        protected List<ObjectTag> Tags { get; private set; } = new List<ObjectTag>();
+        private protected List<ObjectTag> Tags { get; private set; } = new List<ObjectTag>();
+
+        /// <summary>
+        /// Gets the alert message.
+        /// </summary>
+        private protected string Message { get; private set; }
 
         [Inject]
         private HttpClient Http { get; set; }
-
-        /// <summary>Method for delete a tag by id.</summary>
-        /// <param name="id">Tag's is.</param>
-        /// <returns>Retourne une tache.</returns>
-        protected async Task DeleteTag(int id)
-        {
-            var result = await this.Http.DeleteAsync($"/api/tag/{id}");
-            try
-            {
-                result.EnsureSuccessStatusCode();
-            }
-            catch (Exception)
-            {
-                this.level = AlertType.Danger;
-                this.Message = "Error occured while deleting tag";
-                return;
-            }
-
-            this.level = AlertType.Success;
-            this.Message = "Tag sucessfully deleted";
-
-            await this.OnInitAsync();
-            this.StateHasChanged();
-        }
-
-        /// <summary>
-        /// Method call when the tags collection changed.
-        /// </summary>
-        /// <param name="success">A value indicating whether a tag was successfully added.</param>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        protected async Task OnCollectionChanged(bool success)
-        {
-            if (success)
-            {
-                this.level = AlertType.Success;
-                this.Message = "Tag sucessfully created";
-            }
-            else
-            {
-                this.level = AlertType.Danger;
-                this.Message = "Error occured while creating new tag";
-            }
-
-            // reload tag lists
-            await this.OnInitAsync().ConfigureAwait(false);
-
-            this.StateHasChanged();
-        }
 
         /// <summary>
         /// Method invoked when the component is ready to start, having received its
@@ -124,6 +76,54 @@ namespace AlmaIt.Dotnet.Heroes.Client.Pages.Settings
                 this.level = AlertType.Danger;
                 this.Message = ex.Message;
             }
+        }
+
+        /// <summary>
+        /// Method call when the tags collection changed.
+        /// </summary>
+        /// <param name="success">A value indicating whether a tag was successfully added.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        protected async Task OnCollectionChanged(bool success)
+        {
+            if (success)
+            {
+                this.level = AlertType.Success;
+                this.Message = "Tag sucessfully created";
+            }
+            else
+            {
+                this.level = AlertType.Danger;
+                this.Message = "Error occured while creating new tag";
+            }
+
+            // reload tag lists
+            await this.OnInitAsync().ConfigureAwait(false);
+
+            this.StateHasChanged();
+        }
+
+        /// <summary>Method for delete a tag by id.</summary>
+        /// <param name="id">Tag's is.</param>
+        /// <returns>Retourne une tache.</returns>
+        protected async Task DeleteTag(int id)
+        {
+            var result = await this.Http.DeleteAsync($"/api/tag/{id}");
+            try
+            {
+                result.EnsureSuccessStatusCode();
+            }
+            catch (Exception)
+            {
+                this.level = AlertType.Danger;
+                this.Message = "Error occured while deleting tag";
+                return;
+            }
+
+            this.level = AlertType.Success;
+            this.Message = "Tag sucessfully deleted";
+
+            await this.OnInitAsync();
+            this.StateHasChanged();
         }
     }
 }

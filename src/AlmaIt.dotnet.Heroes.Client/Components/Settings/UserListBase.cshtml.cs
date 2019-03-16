@@ -84,6 +84,15 @@ namespace AlmaIt.Dotnet.Heroes.Client.Components.Settings
         }
 
         /// <summary>
+        /// Method invoked when the component is ready to start, having received its
+        /// initial parameters from its parent in the render tree.
+        /// Override this method if you will perform an asynchronous operation and
+        /// want the component to refresh when that operation is completed.
+        /// </summary>
+        /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing any asynchronous operation.</returns>
+        protected override async Task OnInitAsync() => await this.RefreshUserListAsync();
+
+        /// <summary>
         /// Method to delete a user.
         /// </summary>
         /// <param name="username">User's name to delete.</param>
@@ -104,15 +113,6 @@ namespace AlmaIt.Dotnet.Heroes.Client.Components.Settings
                 this.MessageType = AlertType.Danger;
             }
         }
-
-        /// <summary>
-        /// Method invoked when the component is ready to start, having received its
-        /// initial parameters from its parent in the render tree.
-        /// Override this method if you will perform an asynchronous operation and
-        /// want the component to refresh when that operation is completed.
-        /// </summary>
-        /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing any asynchronous operation.</returns>
-        protected override async Task OnInitAsync() => await this.RefreshUserListAsync();
     }
 }
 #pragma warning restore SA1401 // Fields should be private
