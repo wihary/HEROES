@@ -92,6 +92,20 @@ app {
             color: white;
         }
 
+.comic-tag {
+    vertical-align: super; 
+    font-size: 0.8rem;
+    float: left;
+}
+
+.comic-tag.green {
+    color: #00A600;
+}
+
+.comic-tag.blue {
+    color: #2672EC;
+}
+
 .content {
     padding-top: 1.1rem;
 }

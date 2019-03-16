@@ -1,35 +1,63 @@
 @inherits AlmaIt.Dotnet.Heroes.Client.ViewModel.Page.ComicSerieOverviewBase
+@using AlmaIt.Dotnet.Heroes.Client.Components
+@using AlmaIt.Dotnet.Heroes.Shared.Enumeration
 
 @page "/overview/serie/{ComicSerieId}"
 
+
+<TopAlertMessage Message="@this.Message" AlertType="@this.Type" />
+
 <h1>Comic book Serie Overview</h1>
 <!-- clip-path: polygon(0 0,0 100%,100% 80%,100% 0); -->
-<div class="row mb-3" style="height: 16rem; background-color: #e2e2e2;">
-    <div class="col-md-2 border mt-3">
-        <img src="https://i.annihil.us/u/prod/marvel/i/mg/1/d0/5aa06c1aeb7ff/standard_incredible.jpg" class="card-img-top border" alt="..." style="width: 100%; height: auto;">
+
+@if(this.ComicBookSerie != null)
+{
+    <div class="row mb-3" style="height: 16rem; background-color: #e2e2e2;">
+        <div class="col-md-2 border mt-3">
+            <img src="https://i.annihil.us/u/prod/marvel/i/mg/1/d0/5aa06c1aeb7ff/standard_incredible.jpg" class="card-img-top border" alt="..." style="width: 100%; height: auto;">
+        </div>
+        <div class="col-md-6 mt-3">
+            <div class="row mb-3">
+                <span>@this.ComicBookSerie.Name</span>
+            </div>
+            <div class="row">
+                <span>Description</span>
+            </div>
+        </div>
+        <div class="col-md-2 offset-md-2 align-self-end">
+            <div class="row mr-1" style="float: right;">
+                <span>Add Comic Book</span>
+            </div>
+        </div>
     </div>
-    <div class="col-md-6 mt-3">
-        <div class="row mb-3">
-            <span>TITLE</span>
-        </div>
-        <div class="row">
-            <span>Description</span>
-        </div>
+    <div class="row">
+        @foreach (var comicBook in this.ComicBookSerie.AssociatedComnicBooksExtended)
+        {
+            <!-- https://i.annihil.us/u/prod/marvel/i/mg/5/60/5afc7fed6a4da/clean.jpg -->
+            <div class="col mr-1 mb-1 pb-2 border" style="background-color: #e6e6e6;min-width: 22rem;max-width: 33%;">
+                @if(comicBook.Status == ComicBookStatus.Collection)
+                {
+                    <div class="comic-tag green px-1 py-1">
+                        <span class="oi oi-list-rich" aria-hidden="true" title="Collection"></span>
+                    </div>
+                }
+                else if(comicBook.Status == ComicBookStatus.Wishlist)
+                {
+                    <div class="comic-tag blue px-1 py-1">
+                        <span class="oi oi-task" aria-hidden="true" title="Wishlist"></span>
+                    </div>
+                }
+                <img src="/images/NoImage.png" class="card-img-top border" alt="..." style="width: 100%; height: auto;">
+                <!-- <img src="https://i.annihil.us/u/prod/marvel/i/mg/5/60/5afc7fed6a4da/clean.jpg" class="card-img-top" alt="..." style="width: 100%; height: auto;"> -->
+
+                <h6 class="card-title pt-2">@comicBook.Title</h6>
+                <small class="text-muted" style="float:left;">@comicBook.ParutionDate.ToString("dd/MM/yyyy")</small>
+                <small class="text-muted" style="float:right;">#@comicBook.IssueNumber</small>
+            </div> 
+        }
     </div>
-    <div class="col-md-2 offset-md-2 align-self-end">
-        <div class="row mr-1" style="float: right;">
-            <span>Add Comic Book</span>
-        </div>
-    </div>
-</div>
-<div class="row" >
-    @for (int i = 0; i < 13; i++)
-    {
-        <!-- https://i.annihil.us/u/prod/marvel/i/mg/5/60/5afc7fed6a4da/clean.jpg -->
-        <div class="col-md-3 pb-5">
-            <img src="/images/NoImage.png" class="card-img-top border" alt="..." style="width: 100%; height: auto;">
-            <h5 class="card-title">Comic title</h5>
-            <p class="card-text">Parution Date + author</p>
-        </div>
-    }
-</div>
+}
+else
+{
+    <span>Unknown parameter</span>
+}
