@@ -56,6 +56,16 @@ namespace AlmaIt.Dotnet.Heroes.Client.ViewModel
         /// </summary>
         public bool IsLoggedIn { get; private set; }
 
+        /// <summary>
+        /// Method to get the connected user name.
+        /// </summary>
+        /// <returns>Return the username of connected user.</returns>
+        public async Task<string> GetConnectedUserName()
+        {
+            Console.WriteLine($"this.IsLoggedIn : {this.IsLoggedIn}");
+            return !this.IsLoggedIn ? string.Empty : (await this.sessionStorage.GetItem<TokenInfo>("authToken"))?.UserName;
+        }
+
         /// <summary>Simple method that checks if there is a JWT avaible and if its valid.</summary>
         /// <returns>Return a value indicating whether the user is log in.</returns>
         public async Task<bool> IsLoggedInAsync()
