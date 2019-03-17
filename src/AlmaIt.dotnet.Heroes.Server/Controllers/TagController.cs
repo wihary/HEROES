@@ -56,9 +56,9 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
         }
 
         /// <summary>
-        ///     API endpoint use to create a new Object Tags
+        ///     API endpoint use to create a new Object Tags.
         /// </summary>
-        /// <param name="tag">Object Tags model to create</param>
+        /// <param name="tag">Object Tags model to create.</param>
         /// <returns>Returns Id of newly created data object.</returns>
         [HttpPost]
         [Authorize(Policy = "WriteUsers")]
@@ -92,9 +92,9 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
         }
 
         /// <summary>
-        ///     API endpoint use to update an existing Object Tags
+        ///     API endpoint use to update an existing Object Tags.
         /// </summary>
-        /// <param name="tag">Object Tags model to create</param>
+        /// <param name="tag">Object Tags model to create.</param>
         /// <returns>Return the count of comic serie updated.</returns>
         [HttpPut]
         [Authorize(Policy = "WriteUsers")]

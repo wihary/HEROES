@@ -16,6 +16,17 @@ app {
     align-items: center;
 }
 
+.nav-menu {
+    flex: 1;
+}
+
+.bottom-row {
+    height: 3.5rem;
+    position: absolute;
+    bottom: 0;
+    align-items: center;
+}
+
 .main {
     flex: 1;
     display: flex;
@@ -186,4 +197,8 @@ app {
 }
 .tile.orange:hover {
     background: #b8431f;
+}
+
+.user-info {
+    color: white;
 }
