@@ -23,7 +23,7 @@ namespace AlmaIt.Dotnet.Heroes.Shared.Models
         /// <summary>Gets the issue count.</summary>
         [NotMapped]
         [DisplayName("Nb issues")]
-        public int IssuesCount => this.AssociatedComnicBooksExtended.Count;
+        public int IssuesCount { get; set; }
 
         /// <summary>Gets or sets a value indicating whether true if a comic serie is finished (no more issue are planned).</summary>
         public bool IsSerieCompleted { get; set; }

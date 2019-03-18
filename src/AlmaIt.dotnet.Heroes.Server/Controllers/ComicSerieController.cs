@@ -38,7 +38,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
         [Authorize(Policy = "ReadOnlyUsers")]
         public async Task<IActionResult> GetAsync([FromRoute] int id)
         {
-            var result = await this.comicSerieContext.GetAllAsync().Where(x => x.Id == id).FirstOrDefault();
+            var result = await this.comicSerieContext.GetAllDetailsAsync().Where(x => x.Id == id).FirstOrDefault();
 
             if (result == null)
             {

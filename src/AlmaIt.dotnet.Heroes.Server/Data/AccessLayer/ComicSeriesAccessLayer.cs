@@ -20,6 +20,10 @@ namespace AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer
 
         /// <summary>Async Method that return all data object existing in Db.</summary>
         /// <returns>List of <see cref="ComicSeries" />.</returns>
-        public override IAsyncEnumerable<ComicSeries> GetAllAsync() => this.ModelSet.Include(serie => serie.AssociatedComnicBooksExtended).ToAsyncEnumerable();
+        public override IAsyncEnumerable<ComicSeries> GetAllAsync() => this.ModelSet.ToAsyncEnumerable();
+
+        /// <summary>Async Method that return all data object existing in Db.</summary>
+        /// <returns>List of <see cref="ComicSeries" />.</returns>
+        public IAsyncEnumerable<ComicSeries> GetAllDetailsAsync() => this.ModelSet.Include(serie => serie.AssociatedComnicBooksExtended).ToAsyncEnumerable();
     }
 }

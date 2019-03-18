@@ -1,5 +1,7 @@
 namespace AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using AlmaIt.Dotnet.Heroes.Shared.Models;
 
     /// <summary>
@@ -7,5 +9,8 @@ namespace AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface
     /// </summary>
     public interface IComicSeriesAccessLayer : IBaseAccessLayer<ComicSeries, int>
     {
+        /// <summary>Async Method that return all data object existing in Db.</summary>
+        /// <returns>List of <see cref="ComicSeries" />.</returns>
+        IAsyncEnumerable<ComicSeries> GetAllDetailsAsync() ;
     }
 }
