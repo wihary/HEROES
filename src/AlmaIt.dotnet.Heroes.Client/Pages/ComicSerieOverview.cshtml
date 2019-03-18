@@ -55,13 +55,20 @@
                         <span class="oi oi-task" aria-hidden="true" title="Wishlist"></span>
                     </div>
                 }
-                <img src="/images/NoImage.png" class="card-img-top border" alt="..." style="width: 100%; height: auto;">
+                @if(!string.IsNullOrEmpty(comicBook.CoverPicture))
+                {
+                    <img src="data:image/png;base64, @comicBook.CoverPicture" class="card-img-top border" alt="..." style="width: 100%; height: auto;">
+                }
+                else{
+                    <img src="/images/NoImage.png" class="card-img-top border" alt="..." style="width: 100%; height: auto;">
+                }
+
                 <!-- <img src="https://i.annihil.us/u/prod/marvel/i/mg/5/60/5afc7fed6a4da/clean.jpg" class="card-img-top" alt="..." style="width: 100%; height: auto;"> -->
 
                 <h6 class="card-title pt-2">@comicBook.Title</h6>
                 <small class="text-muted" style="float:left;">@comicBook.ParutionDate.ToString("dd/MM/yyyy")</small>
                 <small class="text-muted" style="float:right;">#@comicBook.IssueNumber</small>
-            </div> 
+            </div>
         }
     </div>
 }

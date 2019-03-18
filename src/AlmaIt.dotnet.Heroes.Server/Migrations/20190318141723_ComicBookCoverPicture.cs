@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AlmaIt.Dotnet.Heroes.Server.Migrations
 {
@@ -7,7 +6,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<byte[]>(
+            migrationBuilder.AddColumn<string>(
                 name: "CoverPicture",
                 table: "ComicBooks",
                 nullable: true);

@@ -36,6 +36,16 @@
         <div class="col-auto">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
+                    <span class="input-group-text" id="PictureUrl">Picture URL</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="PictureUrl" bind="@(this.EditedComicBook.CoverUrl)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-auto">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
                     <span class="input-group-text" id="EditSerie">Related to</span>
                 </div>
                 <select class="form-control" aria-describedby="EditSerie" bind="@(this.selectedComicSerie)">
@@ -91,7 +101,7 @@
             <div class="form-group">
                 @foreach (var comicBookTags in this.EditedComicBook.Tags)
                 {
-                    <span class="badge badge-primary"data-toggle="tooltip" data-placement="bottom" title="Click to remove" 
+                    <span class="badge badge-primary"data-toggle="tooltip" data-placement="bottom" title="Click to remove"
                         onclick="@(() => this.RemoveTag(comicBookTags.Name))" style="cursor: pointer; background-color: @comicBookTags.Color.ToHtml()">
                         @comicBookTags.Name
                     </span>

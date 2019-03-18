@@ -3,6 +3,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Http;
     using System.Threading.Tasks;
 
     using AlmaIt.Dotnet.Heroes.Server.Data.AccessLayer.Interface;
@@ -100,8 +101,8 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
         /// <returns>Return paginated comic book sorted corresponding to status and filter.</returns>
         [HttpGet("type/{status}/{page}/{size}/{filter}")]
         [Authorize(Policy = "ReadOnlyUsers")]
-        public async Task<IActionResult> GetByStatusAsync(
-            [FromRoute] ComicBookStatus status, [FromRoute] int page, [FromRoute] int size, [FromQuery] string sortBy, [FromRoute] string filter)
+        public async Task<IActionResult> GetByStatusAsync([FromRoute] ComicBookStatus status, [FromRoute] int page,
+            [FromRoute] int size, [FromQuery] string sortBy, [FromRoute] string filter)
         {
             var result = (await this.comicBookLayer.GetAllComcisAndSerieInfo().ConfigureAwait(false)).Where(book => book.Status == status).ToList();
 
@@ -164,6 +165,13 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
                     });
             }
 
+            // Process image in case one is specified
+            if(!string.IsNullOrEmpty(comicBook.CoverUrl) && Uri.IsWellFormedUriString(comicBook.CoverUrl, UriKind.Absolute))
+            {
+                var client = new HttpClient();
+                comicBook.CoverPicture = Convert.ToBase64String(await client.GetByteArrayAsync(comicBook.CoverUrl));
+            }
+
             var result = await this.comicBookLayer.AddAsync(comicBook);
             return this.Ok(result);
         }
@@ -202,6 +210,13 @@ namespace AlmaIt.Dotnet.Heroes.Server.Controllers
             if (!model.ComicSerieId.HasValue || !this.comicSerieLayer.Exists(model.ComicSerieId.Value))
             {
                 model.ComicSerieId = null;
+            }
+
+            // Process image in case one is specified
+            if(!string.IsNullOrEmpty(model.CoverUrl) && Uri.IsWellFormedUriString(model.CoverUrl, UriKind.Absolute))
+            {
+                var client = new HttpClient();
+                model.CoverPicture = Convert.ToBase64String(await client.GetByteArrayAsync(model.CoverUrl));
             }
 
             // Update comic changes

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlmaIt.Dotnet.Heroes.Server.Migrations
 {
     [DbContext(typeof(HeroesContext))]
-    [Migration("20190317144237_ComicBookCoverPicture")]
+    [Migration("20190318141723_ComicBookCoverPicture")]
     partial class ComicBookCoverPicture
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Migrations
 
                     b.Property<int?>("ComicSerieId");
 
-                    b.Property<byte[]>("CoverPicture");
+                    b.Property<string>("CoverPicture");
 
                     b.Property<string>("CoverUrl");
 

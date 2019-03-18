@@ -67,12 +67,12 @@ namespace AlmaIt.Dotnet.Heroes.Shared.Models
         public string CoverUrl { get; set; } = string.Empty;
 
         /// <summary>
-        ///     Gets or sets the comic cover Picture, it's initialize from CoverUrl content recovery
+        ///     Gets the comic cover Picture, base64 representation of the picture
         /// </summary>
-        public byte[] CoverPicture { get; set; }
+        public string CoverPicture { get; set; } = string.Empty;
 
         /// <summary>
-        ///     Gets or sets list of all associated Tag object. 
+        ///     Gets or sets list of all associated Tag object.
         ///     TODO: [JsonIgnore] == we are not yet ready for this, should come with business layer separation.
         /// </summary>
         public ICollection<ComicBookTags> RelatedTags { get; set; }

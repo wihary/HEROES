@@ -23,7 +23,7 @@ namespace AlmaIt.Dotnet.Heroes.Server.Migrations
 
                     b.Property<int?>("ComicSerieId");
 
-                    b.Property<byte[]>("CoverPicture");
+                    b.Property<string>("CoverPicture");
 
                     b.Property<string>("CoverUrl");
 
