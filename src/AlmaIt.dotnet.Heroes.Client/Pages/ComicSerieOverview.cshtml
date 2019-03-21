@@ -42,7 +42,7 @@
         @foreach (var comicBook in this.ComicBookSerie.AssociatedComnicBooksExtended)
         {
             <!-- https://i.annihil.us/u/prod/marvel/i/mg/5/60/5afc7fed6a4da/clean.jpg -->
-            <div class="col mr-1 mb-1 pb-2 border" style="background-color: #e6e6e6;min-width: 22rem;max-width: 33%;">
+            <div class="comic-tile col mr-1 mb-1 pb-2 border">
                 @if(comicBook.Status == ComicBookStatus.Collection)
                 {
                     <div class="comic-tag green px-1 py-1">
